@@ -1,9 +1,10 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { fetchUsers } from './controllers/UserController';
+import UserView from './views/userview';
+import LoginPage from './views/login';
+import AboutPage from './views/about';
 import type{ User } from './models/User';
-import UserView from './views/UserView';
-import AboutPage from './views/About';
 import './App.css';
 
 const App: React.FC = () => {
@@ -16,8 +17,9 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<UserView users={users} />} />
-        <Route path="/about" element={<AboutPage />} />
+        <Route path="/" element={<UserView users = {users}  />} />
+        <Route path="/dashboard" element={<AboutPage />} />
+        <Route path='/login' element={<LoginPage/>} />
       </Routes>
     </Router>
     
