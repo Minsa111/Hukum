@@ -30,7 +30,7 @@ export function LoginForm({
     const{ username, password}=formData;
 
     if (username==='admin' && password==='123') {
-      localStorage.setItem("isLoggedin", "true");
+      localStorage.setItem("isLoggedIn", "true");
       navigate("/dashboard");
     }else{
       alert("invalid");
