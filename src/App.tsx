@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { fetchUsers } from './controllers/UserController';
 import UserView from './views/userview';
@@ -22,7 +22,6 @@ const App: React.FC = () => {
         <Route path='/login' element={<LoginPage/>} />
       </Routes>
     </Router>
-    
   );
 };
 
