@@ -6,6 +6,7 @@ import {
   IconUserCircle,
 } from "@tabler/icons-react"
 
+import { useNavigate } from "react-router-dom"
 import {
   Avatar,
   AvatarFallback,
@@ -27,6 +28,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
+
+
 export function NavUser({
   user,
 }: {
@@ -37,7 +40,11 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
-
+  const navigate =useNavigate();
+  const handleLogout = () => {
+    localStorage.setItem("isLoggedIn", "false");
+    navigate("/login");
+  };
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -96,7 +103,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <IconLogout />
               Log out
             </DropdownMenuItem>

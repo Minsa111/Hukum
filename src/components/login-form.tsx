@@ -50,11 +50,11 @@ export function LoginForm({
             <div className="grid gap-6">
               <div className="grid gap-6">
                 <div className="grid gap-3">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="username">Username</Label>
                   <Input
                     id="username"
                     type="text"
-                    placeholder="sdmbatu4"
+                    placeholder="Username..."
                     required
                     value={formData.username}
                     onChange={(e)=>
@@ -69,6 +69,7 @@ export function LoginForm({
                   <Input 
                     id="password" 
                     type="password" 
+                    placeholder="Password..."
                     required 
                     value={formData.password}
                     onChange={(e)=>
