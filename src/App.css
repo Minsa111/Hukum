@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-
-@custom-variant dark (&:is(.dark *));
+@import url('https://geist.vercel.app/sans.css');
+@import url('https://geist.vercel.app/mono.css');
 
 #root {
   max-width: 100%;
@@ -45,7 +45,9 @@
   color: #888;
 }
 
-@theme inline {
+@theme inline {  
+  --font-sans: 'Geist Sans', sans-serif;
+  --font-mono: 'Geist Mono', monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
