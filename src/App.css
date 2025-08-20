@@ -1,7 +1,5 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import url('https://geist.vercel.app/sans.css');
-@import url('https://geist.vercel.app/mono.css');
 
 #root {
   max-width: 100%;
@@ -44,8 +42,22 @@
 .read-the-docs {
   color: #888;
 }
+@font-face {
+  font-family: 'Geist Sans';
+  src: url('/src/assets/fonts/geist-font-1.5.0/Geist[wght].woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('/src/assets/fonts/geist-font-1.5.0/GeistMono[wght].woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
 
-@theme inline {  
+@theme inline {
   --font-sans: 'Geist Sans', sans-serif;
   --font-mono: 'Geist Mono', monospace;
   --radius-sm: calc(var(--radius) - 4px);
