@@ -1,7 +1,7 @@
-import { useState } from "react"
+
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { useNavigate } from "react-router-dom"
+import { useLogin } from "@/hooks/authlocal"
 import {
   Card,
   CardContent,
@@ -16,26 +16,7 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<"div">) {
 
-  const [formData, setFormData] = useState({
-    username:'',
-    password:''
-  })
-
-  const navigate = useNavigate();
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("Login data:", formData)
-
-    const{ username, password}=formData;
-
-    if (username==='admin' && password==='123') {
-      localStorage.setItem("isLoggedIn", "true");
-      navigate("/dashboard");
-    }else{
-      alert("invalid");
-    }
-  }
+  const { formData, setFormData, handleSubmit } = useLogin()
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="shadow-lg">
