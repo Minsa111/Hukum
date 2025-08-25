@@ -15,7 +15,7 @@ export function useLogin() {
 
         const{ username, password}=formData;
 
-        if (username==='admin' && password==='123') {
+        if (username.toLowerCase()==='admin' && password==='123') {
             localStorage.setItem("isLoggedIn", "true");
             navigate("/dashboard");
         }else{
