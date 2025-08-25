@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+export function useLogout(){
+    const navigate = useNavigate();
+
+    const handleLogout = () => { 
+        localStorage.removeItem("isLoggedIn"); // remove login state
+        navigate("/login"); // redirect to login page
+    };
+    return handleLogout;
+}
 export function useLogin() {
     const [formData, setFormData] = useState({
         username:'',

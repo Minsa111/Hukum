@@ -1,60 +1,30 @@
-import { GalleryVerticalEnd, AudioWaveform, BookOpen, Bot, Command, Settings2, SquareTerminal } from "lucide-react"
+import { 
+  // GalleryVerticalEnd, 
+  // AudioWaveform, 
+  Book,
+  BookOpen,
+  LayoutDashboard,
+  // Bot, 
+  // Command, 
+  Settings2,  } from "lucide-react"
 
-export const SingleMenu ={
-  projects:{
-    name: "Dashboard",
-    url: "#",
-    icon: SquareTerminal
-  },
-}
 export const Dropdown= {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    name: "Saiful",
+    sekolah: "SMA Muhammadiyah 3 Batu",
+    email: "o9C9t@example.com",
   },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
   navMain: [
     {
       title: "Dashboard",
       url: "#",
-      icon: SquareTerminal,
+      icon: LayoutDashboard,
       isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
     },
     {
-      title: "Models",
+      title: "Laporan",
       url: "#",
-      icon: Bot,
+      icon: Book,
       items: [
         {
           title: "Genesis",

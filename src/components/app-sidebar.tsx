@@ -1,7 +1,6 @@
 import * as React from "react"
-import { SingleMenu, Dropdown } from "@/models/sidebarmenu"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { NavProjects } from "./nav-projects"
+import { Dropdown } from "@/models/sidebarmenu"
+// import { NavProjects } from "./nav-projects"
 import { NavMain } from "@/components/nav-main"
 import { NavUser } from "@/components/nav-user"
 import {
@@ -11,7 +10,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
-
+// import { useState } from "react"
 // This is sample data.
 
 //   projects: [
@@ -33,18 +32,15 @@ import {
 //   ],
 // }
 
+// const [open, setOpen] = useState(false)
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <div>
-          <AspectRatio ratio={1/1}>
             <img src="/images/logo.png" alt="logo" className="mx-auto w-24 h-auto" />
-          </AspectRatio>
-        </div>
+            <div className="text-center text-2xl font-bold text-primary">DIKDASMEN<br/>PDM BATU</div>
       </SidebarHeader>
       <SidebarContent>
-        <NavProjects projects={SingleMenu.projects} />
         <NavMain items={Dropdown.navMain} />
       </SidebarContent>
       <SidebarFooter>
