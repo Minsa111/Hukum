@@ -1,6 +1,8 @@
 import * as React from "react"
 import { Dropdown } from "@/models/sidebarmenu"
+
 // import { NavProjects } from "./nav-projects"
+
 import { NavMain } from "@/components/nav-main"
 import { NavUser } from "@/components/nav-user"
 import {
@@ -10,6 +12,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+// import { CollapsibleContent } from "./ui/collapsible"
 // import { useState } from "react"
 // This is sample data.
 
@@ -37,8 +40,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-            <img src="/images/logo.png" alt="logo" className="mx-auto w-24 h-auto" />
-            <div className="text-center text-2xl font-bold text-primary">DIKDASMEN<br/>PDM BATU</div>
+        <SidebarContent>
+            <img src="/images/logo-and-name.png" alt="logo" className="mx-auto w-36 h-auto" />
+          </SidebarContent>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={Dropdown.navMain} />

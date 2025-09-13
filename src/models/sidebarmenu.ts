@@ -2,8 +2,10 @@ import {
   // GalleryVerticalEnd, 
   // AudioWaveform, 
   Book,
-  BookOpen,
+  // BookOpen,
   LayoutDashboard,
+  ArrowRightLeft,
+  
   // Bot, 
   // Command, 
   Settings2,  } from "lucide-react"
@@ -27,41 +29,21 @@ export const Dropdown= {
       icon: Book,
       items: [
         {
-          title: "Genesis",
+          title: "BOS",
           url: "#",
         },
         {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
+          title: "Pembelian",
           url: "#",
         },
       ],
     },
+      
     {
-      title: "Documentation",
+      title: "Pergeseran",
       url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
+      icon: ArrowRightLeft,
+      isActive: true,
     },
     {
       title: "Settings",
