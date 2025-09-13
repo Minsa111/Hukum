@@ -3,9 +3,10 @@ import { z } from "zod"
 
 export const schema= z.object({
     id: z.number(),
-    header: z.string(),
-    type: z.string(),
+    title: z.string(),
+    category: z.string(),
     status: z.string(),
+    budgettotal: z.number(),
     target: z.string(),
     limit: z.string(),
     reviewer: z.string(),

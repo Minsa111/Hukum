@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import './App.css';
+// import PublicDashboard from
 import LoginPage from './views/login';
-import Dashboard from './views/dashboard';
+import Dashboard from './views/dashboarduser';
 import {ProtectedDashboardRoute, ProtectedLoginRoute} from './routes/protectedroute';
 
 const App: React.FC = () => {
