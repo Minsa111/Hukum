@@ -162,7 +162,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
   // },
   
   {
-    accessorKey: "title",
+    accessorKey: "judul",
     header: "Judul",
     cell: ({ row }) => {
       return <div className="text-left px-4">
@@ -172,7 +172,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "category",
+    accessorKey: "Kategori",
     header: "Kategori",
     cell: ({ row }) => (
       <div className="w-32">

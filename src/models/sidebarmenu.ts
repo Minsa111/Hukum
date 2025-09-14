@@ -19,7 +19,7 @@ export const Dropdown= {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard",
       icon: LayoutDashboard,
       isActive: true,
     },
@@ -30,11 +30,11 @@ export const Dropdown= {
       items: [
         {
           title: "BOS",
-          url: "#",
+          url: "/bos",
         },
         {
           title: "Pembelian",
-          url: "#",
+          url: "/pembelian",
         },
       ],
     },

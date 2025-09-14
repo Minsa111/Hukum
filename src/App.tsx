@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 // import PublicDashboard from
 import LoginPage from './views/login';
-import Dashboard from './views/dashboarduser';
+import Dashboard from './views/user/dashboard';
+import PublicDashboard from './views/public/public-dashboard';
 import {ProtectedDashboardRoute, ProtectedLoginRoute} from './routes/protectedroute';
 
 const App: React.FC = () => {
@@ -22,7 +23,9 @@ const App: React.FC = () => {
             isLoggedIn?(
             <Navigate to ='/dashboard' replace/>): (<Navigate to ='/login' replace/>)
           }/>
-  
+        <Route path='/public-dashboard' element={
+          <PublicDashboard/>
+        }/>
         <Route path="/dashboard" element={
           <ProtectedDashboardRoute>
             <Dashboard />
