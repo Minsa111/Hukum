@@ -10,6 +10,6 @@ export const schema= z.object({
     target: z.string(),
     limit: z.string(),
     reviewer: z.string(),
-    })
+})
 
 export type Schema = z.infer<typeof schema>

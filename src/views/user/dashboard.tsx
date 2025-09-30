@@ -1,5 +1,5 @@
 import { AppSidebar } from "@/components/app-sidebar"
-import { DataTable } from "@/components/data-table-user"
+import { DataTable } from "@/components/data-table-admin"
 import { SectionCards } from "@/components/section-cards"
 import { SiteHeader } from "@/components/site-header"
 import {

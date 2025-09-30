@@ -1,7 +1,7 @@
 import { NavbarMenu } from "./navbar-menu";
-import { CircleUser } from "lucide-react";
+// import { CircleUser } from "lucide-react";
 export function Navbar() {
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    // const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
     return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">

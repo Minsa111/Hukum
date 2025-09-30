@@ -2,681 +2,190 @@
   {
     "id": 1,
     "title": "Cover page",
-    "category": "Pembelian",
-    "status": "In Process",
-    "target": "18",
-    "budgettotal": 2400000,
-    "limit": "5",
-    "reviewer": "Eddie Lake"
+    "fundsource": "Pembelian",
+    "fundtotal":  123,
+    "spendtotal": 18,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 2,
     "title": "Table of contents",
-    "category": "BOS Reguler",
-    "status": "Done",
-    "target": "29",
-    "budgettotal": 2400000,
-    "limit": "24",
-    "reviewer": "Eddie Lake"
+    "fundsource": "BOS Reguler",
+    "fundtotal": 123,
+    "spendtotal": 29,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 3,
     "title": "Executive summary",
-    "category": "BOS Afirmasi",
-    "status": "Done",
-    "target": "10",
-    "budgettotal": 2400000,
-    "limit": "13",
-    "reviewer": "Eddie Lake"
+    "fundsource": "BOS Afirmasi",
+    "fundtotal": 123,
+    "spendtotal": 10,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 4,
     "title": "Technical approach",
-    "category": "BOS Kinerja",
-    "status": "Done",
-    "target": "27",
-    "budgettotal": 2400000,
-    "limit": "23",
-    "reviewer": "Jamik Tashpulatov"
+    "fundsource": "BOS Kinerja",
+    "fundtotal": 123,
+    "spendtotal": 27,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 5,
     "title": "Design",
-    "category": "Pembelian",
-    "status": "In Process",
-    "target": "2",
-    "budgettotal": 2400000,
-    "limit": "16",
-    "reviewer": "Jamik Tashpulatov"
+    "fundsource": "Pembelian",
+    "fundtotal": 123,
+    "spendtotal": 2,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 6,
     "title": "Capabilities",
-    "category": "BOS Reguler",
-    "status": "In Process",
-    "target": "20",
-    "budgettotal": 2400000,
-    "limit": "8",
-    "reviewer": "Jamik Tashpulatov"
+    "fundsource": "BOS Reguler",
+    "fundtotal": 123,
+    "spendtotal": 20,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 7,
     "title": "Integration with existing systems",
-    "category": "BOS Kinerja",
-    "status": "In Process",
-    "target": "19",
-    "budgettotal": 2400000,
-    "limit": "21",
-    "reviewer": "Jamik Tashpulatov"
+    "fundsource": "BOS Kinerja",
+    "fundtotal":  123,
+    "spendtotal": 19,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 8,
     "title": "Innovation and Advantages",
-    "category": "BOS Afirmasi",
-    "status": "Done",
-    "target": "25",
-    "budgettotal": 2400000,
-    "limit": "26",
-    "reviewer": "Assign reviewer"
+    "fundsource": "BOS Afirmasi",
+    "fundtotal": 123,
+    "spendtotal": 25,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 9,
     "title": "Overview of EMR's Innovative Solutions",
-    "category": "Pembelian",
-    "status": "Done",
-    "target": "7",
-    "budgettotal": 2400000,
-    "limit": "23",
-    "reviewer": "Assign reviewer"
+    "fundsource": "Pembelian",
+    "fundtotal": 123,
+    "spendtotal": 7,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 10,
     "title": "Advanced Algorithms and Machine Learning",
-    "category": "BOS Reguler",
-    "status": "Done",
-    "target": "30",
-    "budgettotal": 2400000,
-    "limit": "28",
-    "reviewer": "Assign reviewer"
+    "fundsource": "BOS Reguler",
+    "fundtotal": 123,
+    "spendtotal": 30,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 11,
     "title": "Adaptive Communication Protocols",
-    "category": "BOS Afirmasi",
-    "status": "Done",
-    "target": "9",
-    "budgettotal": 2400000,
-    "limit": "31",
-    "reviewer": "Assign reviewer"
+    "fundsource": "BOS Afirmasi",
+    "fundtotal": 123,
+    "spendtotal": 9,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 12,
     "title": "Advantages Over Current Technologies",
-    "category": "Pembelian",
-    "status": "Done",
-    "target": "12",
-    "budgettotal": 2400000,
-    "limit": "0",
-    "reviewer": "Assign reviewer"
+    "fundsource": "Pembelian",
+    "fundtotal": 123,
+    "spendtotal": 12,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 13,
     "title": "Past Performance",
-    "category": "BOS Kinerja",
-    "status": "Done",
-    "target": "22",
-    "budgettotal": 2400000,
-    "limit": "33",
-    "reviewer": "Assign reviewer"
+    "fundsource": "BOS Kinerja",
+    "fundtotal": 123,
+    "spendtotal": 22,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 14,
     "title": "Customer Feedback and Satisfaction Levels",
-    "category": "BOS Reguler",
-    "status": "Done",
-    "target": "15",
-    "budgettotal": 2400000,
-    "limit": "34",
-    "reviewer": "Assign reviewer"
+    "fundsource": "BOS Reguler",
+    "fundtotal": 123,
+    "spendtotal": 15,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 15,
     "title": "Implementation Challenges and Solutions",
-    "category": "BOS Afirmasi",
-    "status": "Done",
-    "target": "3",
-    "budgettotal": 2400000,
-    "limit": "35",
-    "reviewer": "Assign reviewer"
+    "fundsource": "BOS Afirmasi",
+    "fundtotal": 123,
+    "spendtotal": 3,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 16,
     "title": "Security Measures and Data Protection Policies",
-    "category": "Pembelian",
-    "status": "In Process",
-    "target": "6",
-    "budgettotal": 2400000,
-    "limit": "36",
-    "reviewer": "Assign reviewer"
+    "fundsource": "Pembelian",
+    "fundtotal": 123,
+    "spendtotal": 6,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 17,
     "title": "Scalability and Future Proofing",
-    "category": "BOS Kinerja",
-    "status": "Done",
-    "target": "4",
-    "budgettotal": 2400000,
-    "limit": "37",
-    "reviewer": "Assign reviewer"
+    "fundsource": "BOS Kinerja",
+    "fundtotal": 123,
+    "spendtotal": 4,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 18,
     "title": "Cost-Benefit Analysis",
-    "category": "BOS Reguler",
-    "status": "Done",
-    "target": "14",
-    "budgettotal": 2400000,
-    "limit": "38",
-    "reviewer": "Assign reviewer"
+    "fundsource": "BOS Reguler",
+    "fundtotal": 123,
+    "spendtotal": 14,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 19,
     "title": "User Training and Onboarding Experience",
-    "category": "BOS Afirmasi",
-    "status": "Done",
-    "target": "17",
-    "budgettotal": 2400000,
-    "limit": "39",
-    "reviewer": "Assign reviewer"
+    "fundsource": "BOS Afirmasi",
+    "fundtotal": 123,
+    "spendtotal": 17,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 20,
     "title": "Future Development Roadmap",
-    "category": "Pembelian",
-    "status": "Done",
-    "target": "11",
-    "budgettotal": 2400000,
-    "limit": "40",
-    "reviewer": "Assign reviewer"
+    "fundsource": "Pembelian",
+    "fundtotal": 123,
+    "spendtotal": 11,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   },
   {
     "id": 21,
     "title": "Appendices",
-    "category": "BOS Reguler",
-    "status": "In Process",
-    "target": "21",
-    "budgettotal": 2400000,
-    "limit": "41",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 22,
-    "title": "Glossary of Terms",
-    "category": "Pembelian",
-    "status": "In Process",
-    "target": "8",
-    "budgettotal": 2400000,
-    "limit": "42",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 23,
-    "title": "References",
-    "category": "BOS Kinerja",
-    "status": "Done",
-    "target": "13",
-    "budgettotal": 2400000,
-    "limit": "43",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 24,
-    "title": "Budget Breakdown",
-    "category": "BOS Reguler",
-    "status": "Done",
-    "target": "24",
-    "budgettotal": 2400000,
-    "limit": "44",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 25,
-    "title": "Risk Assessment",
-    "category": "BOS Afirmasi",
-    "status": "In Process",
-    "target": "26",
-    "budgettotal": 2400000,
-    "limit": "45",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 26,
-    "title": "Timeline and Milestones",
-    "category": "Pembelian",
-    "status": "In Process",
-    "target": "5",
-    "budgettotal": 2400000,
-    "limit": "46",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 27,
-    "title": "Team Structure and Responsibilities",
-    "category": "BOS Reguler",
-    "status": "Done",
-    "target": "16",
-    "budgettotal": 2400000,
-    "limit": "47",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 28,
-    "title": "Collaboration with Partners",
-    "category": "BOS Kinerja",
-    "status": "Done",
-    "target": "28",
-    "budgettotal": 2400000,
-    "limit": "48",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 29,
-    "title": "Sustainability Plan",
-    "category": "Pembelian",
-    "status": "Done",
-    "target": "23",
-    "budgettotal": 2400000,
-    "limit": "49",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 30,
-    "title": "Legal and Regulatory Compliance",
-    "category": "BOS Reguler",
-    "status": "Done",
-    "target": "31",
-    "budgettotal": 2400000,
-    "limit": "50",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 31,
-    "title": "Quality Assurance Processes",
-    "category": "BOS Kinerja",
-    "status": "In Process",
-    "target": "19",
-    "budgettotal": 2400000,
-    "limit": "51",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 32,
-    "title": "Technical Specifications",
-    "category": "Pembelian",
-    "status": "Done",
-    "target": "21",
-    "budgettotal": 2400000,
-    "limit": "52",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 33,
-    "title": "Testing and Validation",
-    "category": "BOS Reguler",
-    "status": "Done",
-    "target": "27",
-    "budgettotal": 2400000,
-    "limit": "53",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 34,
-    "title": "System Architecture",
-    "category": "BOS Afirmasi",
-    "status": "Done",
-    "target": "6",
-    "budgettotal": 2400000,
-    "limit": "54",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 35,
-    "title": "Data Management Strategy",
-    "category": "Pembelian",
-    "status": "Done",
-    "target": "18",
-    "budgettotal": 2400000,
-    "limit": "55",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 36,
-    "title": "Change Management Plan",
-    "category": "BOS Reguler",
-    "status": "Done",
-    "target": "8",
-    "budgettotal": 2400000,
-    "limit": "56",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 37,
-    "title": "Disaster Recovery and Backup",
-    "category": "BOS Kinerja",
-    "status": "Done",
-    "target": "14",
-    "budgettotal": 2400000,
-    "limit": "57",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 38,
-    "title": "Maintenance and Support Plan",
-    "category": "BOS Afirmasi",
-    "status": "Done",
-    "target": "25",
-    "budgettotal": 2400000,
-    "limit": "58",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 39,
-    "title": "Monitoring and Evaluation",
-    "category": "Pembelian",
-    "status": "In Process",
-    "target": "12",
-    "budgettotal": 2400000,
-    "limit": "59",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 40,
-    "title": "Performance Metrics",
-    "category": "BOS Reguler",
-    "status": "Done",
-    "target": "20",
-    "budgettotal": 2400000,
-    "limit": "60",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 41,
-    "title": "Key Performance Indicators",
-    "category": "BOS Afirmasi",
-    "status": "In Process",
-    "target": "15",
-    "budgettotal": 2400000,
-    "limit": "61",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 42,
-    "title": "Communication Plan",
-    "category": "Pembelian",
-    "status": "Done",
-    "target": "10",
-    "budgettotal": 2400000,
-    "limit": "62",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 43,
-    "title": "Stakeholder Engagement",
-    "category": "BOS Kinerja",
-    "status": "Done",
-    "target": "17",
-    "budgettotal": 2400000,
-    "limit": "63",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 44,
-    "title": "Public Relations Strategy",
-    "category": "BOS Reguler",
-    "status": "Done",
-    "target": "3",
-    "budgettotal": 2400000,
-    "limit": "64",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 45,
-    "title": "Social Media Integration",
-    "category": "Pembelian",
-    "status": "In Process",
-    "target": "13",
-    "budgettotal": 2400000,
-    "limit": "65",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 46,
-    "title": "Training Materials",
-    "category": "BOS Afirmasi",
-    "status": "Done",
-    "target": "26",
-    "budgettotal": 2400000,
-    "limit": "66",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 47,
-    "title": "Workshops and Seminars",
-    "category": "BOS Reguler",
-    "status": "Done",
-    "target": "29",
-    "budgettotal": 2400000,
-    "limit": "67",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 48,
-    "title": "Evaluation Reports",
-    "category": "BOS Kinerja",
-    "status": "Done",
-    "target": "5",
-    "budgettotal": 2400000,
-    "limit": "68",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 49,
-    "title": "Compliance Audits",
-    "category": "Pembelian",
-    "status": "In Process",
-    "target": "11",
-    "budgettotal": 2400000,
-    "limit": "69",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 50,
-    "title": "Certification and Accreditation",
-    "category": "BOS Reguler",
-    "status": "Done",
-    "target": "23",
-    "budgettotal": 2400000,
-    "limit": "70",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 51,
-    "title": "Project Closure Report",
-    "category": "BOS Afirmasi",
-    "status": "Done",
-    "target": "4",
-    "budgettotal": 2400000,
-    "limit": "71",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 52,
-    "title": "Lessons Learned",
-    "category": "Pembelian",
-    "status": "Done",
-    "target": "16",
-    "budgettotal": 2400000,
-    "limit": "72",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 53,
-    "title": "Knowledge Transfer Plan",
-    "category": "BOS Kinerja",
-    "status": "Done",
-    "target": "30",
-    "budgettotal": 2400000,
-    "limit": "73",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 54,
-    "title": "Post-Implementation Review",
-    "category": "BOS Reguler",
-    "status": "Done",
-    "target": "7",
-    "budgettotal": 2400000,
-    "limit": "74",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 55,
-    "title": "Continuous Improvement Strategy",
-    "category": "Pembelian",
-    "status": "Done",
-    "target": "2",
-    "budgettotal": 2400000,
-    "limit": "75",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 56,
-    "title": "Feedback Mechanisms",
-    "category": "BOS Afirmasi",
-    "status": "In Process",
-    "target": "22",
-    "budgettotal": 2400000,
-    "limit": "76",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 57,
-    "title": "Client Testimonials",
-    "category": "BOS Reguler",
-    "status": "Done",
-    "target": "9",
-    "budgettotal": 2400000,
-    "limit": "77",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 58,
-    "title": "Case Studies",
-    "category": "Pembelian",
-    "status": "Done",
-    "target": "28",
-    "budgettotal": 2400000,
-    "limit": "78",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 59,
-    "title": "Market Analysis",
-    "category": "BOS Kinerja",
-    "status": "Done",
-    "target": "1",
-    "budgettotal": 2400000,
-    "limit": "79",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 60,
-    "title": "Competitive Landscape",
-    "category": "BOS Reguler",
-    "status": "Done",
-    "target": "18",
-    "budgettotal": 2400000,
-    "limit": "80",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 61,
-    "title": "SWOT Analysis",
-    "category": "BOS Afirmasi",
-    "status": "Done",
-    "target": "20",
-    "budgettotal": 2400000,
-    "limit": "81",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 62,
-    "title": "Strategic Recommendations",
-    "category": "Pembelian",
-    "status": "Done",
-    "target": "27",
-    "budgettotal": 2400000,
-    "limit": "82",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 63,
-    "title": "Executive Biographies",
-    "category": "BOS Kinerja",
-    "status": "In Process",
-    "target": "6",
-    "budgettotal": 2400000,
-    "limit": "83",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 64,
-    "title": "Organizational Chart",
-    "category": "Pembelian",
-    "status": "Done",
-    "target": "12",
-    "budgettotal": 2400000,
-    "limit": "84",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 65,
-    "title": "Corporate Governance Policies",
-    "category": "BOS Reguler",
-    "status": "Done",
-    "target": "25",
-    "budgettotal": 2400000,
-    "limit": "85",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 66,
-    "title": "Code of Ethics",
-    "category": "BOS Afirmasi",
-    "status": "Done",
-    "target": "14",
-    "budgettotal": 2400000,
-    "limit": "86",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 67,
-    "title": "Environmental Impact Statement",
-    "category": "BOS Kinerja",
-    "status": "In Process",
-    "target": "11",
-    "budgettotal": 2400000,
-    "limit": "87",
-    "reviewer": "Assign reviewer"
-  },
-  {
-    "id": 68,
-    "title": "Corporate Social Responsibility Initiatives",
-    "category": "Pembelian",
-    "status": "Done",
-    "target": "24",
-    "budgettotal": 2400000,
-    "limit": "88",
-    "reviewer": "Assign reviewer"
+    "fundsource": "BOS Reguler",
+    "fundtotal":  1100000,
+    "spendtotal": 21,
+    "fundremain": 2400000,
+    "lastedit": "2025-09-29 21:35:45"
   }
 ]
