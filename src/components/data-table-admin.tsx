@@ -1,6 +1,7 @@
 
 import * as React from "react"
 import { Link } from "react-router-dom"
+import {Input} from "@/components/ui/input"
 import {
   closestCenter,
   DndContext,
@@ -30,6 +31,7 @@ import {
   IconDotsVertical,
   // IconGripVertical,
   IconLayoutColumns,
+  // IconSearch,
   // IconLoader,
   // IconPlus,
   // IconTrendingUp,
@@ -85,8 +87,8 @@ import {
 import {
   Tabs,
   TabsContent,
-  TabsList,
-  TabsTrigger,
+  // TabsList,
+  // TabsTrigger,
 } from "@/components/ui/tabs"
 
 
@@ -159,7 +161,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     accessorKey: "fundsource",
     header: "Sumber Dana",
     cell: ({ row }) => (
-      <div className="w-32">
+      <div className="text-left w-32">
         {row.original.fundsource}
       </div>
     ),
@@ -169,7 +171,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     accessorKey: "fundtotal",
     header: "Total Dana Anggaran",
     cell: ({ row }) => (
-      <div className="w-32">
+      <div className="w-32 text-left">
           Rp. {row.original.fundtotal.toLocaleString("id-ID")}
       </div>
     ),
@@ -178,7 +180,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     accessorKey: "spendtotal",
     header: "Jumlah Realisasi",
     cell: ({ row }) => (
-      <div className="w-32">
+      <div className="w-32 text-left">
         Rp. {row.original.spendtotal.toLocaleString("id-ID")}
       </div>
     ),
@@ -187,14 +189,14 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     accessorKey: "fundremain",
     header: "Fund Remain",
     cell: ({ row }) => (
-      <div className="w-32">
+      <div className="w-32 text-left">
         Rp. {row.original.fundremain.toLocaleString("id-ID")}
       </div>
     ),
   },
   {
     accessorKey: "lastedit",
-    header: "Terkhir Diubah",
+    header: "Terakhir Diubah",
     cell: ({ row }) => (
       <div className="w-40">
         {row.original.lastedit.toLocaleString()}
@@ -323,35 +325,22 @@ export function DataTable({
       className="w-full flex-col justify-start gap-6"
     >
       <div className="flex items-center justify-between px-4 lg:px-6">
-        <Label htmlFor="view-selector" className="sr-only">
-          View
-        </Label>
-        <Select defaultValue="outline">
-          <SelectTrigger
-            className="flex w-fit @4xl/main:hidden"
-            size="sm"
-            id="view-selector"
-          >
-            <SelectValue placeholder="Select a view" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="outline">Outline</SelectItem>
-            <SelectItem value="past-performance">Past Performance</SelectItem>
-            <SelectItem value="key-personnel">Key Personnel</SelectItem>
-            <SelectItem value="focus-documents">Focus Documents</SelectItem>
-          </SelectContent>
-        </Select>
-        <TabsList className="**:data-[slot=badge]:bg-muted-foreground/30 hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:px-1 @4xl/main:flex">
-          <TabsTrigger value="semua">Semua</TabsTrigger>
-          <TabsTrigger value="bos">BOS</TabsTrigger>
-          <TabsTrigger value="pembelian">Pembelian</TabsTrigger>
-        </TabsList>
+        <Input
+          placeholder="Search by title..."
+          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("title")?.setFilterValue(event.target.value)
+          }
+          className="text-sm max-w-sm"
+          
+        />
+        
         <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm">
                 <IconLayoutColumns />
-                <span className="hidden lg:inline">Customize Columns</span>
+                <span className="hidden lg:inline">Custom Kolom</span>
                 <span className="lg:hidden">Columns</span>
                 <IconChevronDown />
               </Button>
@@ -395,12 +384,12 @@ export function DataTable({
             id={sortableId}
           >
             <Table>
-              <TableHeader className="bg-muted sticky top-0 z-10">
+              <TableHeader className="text-left bg-muted sticky top-0 z-10">
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
                       return (
-                        <TableHead key={header.id} colSpan={header.colSpan}>
+                        <TableHead className="text-left" key={header.id} colSpan={header.colSpan}>
                           {header.isPlaceholder
                             ? null
                             : flexRender(
@@ -413,7 +402,7 @@ export function DataTable({
                   </TableRow>
                 ))}
               </TableHeader>
-              <TableBody className="**:data-[slot=table-cell]:first:w-8">
+              <TableBody className="**:data-[slot=table-cell]:first:w-8 ">
                 {table.getRowModel().rows?.length ? (
                   <SortableContext
                     items={dataIds}

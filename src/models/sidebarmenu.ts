@@ -29,12 +29,8 @@ export const Dropdown= {
       icon: Book,
       items: [
         {
-          title: "BOS",
-          url: "/bos",
-        },
-        {
-          title: "Pembelian",
-          url: "/pembelian",
+          title: "Pembelanjaan",
+          url: "/pembelanjaan",
         },
       ],
     },
