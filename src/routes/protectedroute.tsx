@@ -6,7 +6,7 @@ interface ProtectedRouteProps {
 }
 
 // Only allow access if logged in
-export const ProtectedDashboardRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
+export const ProtectedAdminRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   return isLoggedIn ? <>{children}</> : <Navigate to="/login" replace />;
 };

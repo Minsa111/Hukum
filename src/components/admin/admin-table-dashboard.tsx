@@ -54,7 +54,7 @@ import {
   useReactTable,
   getSortedRowModel,
 } from "@tanstack/react-table"
-import {schema} from "@/models/admin-dashboard-table"
+import {schema} from "@/models/schema/admin-dashboard-table"
 
 // import { toast } from "sonner"
 import { z } from "zod"
@@ -146,7 +146,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     header: "Judul",
   cell: ({ row }) => {
     return (
-      <div className="text-left px-4">
+      <div className="text-left px-2 lg:px-6">
         <Link 
           to={`/pembelanjaan/${row.original.id}`}
         >
@@ -161,7 +161,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     accessorKey: "fundsource",
     header: "Sumber Dana",
     cell: ({ row }) => (
-      <div className="text-left w-32">
+      <div className="text-left w-32 px-2 lg:px-4">
         {row.original.fundsource}
       </div>
     ),
@@ -171,7 +171,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     accessorKey: "fundtotal",
     header: "Total Dana Anggaran",
     cell: ({ row }) => (
-      <div className="w-32 text-left">
+      <div className="w-32 text-left px-2 lg:px-4">
           Rp. {row.original.fundtotal.toLocaleString("id-ID")}
       </div>
     ),
@@ -180,16 +180,16 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     accessorKey: "spendtotal",
     header: "Jumlah Realisasi",
     cell: ({ row }) => (
-      <div className="w-32 text-left">
+      <div className="w-32 text-left px-2 lg:px-4">
         Rp. {row.original.spendtotal.toLocaleString("id-ID")}
       </div>
     ),
   },
   {
     accessorKey: "fundremain",
-    header: "Fund Remain",
+    header: "Sisa Dana",
     cell: ({ row }) => (
-      <div className="w-32 text-left">
+      <div className="w-32 text-left px-2 lg:px-4">
         Rp. {row.original.fundremain.toLocaleString("id-ID")}
       </div>
     ),
@@ -198,7 +198,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     accessorKey: "lastedit",
     header: "Terakhir Diubah",
     cell: ({ row }) => (
-      <div className="w-40">
+      <div className="w-auto px-2 lg:px-4">
         {row.original.lastedit.toLocaleString()}
       </div>
     ),
@@ -210,7 +210,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+            className="data-[state=open]:bg-muted text-muted-foreground flex size-2"
             size="icon"
           >
             <IconDotsVertical />
@@ -332,7 +332,6 @@ export function DataTable({
             table.getColumn("title")?.setFilterValue(event.target.value)
           }
           className="text-sm max-w-sm"
-          
         />
         
         <div className="flex items-center gap-2">
@@ -389,7 +388,7 @@ export function DataTable({
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
                       return (
-                        <TableHead className="text-left" key={header.id} colSpan={header.colSpan}>
+                        <TableHead className="text-left px-4 lg:px-6" key={header.id} colSpan={header.colSpan}>
                           {header.isPlaceholder
                             ? null
                             : flexRender(
