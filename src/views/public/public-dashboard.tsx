@@ -4,7 +4,7 @@ import { ChartPieLegendSpend } from "@/components/pie-chart-spend"
 // import { SiteHeader } from "@/components/site-header"
 import { Navbar } from "@/components/navbar"
 
-import data from "@/models/data.json"
+import data from "@/models/dummy/data.json"
 
 export default function Page() {
   return (

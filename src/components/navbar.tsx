@@ -7,7 +7,7 @@ export function Navbar() {
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
                 <img src="/images/logo.png" className="mx-auto w-16 h-auto" alt="Flowbite Logo" />
-                <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white text-primary px-2">DIDKDASMEN PDM BATU</span>
+                <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white text-primary px-2">DIDKDASMEN PDM BATU</span>
             </a>
             <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                 <button type="button" className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
@@ -41,7 +41,7 @@ export function Navbar() {
                     </svg>
                 </button>
             </div>
-            <div className="text-left justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
+            <div className="text-left justify-between hidden w-full md:flex md:w-auto md:order-1 z-10" id="navbar-user">
                 <NavbarMenu/>
             </div>
         </div>

@@ -7,7 +7,7 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 
-import data from "@/models/data.json"
+import data from "@/models/dummy/data.json"
 
 export default function Page() {
   return (

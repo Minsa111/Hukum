@@ -20,7 +20,7 @@ export function LoginForm({
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="shadow-lg">
-        <CardHeader className="text-middle">
+        <CardHeader className="text-center">
           <img src="/images/logo.png" alt="logo" className="mx-auto w-24 h-auto" />
           <CardTitle className="text-xl">
             Login Administrator
