@@ -1,7 +1,6 @@
 "use client"
 
 import { Pie, PieChart } from "recharts"
-
 import {
   Card,
   CardContent,
@@ -14,47 +13,28 @@ import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent
 } from "@/components/ui/chart"
-import type{
-  ChartConfig,
-} from "@/components/ui/chart"
+import type { ChartConfig } from "@/components/ui/chart"
 import chartData from "@/models/dummy/chartData.json"
+import colors from "@/models/dummy/colorsconfig.json"
 
-export const description = "A pie chart with a legend"
 
-// const chartData = [
-//   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-//   { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-//   { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
-//   { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-//   { browser: "other", visitors: 90, fill: "var(--color-other)" },
-// ]
+// 🧠 Auto-generate chartConfig from chartData
+const chartConfig: ChartConfig = chartData.reduce(
+  (config, item, index) => {
+    config[item.school] = {
+      label: item.school,
+      color: colors[index % colors.length],
+    }
+    return config
+  },
+  {} as ChartConfig
+)
 
-const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  chrome: {
-    label: "Chrome",
-    color: "var(--chart-1)",
-  },
-  safari: {
-    label: "Safari",
-    color: "var(--chart-2)",
-  },
-  firefox: {
-    label: "Firefox",
-    color: "var(--chart-3)",
-  },
-  edge: {
-    label: "Edge",
-    color: "var(--chart-4)",
-  },
-  other: {
-    label: "Other",
-    color: "var(--chart-5)",
-  },
-} satisfies ChartConfig
+// Add a label for totalfund
+chartConfig.totalfund = { label: "Total Dana" }
 
 export function ChartPieLegendFund() {
   return (
@@ -63,20 +43,33 @@ export function ChartPieLegendFund() {
         <CardTitle>Dana Anggaran</CardTitle>
         <CardDescription>Tahun 2025</CardDescription>
       </CardHeader>
+
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[300px]"
+          className="mx-auto aspect-square w-full min-h-[265px] sm:min-h-[250px] lg:max-h-[400px]"
         >
           <PieChart>
-            <Pie data={chartData} dataKey="visitors" />
+            <ChartTooltip
+              cursor={true}
+              content={<ChartTooltipContent hideLabel />}
+            />
+            <Pie
+              data={chartData.map((item, index) => ({
+                ...item,
+                fill: colors[index % colors.length],
+              }))}
+              dataKey="totalfund"
+              nameKey="school"
+            />
             <ChartLegend
-              content={<ChartLegendContent nameKey="browser" />}
-              className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
+              content={<ChartLegendContent nameKey="school" />}
+              className="-translate-y-2 flex-wrap gap-2 *:justify-center"
             />
           </PieChart>
         </ChartContainer>
       </CardContent>
+
       <CardFooter>
         <CardTitle>Rp. 100.000.000</CardTitle>
       </CardFooter>

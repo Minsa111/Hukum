@@ -20,10 +20,10 @@ export default function Page() {
       {/* <SiteHeader title="Dashboard" /> */}
 
       {/* Main Content */}
-        <div className="flex flex-1 flex-col gap-2 bg-background relative px-16 w-full">
+        <div className="flex flex-1 flex-col gap-2 bg-background relative lg:px-16 px-2 w-full">
           <div className="@container/main flex flex-1 flex-col gap-2 ">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-              <div className="grid gap-y-4 gap-x-6 lg:grid-cols-2 mx-0 lg:mx-6">
+              <div className="grid gap-y-4 gap-x-6 md:grid-cols-2 mx-0 lg:mx-6">
                 <ChartPieLegendFund />
                 <ChartPieLegendSpend />
               </div>

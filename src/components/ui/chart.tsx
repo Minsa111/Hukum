@@ -220,7 +220,7 @@ function ChartTooltipContent({
                   )}
                   <div
                     className={cn(
-                      "flex flex-1 justify-between leading-none",
+                      "flex flex-1 justify-between leading-none gap-2",
                       nestLabel ? "items-end" : "items-center"
                     )}
                   >
@@ -281,7 +281,7 @@ function ChartLegendContent({
           <div
             key={item.value}
             className={cn(
-              "[&>svg]:text-muted-foreground flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3"
+              "[&>svg]:text-muted-foreground border border-b-blue-200 rounded-md py-0.5 px-2 flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-5"
             )}
           >
             {itemConfig?.icon && !hideIcon ? (
