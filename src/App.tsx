@@ -36,7 +36,7 @@ const App: React.FC = () => {
             <ShopReport />
           </ProtectedAdminRoute>
         }/>
-          <Route path='/login' 
+          <Route path='/auth/login' 
             element={
               <ProtectedLoginRoute>
                 <LoginPage/>

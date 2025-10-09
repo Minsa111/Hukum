@@ -6,7 +6,7 @@ export function useLogout(){
 
     const handleLogout = () => { 
         localStorage.removeItem("isLoggedIn"); // remove login state
-        navigate("/login"); // redirect to login page
+        navigate("/auth/login"); // redirect to login page
     };
     return handleLogout;
 }

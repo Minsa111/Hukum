@@ -1,9 +1,8 @@
 [
     { "school": "SD Muhammadiyah 4 Batu", "totalfund": 275, "totalspend": 124124 },
     { "school": "SMP Muhammadiyah 08 Batu", "totalfund": 200, "totalspend": 444444 },
-    { "school": "SMP Muhammadiyah 08 Batu", "totalfund": 187, "totalspend": 184124 },
     { "school": "SMP Muhammadiyah 2 Sidomulyo", "totalfund": 173, "totalspend": 172323 },
-    { "school": "SMA Islam Batu", "totalfund": 173, "totalspend": 17312412 },
-    { "school": "SMK Muhammadiyah 1 Batu", "totalfund": 173, "totalspend": 11232373 },
-    { "school": "SMA Muhammadiyah 3 Batu", "totalfund": 173, "totalspend": 173124124 }
+    { "school": "SMA Islam Batu", "totalfund": 173, "totalspend": 17312 },
+    { "school": "SMK Muhammadiyah 1 Batu", "totalfund": 173, "totalspend":32373 },
+    { "school": "SMA Muhammadiyah 3 Batu", "totalfund": 173, "totalspend": 17312 }
 ]

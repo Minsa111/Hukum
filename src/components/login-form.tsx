@@ -1,30 +1,36 @@
-
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { useLogin } from "@/hooks/authlocal"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import type { LoginDto } from "@/api/auth"; // import the LoginDto type
+
+interface LoginFormProps extends React.ComponentProps<"div"> {
+  formData: LoginDto;
+  setFormData: React.Dispatch<React.SetStateAction<LoginDto>>;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  loading?: boolean;
+}
 
 export function LoginForm({
   className,
+  formData,
+  setFormData,
+  handleSubmit,
+  loading,
   ...props
-}: React.ComponentProps<"div">) {
-
-  const { formData, setFormData, handleSubmit } = useLogin()
+}: LoginFormProps) {
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="shadow-lg">
         <CardHeader className="text-center">
           <img src="/images/logo.png" alt="logo" className="mx-auto w-24 h-auto" />
-          <CardTitle className="text-xl">
-            Login Administrator
-          </CardTitle>
+          <CardTitle className="text-xl">Login Administrator</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
@@ -38,8 +44,8 @@ export function LoginForm({
                     placeholder="Username..."
                     required
                     value={formData.username}
-                    onChange={(e)=>
-                      setFormData({...formData, username: e.target.value})
+                    onChange={(e) =>
+                      setFormData({ ...formData, username: e.target.value })
                     }
                   />
                 </div>
@@ -47,19 +53,19 @@ export function LoginForm({
                   <div className="flex items-center">
                     <Label htmlFor="password">Password</Label>
                   </div>
-                  <Input 
-                    id="password" 
-                    type="password" 
+                  <Input
+                    id="password"
+                    type="password"
                     placeholder="Password..."
-                    required 
+                    required
                     value={formData.password}
-                    onChange={(e)=>
-                    setFormData({...formData, password: e.target.value})
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
                     }
                   />
                 </div>
-                <Button type="submit" className="w-full">
-                  Login
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? "Logging in..." : "Login"}
                 </Button>
               </div>
             </div>
@@ -67,5 +73,5 @@ export function LoginForm({
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

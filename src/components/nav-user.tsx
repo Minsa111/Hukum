@@ -25,7 +25,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
-import { useLogout } from "@/hooks/authlocal"
+import { useLogout } from "@/api/authlocal"
 export function NavUser({
   user,
 }: {
