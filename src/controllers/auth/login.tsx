@@ -2,6 +2,35 @@ import { loginUser } from "../../api/auth";
 import type { LoginDto, LoginResponse } from "../../api/auth";
 import {jwtDecode} from "jwt-decode";
 
+interface JwtPayload {
+    exp?: number;
+    sub?: string;
+    username?: string;
+    role?: string;
+}
+export function validateToken(): { valid: boolean; expired: boolean; user?: JwtPayload } {
+    const token = localStorage.getItem("token");
+    if (!token) return { valid: false, expired: true };
+
+    try {
+        const decoded = jwtDecode<JwtPayload>(token);
+
+        if (!decoded.exp) return { valid: false, expired: true };
+
+        // exp from JWT is in seconds, so convert to ms
+        const isExpired = Date.now() >= decoded.exp * 1000;
+
+        return {
+            valid: !isExpired,
+            expired: isExpired,
+            user: decoded,
+        };
+    } catch (err) {
+        console.error("Invalid token:", err);
+        return { valid: false, expired: true };
+    }
+}
+
 export async function loginController(
     data: LoginDto
 ): Promise<LoginResponse> {
