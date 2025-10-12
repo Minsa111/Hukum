@@ -146,7 +146,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     header: "Judul",
   cell: ({ row }) => {
     return (
-      <div className="text-left px-2 lg:px-6">
+      <div className="text-left truncate w-64 lg:w-sm px-2 lg:px-6">
         <Link 
           to={`/pembelanjaan/${row.original.id}`}
         >
@@ -161,7 +161,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     accessorKey: "fundsource",
     header: "Sumber Dana",
     cell: ({ row }) => (
-      <div className="text-left w-32 px-2 lg:px-4">
+      <div className="text-left truncate w-32 px-2 lg:px-4">
         {row.original.fundsource}
       </div>
     ),
@@ -417,7 +417,7 @@ export function DataTable({
                       colSpan={columns.length}
                       className="h-24 text-center"
                     >
-                      No results.
+                      Data tidak ditemukan.
                     </TableCell>
                   </TableRow>
                 )}
