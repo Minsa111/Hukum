@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { validateToken } from "@/controllers/auth/login"; // adjust path if needed
+import { validateToken } from "@/controllers/auth/authcontroller"; // adjust path if needed
 
 interface ProtectedRouteProps {
   children: React.ReactNode;

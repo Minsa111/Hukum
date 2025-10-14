@@ -1,7 +1,7 @@
 // so called "hooks"
 import { useState } from "react";
 import type { LoginDto } from "@/api/auth";
-import { loginController } from "@/controllers/auth/login";
+import { loginController } from "@/controllers/auth/authcontroller";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
@@ -18,8 +18,8 @@ export function useLogin() {
 
         try {
             await loginController(formData);
-            toast.success("Login successful!");
             navigate("/dashboard");
+            toast.success("Login successful!");
         } catch (err) {
             console.error(err);
             toast.error(`Login failed: ${err}`);

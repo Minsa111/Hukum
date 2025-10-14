@@ -1,7 +1,7 @@
 
 import * as React from "react"
 import { Link } from "react-router-dom"
-import {Input} from "@/components/ui/input"
+import { Input } from "@/components/ui/input"
 import {
   closestCenter,
   DndContext,
@@ -27,6 +27,7 @@ import {
   IconChevronRight,
   IconChevronsLeft,
   IconChevronsRight,
+  IconPlus,
   // IconCircleCheckFilled,
   IconDotsVertical,
   // IconGripVertical,
@@ -41,7 +42,7 @@ import type {
   ColumnFiltersState,
   Row,
   SortingState,
-  
+
   VisibilityState,
 } from "@tanstack/react-table"
 import {
@@ -54,9 +55,7 @@ import {
   useReactTable,
   getSortedRowModel,
 } from "@tanstack/react-table"
-import {schema} from "@/models/schema/admin-dashboard-table"
-
-// import { toast } from "sonner"
+import { schema } from "@/models/schema/admin-dashboard-table"
 import { z } from "zod"
 // import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -90,70 +89,22 @@ import {
   // TabsList,
   // TabsTrigger,
 } from "@/components/ui/tabs"
-
-
-// Create a separate component for the drag handle
-// function DragHandle({ id }: { id: number }) {
-//   const { attributes, listeners } = useSortable({
-//     id,
-//   })
-
-//   return (
-//     <Button
-//       {...attributes}
-//       {...listeners}
-//       variant="ghost"
-//       size="icon"
-//       className="text-muted-foreground size-7 hover:bg-transparent"
-//     >
-//       <IconGripVertical className="text-muted-foreground size-3" />
-//       <span className="sr-only">Drag to reorder</span>
-//     </Button>
-//   )
-// }
+import { ReportShopDialog } from "@/components/shop-report-dialog"
 
 const columns: ColumnDef<z.infer<typeof schema>>[] = [
-  
-  // {
-  //   id: "select",
-  //   header: ({ table }) => (
-  //     <div className="flex items-center justify-center">
-  //       <Checkbox
-  //         checked={
-  //           table.getIsAllPageRowsSelected() ||
-  //           (table.getIsSomePageRowsSelected() && "indeterminate")
-  //         }
-  //         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-  //         aria-label="Select all"
-  //       />
-  //     </div>
-  //   ),
-  //   cell: ({ row }) => (
-  //     <div className="flex items-center justify-center">
-  //       <Checkbox
-  //         checked={row.getIsSelected()}
-  //         onCheckedChange={(value) => row.toggleSelected(!!value)}
-  //         aria-label="Select row"
-  //       />
-  //     </div>
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // },
-  
   {
     accessorKey: "title",
     header: "Judul",
-  cell: ({ row }) => {
-    return (
-      <div className="text-left truncate w-64 lg:w-sm px-2 lg:px-6">
-        <Link 
-          to={`/pembelanjaan/${row.original.id}`}
-        >
-          {row.original.title}
-        </Link>
-      </div>
-    )
+    cell: ({ row }) => {
+      return (
+        <div className="text-left px-2 lg:px-6">
+          <Link
+            to={`/pembelanjaan/${row.original.id}`}
+          >
+            {row.original.title}
+          </Link>
+        </div>
+      )
     },
     enableHiding: false,
   },
@@ -161,18 +112,18 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     accessorKey: "fundsource",
     header: "Sumber Dana",
     cell: ({ row }) => (
-      <div className="text-left truncate w-32 px-2 lg:px-4">
+      <div className="text-left w-32 px-2 lg:px-4">
         {row.original.fundsource}
       </div>
     ),
   },
-  
+
   {
     accessorKey: "fundtotal",
     header: "Total Dana Anggaran",
     cell: ({ row }) => (
       <div className="w-32 text-left px-2 lg:px-4">
-          Rp. {row.original.fundtotal.toLocaleString("id-ID")}
+        Rp. {row.original.fundtotal.toLocaleString("id-ID")}
       </div>
     ),
   },
@@ -210,7 +161,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            className="data-[state=open]:bg-muted text-muted-foreground flex size-2"
+            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
             size="icon"
           >
             <IconDotsVertical />
@@ -259,6 +210,7 @@ export function DataTable({
 }: {
   data: z.infer<typeof schema>[]
 }) {
+  const [isDialogOpen, setDialogOpen] = React.useState(false)
   const [data, setData] = React.useState(() => initialData)
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
@@ -318,12 +270,12 @@ export function DataTable({
       })
     }
   }
-
   return (
     <Tabs
-      defaultValue="semua"
-      className="w-full flex-col justify-start gap-6"
+    defaultValue="semua"
+    className="w-full flex-col justify-start gap-6"
     >
+    <ReportShopDialog open={isDialogOpen} onOpenChange={setDialogOpen} />
       <div className="flex items-center justify-between px-4 lg:px-6">
         <Input
           placeholder="Search by title..."
@@ -333,41 +285,51 @@ export function DataTable({
           }
           className="text-sm max-w-sm"
         />
-        
-        <div className="flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
-                <IconLayoutColumns />
-                <span className="hidden lg:inline">Custom Kolom</span>
-                <span className="lg:hidden">Columns</span>
-                <IconChevronDown />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              {table
-                .getAllColumns()
-                .filter(
-                  (column) =>
-                    typeof column.accessorFn !== "undefined" &&
-                    column.getCanHide()
-                )
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
+        <div className=" flex items-center gap-2">
+          <Button
+            size="lg"
+            className="text hover:bg-primary/80 "
+            onClick={() => setDialogOpen(true)}
+          >
+            <IconPlus />
+            <span className="hidden lg:inline">Tambah Laporan</span>
+            <span className="lg:hidden">Tambah</span>
+          </Button>
+          <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="lg">
+                  <IconLayoutColumns />
+                  <span className="hidden lg:inline">Custom Kolom</span>
+                  <span className="lg:hidden">Kolom</span>
+                  <IconChevronDown />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                {table
+                  .getAllColumns()
+                  .filter(
+                    (column) =>
+                      typeof column.accessorFn !== "undefined" &&
+                      column.getCanHide()
                   )
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
+                  .map((column) => {
+                    return (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }
+                      >
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
+                    )
+                  })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </div>
       <TabsContent
@@ -392,9 +354,9 @@ export function DataTable({
                           {header.isPlaceholder
                             ? null
                             : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
                         </TableHead>
                       )
                     })}
@@ -417,7 +379,7 @@ export function DataTable({
                       colSpan={columns.length}
                       className="h-24 text-center"
                     >
-                      Data tidak ditemukan.
+                      Data tidak ditemukan.f
                     </TableCell>
                   </TableRow>
                 )}

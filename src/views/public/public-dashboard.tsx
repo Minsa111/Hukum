@@ -1,4 +1,4 @@
-import { DataTable } from "@/components/admin/admin-table-dashboard"
+import { DataTable } from "@/components/table/admin/admin-table-dashboard"
 import { ChartPieLegendFund} from "@/components/pie-chart-fund"
 import { ChartPieLegendSpend } from "@/components/pie-chart-spend"
 // import { SiteHeader } from "@/components/site-header"

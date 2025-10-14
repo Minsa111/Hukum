@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-// import React, { useEffect, useState } from 'react';
 import './App.css';
 // import PublicDashboard from
 import LoginPage from './views/login';
@@ -7,6 +6,7 @@ import Dashboard from './views/user/dashboard';
 import PublicDashboard from './views/public/public-dashboard';
 import ShopReport from './views/user/shopreport';
 import {ProtectedAdminRoute, ProtectedLoginRoute} from './routes/protectedroute';
+import { Toaster } from 'sonner';
 
 const App: React.FC = () => {
   // const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -18,6 +18,7 @@ const App: React.FC = () => {
 
   return (
     <Router>
+    <Toaster/>
       <Routes>
         <Route path='/' 
           element={

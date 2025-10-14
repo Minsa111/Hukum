@@ -113,12 +113,40 @@ import {
 // }
 
 const columns: ColumnDef<z.infer<typeof schema>>[] = [
+  
+  // {
+  //   id: "select",
+  //   header: ({ table }) => (
+  //     <div className="flex items-center justify-center">
+  //       <Checkbox
+  //         checked={
+  //           table.getIsAllPageRowsSelected() ||
+  //           (table.getIsSomePageRowsSelected() && "indeterminate")
+  //         }
+  //         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //         aria-label="Select all"
+  //       />
+  //     </div>
+  //   ),
+  //   cell: ({ row }) => (
+  //     <div className="flex items-center justify-center">
+  //       <Checkbox
+  //         checked={row.getIsSelected()}
+  //         onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //         aria-label="Select row"
+  //       />
+  //     </div>
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
+  
   {
     accessorKey: "title",
     header: "Judul",
   cell: ({ row }) => {
     return (
-      <div className="text-left px-2 lg:px-6">
+      <div className="text-left truncate w-64 lg:w-sm px-2 lg:px-4">
         <Link 
           to={`/pembelanjaan/${row.original.id}`}
         >
@@ -133,7 +161,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     accessorKey: "fundsource",
     header: "Sumber Dana",
     cell: ({ row }) => (
-      <div className="text-left w-32 px-2 lg:px-4">
+      <div className="text-left truncate w-32 px-2 lg:px-4">
         {row.original.fundsource}
       </div>
     ),
@@ -182,7 +210,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            className="data-[state=open]:bg-muted text-muted-foreground flex size-2"
+            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
             size="icon"
           >
             <IconDotsVertical />
@@ -304,7 +332,6 @@ export function DataTable({
             table.getColumn("title")?.setFilterValue(event.target.value)
           }
           className="text-sm max-w-sm"
-          
         />
         
         <div className="flex items-center gap-2">
@@ -390,7 +417,7 @@ export function DataTable({
                       colSpan={columns.length}
                       className="h-24 text-center"
                     >
-                      Data tidak ditemukan.f
+                      Data tidak ditemukan.
                     </TableCell>
                   </TableRow>
                 )}

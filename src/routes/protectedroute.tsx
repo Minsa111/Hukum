@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { validateToken } from "@/controllers/auth/login"; // adjust path if needed
+import { validateToken } from "@/controllers/auth/authcontroller"; // adjust path if needed
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -16,6 +16,8 @@ export const ProtectedAdminRoute: React.FC<ProtectedRouteProps> = ({ children })
     localStorage.removeItem("tokenExpiration");
     return <Navigate to="/auth/login" replace />;
   }
+  
+  console.log(valid,"and", expired);
   return <>{children}</>;
 };
 
@@ -23,6 +25,7 @@ export const ProtectedLoginRoute: React.FC<ProtectedRouteProps> = ({ children })
   const { valid, expired } = validateToken();
 
   if (valid && !expired) {
+    console.log(valid,"and", expired);
     return <Navigate to="/dashboard" replace />;
   }
   return <>{children}</>;

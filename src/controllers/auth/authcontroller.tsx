@@ -1,6 +1,7 @@
 import { loginUser } from "../../api/auth";
 import type { LoginDto, LoginResponse } from "../../api/auth";
 import {jwtDecode} from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 interface JwtPayload {
     exp?: number;
@@ -16,8 +17,6 @@ export function validateToken(): { valid: boolean; expired: boolean; user?: JwtP
         const decoded = jwtDecode<JwtPayload>(token);
 
         if (!decoded.exp) return { valid: false, expired: true };
-
-        // exp from JWT is in seconds, so convert to ms
         const isExpired = Date.now() >= decoded.exp * 1000;
 
         return {
@@ -38,9 +37,20 @@ export async function loginController(
     // token expires in 30 minutes — match backend setting
     const tokenExpiration = new Date();
     tokenExpiration.setMinutes(tokenExpiration.getMinutes() + 30);
-    
+    const decoded = jwtDecode<JwtPayload>(response.access_token);
+
     localStorage.setItem("token", response.access_token);
     localStorage.setItem("tokenExpiration", tokenExpiration.toISOString());
-    console.log(jwtDecode(response.access_token));
+    localStorage.setItem("username", decoded.username ?? "");
     return response;
+}
+
+export function useLogoutController(){
+    const navigate = useNavigate();
+    return () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("tokenExpiration");
+        localStorage.removeItem("username");
+        navigate("/auth/login");
+    }
 }

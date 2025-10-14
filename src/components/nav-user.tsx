@@ -25,7 +25,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
-import { useLogout } from "@/api/authlocal"
+import { useLogoutController } from "@/controllers/auth/authcontroller"
 export function NavUser({
   user,
 }: {
@@ -34,8 +34,7 @@ export function NavUser({
     sekolah: string
   }
 }) {
-  
-  const handleLogout = useLogout();
+  const handleLogout = useLogoutController();
   const { isMobile } = useSidebar()
   return (
     <SidebarMenu>
