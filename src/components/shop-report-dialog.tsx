@@ -26,9 +26,7 @@ export function ReportShopDialog({
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Remove all non-digit characters
     const rawValue = e.target.value.replace(/\D/g, "")
-    // Format it using Indonesian locale (adds dots)
     const formatted = rawValue ? Number(rawValue).toLocaleString("id-ID") : ""
     setValue(formatted)
   }
@@ -47,12 +45,12 @@ export function ReportShopDialog({
           </div>
 
           <div className="grid gap-3">
-            <Label htmlFor="fundsource">Judul</Label>
+            <Label htmlFor="fundsource">Sumber Dana</Label>
             <Input id="name" name="name" placeholder="Masukkan Sumber Dana" />
           </div>
 
           <div className="grid gap-3">
-            <Label htmlFor="fundcurr">Judul</Label>
+            <Label htmlFor="fundcurr">Jumlah Nominal</Label>
             <InputGroup>
               <InputGroupInput 
               id="fundcurr"
@@ -75,7 +73,7 @@ export function ReportShopDialog({
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="submit">Save</Button>
+            <Button type="submit">Tambah</Button>
           </DialogFooter>
         </form>
       </DialogContent>

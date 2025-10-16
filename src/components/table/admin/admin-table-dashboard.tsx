@@ -318,13 +318,12 @@ export function DataTable({
       })
     }
   }
-
   return (
     <Tabs
       defaultValue="semua"
-      className="w-full flex-col justify-start gap-6"
+      className="w-full flex-col justify-start gap-4"
     >
-      <div className="flex items-center justify-between px-4 lg:px-6">
+      <div className="w-full flex flex-col sm:flex-row items-start sm:items-center gap-2 justify-between px-4 lg:px-6">
         <Input
           placeholder="Search by title..."
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
@@ -334,7 +333,7 @@ export function DataTable({
           className="text-sm max-w-sm"
         />
         
-        <div className="flex items-center gap-2">
+        <div className="flex items-center self-end gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm">
