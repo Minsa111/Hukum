@@ -379,7 +379,7 @@ export function DataTable({
                       colSpan={columns.length}
                       className="h-24 text-center"
                     >
-                      Data tidak ditemukan.f
+                      Data tidak ditemukan.
                     </TableCell>
                   </TableRow>
                 )}

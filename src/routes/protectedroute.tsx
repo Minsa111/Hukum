@@ -14,7 +14,7 @@ export const ProtectedAdminRoute: React.FC<ProtectedRouteProps> = ({ children })
     // If token invalid or expired, clear and redirect to login
     localStorage.removeItem("token");
     localStorage.removeItem("tokenExpiration");
-    return <Navigate to="/auth/login" replace />;
+    return <Navigate to="/404" replace />;
   }
   
   console.log(valid,"and", expired);
@@ -26,7 +26,7 @@ export const ProtectedLoginRoute: React.FC<ProtectedRouteProps> = ({ children })
 
   if (valid && !expired) {
     console.log(valid,"and", expired);
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/admin" replace />;
   }
   return <>{children}</>;
 };

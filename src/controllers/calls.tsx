@@ -18,7 +18,7 @@ export function useLogin() {
 
         try {
             await loginController(formData);
-            navigate("/dashboard");
+            navigate("/admin");
             toast.success("Login successful!");
         } catch (err) {
             console.error(err);

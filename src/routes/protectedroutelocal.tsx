@@ -25,7 +25,7 @@ export const ProtectedLoginRoute: React.FC<ProtectedRouteProps> = ({ children })
 
   if (valid && !expired) {
     // If already logged in and token valid, go straight to dashboard
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/admin" replace />;
   }
 
   // If token missing or expired, allow access to login page

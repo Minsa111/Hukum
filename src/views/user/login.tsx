@@ -1,6 +1,6 @@
 
 import { useLogin } from "@/controllers/calls"
-import { AuthLayout } from "./layout/authlayout"
+import { AuthLayout } from "../layout/authlayout"
 import { LoginForm } from "@/components/login-form"
 // import { Toaster } from "@/components/ui/sonner";
 export default function LoginPage() {
@@ -14,7 +14,6 @@ export default function LoginPage() {
       handleSubmit={handleSubmit}
       loading = {loading}
       />
-      {/* <Toaster /> */}
     </AuthLayout>
   )
 }

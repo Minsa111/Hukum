@@ -26,7 +26,7 @@ export function useLogin() {
 
         if (username.toLowerCase()==='admin' && password==='123') {
             localStorage.setItem("isLoggedIn", "true");
-            navigate("/dashboard");
+            navigate("/admin/dashboard");
         }else{
             alert("invalid");
         }

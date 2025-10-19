@@ -1,48 +1,51 @@
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import './App.css';
-// import PublicDashboard from
-import LoginPage from './views/login';
-import Dashboard from './views/user/dashboard';
-import PublicDashboard from './views/public/public-dashboard';
-import ShopReport from './views/user/shopreport';
-import {ProtectedAdminRoute, ProtectedLoginRoute} from './routes/protectedroute';
-import { Toaster } from 'sonner';
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import "./App.css";
+import { Toaster } from "sonner";
+import { ProtectedAdminRoute, ProtectedLoginRoute } from "./routes/protectedroute";
+
+import PublicDashboard from "./views/public/public-dashboard";
+import LoginPage from "./views/user/login";
+import Dashboard from "./views/user/dashboard";
+import ShopReport from "./views/user/shopreport";
+import ShopActivity from "./views/user/reportactivity";
+import NotFoundPage from "./views/notfound";
+import { AdminLayout } from "./views/layout/adminLayout";
 
 const App: React.FC = () => {
-  // const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-
-  // useEffect(()=>{
-  //   const loggedIn = localStorage.getItem("isLoggedIn")==="true";
-  //   setIsLoggedIn(loggedIn);
-  // });
-
   return (
     <Router>
-    <Toaster/>
+      <Toaster />
       <Routes>
-        <Route path='/' 
+        <Route path="/" element={<Navigate to="/public-dashboard" replace />} />
+
+        <Route path="/public-dashboard" element={<PublicDashboard />} />
+
+        {/* Auth */}
+        <Route
+          path="/auth/login"
           element={
-            <Navigate to = {'/public-dashboard'}/> 
-          }/>
-        <Route path='/public-dashboard' element={
-          <PublicDashboard/>
-        }/>
-        <Route path="/dashboard" element={
-          <ProtectedAdminRoute>
-            <Dashboard />
-          </ProtectedAdminRoute>
-        }/>
-        <Route path="/pembelanjaan" element={
-          <ProtectedAdminRoute>
-            <ShopReport />
-          </ProtectedAdminRoute>
-        }/>
-          <Route path='/auth/login' 
-            element={
-              <ProtectedLoginRoute>
-                <LoginPage/>
-              </ProtectedLoginRoute>
-            } />
+            <ProtectedLoginRoute>
+              <LoginPage />
+            </ProtectedLoginRoute>
+          }
+        />
+
+        {/* Admin routes with shared layout */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedAdminRoute>
+              <AdminLayout />
+            </ProtectedAdminRoute>
+          }
+        >
+          <Route index element={<Dashboard />} />
+          <Route path="pembelanjaan" element={<ShopReport />} />
+          <Route path="pembelanjaan/aktivitas" element={<ShopActivity />} />
+        </Route>
+
+        {/* Not Found */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
   );
