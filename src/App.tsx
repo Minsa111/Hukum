@@ -30,7 +30,6 @@ const App: React.FC = () => {
           }
         />
 
-        {/* Admin routes with shared layout */}
         <Route
           path="/admin"
           element={
@@ -41,10 +40,9 @@ const App: React.FC = () => {
         >
           <Route index element={<Dashboard />} />
           <Route path="pembelanjaan" element={<ShopReport />} />
-          <Route path="pembelanjaan/aktivitas" element={<ShopActivity />} />
+          <Route path="pembelanjaan/:aktivitas" element={<ShopActivity />} />
         </Route>
 
-        {/* Not Found */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>

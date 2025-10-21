@@ -99,7 +99,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
       return (
         <div className="text-left px-2 lg:px-6">
           <Link
-            to={`/pembelanjaan/${row.original.id}`}
+            to={`/admin/pembelanjaan/${row.original.id}`}
           >
             {row.original.title}
           </Link>

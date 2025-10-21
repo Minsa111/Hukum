@@ -148,7 +148,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     return (
       <div className="text-left truncate w-64 lg:w-sm px-2 lg:px-4">
         <Link 
-          to={`/pembelanjaan/${row.original.id}`}
+          to={`/admin/pembelanjaan/${row.original.id}`}
         >
           {row.original.title}
         </Link>
