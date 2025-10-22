@@ -1,9 +1,9 @@
 
 import { DataTable } from "@/components/table/admin/admin-table-dashboard"
-import { SectionCards } from "@/components/section-cards"
+import { SectionCards } from "@/components/cards/section-cards"
 import { SiteHeader } from "@/components/site-header"
-
 import data from "@/models/dummy/data.json"
+import { fetchWithAuth } from "@/controllers/fetchwithauths"
 
 export default function Page() {
   return (

@@ -17,7 +17,6 @@ const App: React.FC = () => {
       <Toaster />
       <Routes>
         <Route path="/" element={<Navigate to="/public-dashboard" replace />} />
-
         <Route path="/public-dashboard" element={<PublicDashboard />} />
 
         {/* Auth */}
@@ -38,12 +37,23 @@ const App: React.FC = () => {
             </ProtectedAdminRoute>
           }
         >
-          <Route index element={<Dashboard />} />
-          <Route path="pembelanjaan" element={<ShopReport />} />
-          <Route path="pembelanjaan/:aktivitas" element={<ShopActivity />} />
+            <Route index element={<Dashboard />} />
+            <Route path="pembelanjaan" element={
+              <ProtectedAdminRoute>
+                <ShopReport />
+              </ProtectedAdminRoute>
+            } />
+            <Route path="pembelanjaan/:id" element={
+              <ProtectedAdminRoute>
+                <ShopActivity />
+              </ProtectedAdminRoute>
+            } />
         </Route>
 
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="*" element=
+        {
+            <NotFoundPage />
+        } />
       </Routes>
     </Router>
   );

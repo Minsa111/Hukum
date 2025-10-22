@@ -1,5 +1,5 @@
 
-import { DataTable } from "@/components/table/admin/admin-table-shopreport"
+import { DataTable } from "@/components/table/admin/admin-table-reportactivity"
 import { SiteHeader } from "@/components/site-header"
 
 import data from "@/models/dummy/data.json"
