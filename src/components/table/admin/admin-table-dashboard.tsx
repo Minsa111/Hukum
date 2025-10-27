@@ -54,7 +54,7 @@ import {
   useReactTable,
   getSortedRowModel,
 } from "@tanstack/react-table"
-import {schema} from "@/models/schema/admin-dashboard-table"
+import {reportSchema} from "@/models/schema/admin-shopreport-table"
 
 // import { toast } from "sonner"
 import { z } from "zod"
@@ -87,60 +87,10 @@ import {
 import {
   Tabs,
   TabsContent,
-  // TabsList,
-  // TabsTrigger,
 } from "@/components/ui/tabs"
 
 
-// Create a separate component for the drag handle
-// function DragHandle({ id }: { id: number }) {
-//   const { attributes, listeners } = useSortable({
-//     id,
-//   })
-
-//   return (
-//     <Button
-//       {...attributes}
-//       {...listeners}
-//       variant="ghost"
-//       size="icon"
-//       className="text-muted-foreground size-7 hover:bg-transparent"
-//     >
-//       <IconGripVertical className="text-muted-foreground size-3" />
-//       <span className="sr-only">Drag to reorder</span>
-//     </Button>
-//   )
-// }
-
-const columns: ColumnDef<z.infer<typeof schema>>[] = [
-  
-  // {
-  //   id: "select",
-  //   header: ({ table }) => (
-  //     <div className="flex items-center justify-center">
-  //       <Checkbox
-  //         checked={
-  //           table.getIsAllPageRowsSelected() ||
-  //           (table.getIsSomePageRowsSelected() && "indeterminate")
-  //         }
-  //         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-  //         aria-label="Select all"
-  //       />
-  //     </div>
-  //   ),
-  //   cell: ({ row }) => (
-  //     <div className="flex items-center justify-center">
-  //       <Checkbox
-  //         checked={row.getIsSelected()}
-  //         onCheckedChange={(value) => row.toggleSelected(!!value)}
-  //         aria-label="Select row"
-  //       />
-  //     </div>
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // },
-  
+const columns: ColumnDef<z.infer<typeof reportSchema>>[] = [
   {
     accessorKey: "title",
     header: "Judul",
@@ -157,49 +107,60 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     },
     enableHiding: false,
   },
-  {
-    accessorKey: "fundsource",
-    header: "Sumber Dana",
-    cell: ({ row }) => (
+{
+  accessorKey: "Sumber Dana",
+  header: "Sumber Dana",
+  cell: ({ row }) => {
+    const sources = row.original.fundingSources?.map(f => f.source_of_fund).join(", ") || "-";
+    return (
       <div className="text-left truncate w-32 px-2 lg:px-4">
-        {row.original.fundsource}
+        {sources}
       </div>
-    ),
+    );
   },
-  
+},
   {
-    accessorKey: "fundtotal",
+    accessorKey: "Total Dana Anggaran",
     header: "Total Dana Anggaran",
     cell: ({ row }) => (
       <div className="w-32 text-left px-2 lg:px-4">
-          Rp. {row.original.fundtotal.toLocaleString("id-ID")}
+          Rp. {row.original.total_budget_amount.toLocaleString("id-ID")}
       </div>
     ),
   },
   {
-    accessorKey: "spendtotal",
+    accessorKey: "Jumlah Realisasi",
     header: "Jumlah Realisasi",
     cell: ({ row }) => (
       <div className="w-32 text-left px-2 lg:px-4">
-        Rp. {row.original.spendtotal.toLocaleString("id-ID")}
+        Rp. {row.original.realization_amount.toLocaleString("id-ID")}
       </div>
     ),
   },
   {
-    accessorKey: "fundremain",
-    header: "Sisa Dana",
+    accessorKey: "Sisa Dana Anggaran",
+    header: "Sisa Dana Anggaran",
     cell: ({ row }) => (
       <div className="w-32 text-left px-2 lg:px-4">
-        Rp. {row.original.fundremain.toLocaleString("id-ID")}
+        Rp. {row.original.remaining_fund.toLocaleString("id-ID")}
       </div>
     ),
   },
   {
-    accessorKey: "lastedit",
-    header: "Terakhir Diubah",
+    accessorKey: "Terakhir Diperbarui",
+    header: "Terakhir Diperbarui",
     cell: ({ row }) => (
       <div className="w-auto px-2 lg:px-4">
-        {row.original.lastedit.toLocaleString()}
+        {row.original.updated_at.toLocaleString()}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "Dibuat Pada",
+    header: "Dibuat Pada",
+    cell: ({ row }) => (
+      <div className="w-auto px-2 lg:px-4">
+        {row.original.updated_at.toLocaleString()}
       </div>
     ),
   },
@@ -229,7 +190,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
   },
 ]
 
-function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
+function DraggableRow({ row }: { row: Row<z.infer<typeof reportSchema>> }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
     id: row.original.id,
   })
@@ -257,8 +218,9 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
 export function DataTable({
   data: initialData,
 }: {
-  data: z.infer<typeof schema>[]
+  data: z.infer<typeof reportSchema>[]
 }) {
+  
   const [data, setData] = React.useState(() => initialData)
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
@@ -505,172 +467,3 @@ export function DataTable({
     </Tabs>
   )
 }
-
-// const chartData = [
-//   { month: "January", desktop: 186, mobile: 80 },
-//   { month: "February", desktop: 305, mobile: 200 },
-//   { month: "March", desktop: 237, mobile: 120 },
-//   { month: "April", desktop: 73, mobile: 190 },
-//   { month: "May", desktop: 209, mobile: 130 },
-//   { month: "June", desktop: 214, mobile: 140 },
-// ]
-
-// const chartConfig = {
-//   desktop: {
-//     label: "Desktop",
-//     color: "var(--primary)",
-//   },
-//   mobile: {
-//     label: "Mobile",
-//     color: "var(--primary)",
-//   },
-// } satisfies ChartConfig
-
-// function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
-//   const isMobile = useIsMobile()
-
-//   return (
-//     <Drawer direction={isMobile ? "bottom" : "right"}>
-//       <DrawerTrigger asChild>
-//         <Button variant="link" className="text-foreground w-fit px-0 text-left">
-//           {item.title}
-//         </Button>
-//       </DrawerTrigger>
-//       <DrawerContent>
-//         <DrawerHeader className="gap-1">
-//           <DrawerTitle>{item.title}</DrawerTitle>
-//           <DrawerDescription>
-//             Showing total visitors for the last 6 months
-//           </DrawerDescription>
-//         </DrawerHeader>
-//         <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
-//           {!isMobile && (
-//             <>
-//               <ChartContainer config={chartConfig}>
-//                 <AreaChart
-//                   accessibilityLayer
-//                   data={chartData}
-//                   margin={{
-//                     left: 0,
-//                     right: 10,
-//                   }}
-//                 >
-//                   <CartesianGrid vertical={false} />
-//                   <XAxis
-//                     dataKey="month"
-//                     tickLine={false}
-//                     axisLine={false}
-//                     tickMargin={8}
-//                     tickFormatter={(value) => value.slice(0, 3)}
-//                     hide
-//                   />
-//                   <ChartTooltip
-//                     cursor={false}
-//                     content={<ChartTooltipContent indicator="dot" />}
-//                   />
-//                   <Area
-//                     dataKey="mobile"
-//                     type="natural"
-//                     fill="var(--color-mobile)"
-//                     fillOpacity={0.6}
-//                     stroke="var(--color-mobile)"
-//                     stackId="a"
-//                   />
-//                   <Area
-//                     dataKey="desktop"
-//                     type="natural"
-//                     fill="var(--color-desktop)"
-//                     fillOpacity={0.4}
-//                     stroke="var(--color-desktop)"
-//                     stackId="a"
-//                   />
-//                 </AreaChart>
-//               </ChartContainer>
-//               <Separator />
-//               <div className="grid gap-2">
-//                 <div className="flex gap-2 leading-none font-medium">
-//                   Trending up by 5.2% this month{" "}
-//                   <IconTrendingUp className="size-4" />
-//                 </div>
-//                 <div className="text-muted-foreground">
-//                   Showing total visitors for the last 6 months. This is just
-//                   some random text to test the layout. It spans multiple lines
-//                   and should wrap around.
-//                 </div>
-//               </div>
-//               <Separator />
-//             </>
-//           )}
-//           <form className="flex flex-col gap-4">
-//             <div className="flex flex-col gap-3">
-//               <Label htmlFor="header">Header</Label>
-//               <Input id="header" defaultValue={item.title} />
-//             </div>
-//             <div className="grid grid-cols-2 gap-4">
-//               <div className="flex flex-col gap-3">
-//                 <Label htmlFor="type">Type</Label>
-//                 <Select defaultValue={item.category}>
-//                   <SelectTrigger id="type" className="w-full">
-//                     <SelectValue placeholder="Select a type" />
-//                   </SelectTrigger>
-//                   <SelectContent>
-//                     <SelectItem value="Table of Contents">
-//                       Table of Contents
-//                     </SelectItem>
-//                     <SelectItem value="Executive Summary">
-//                       Executive Summary
-//                     </SelectItem>
-//                     <SelectItem value="Technical Approach">
-//                       Technical Approach
-//                     </SelectItem>
-//                     <SelectItem value="Design">Design</SelectItem>
-//                     <SelectItem value="Capabilities">Capabilities</SelectItem>
-//                     <SelectItem value="Focus Documents">
-//                       Focus Documents
-//                     </SelectItem>
-//                     <SelectItem value="Narrative">Narrative</SelectItem>
-//                     <SelectItem value="Cover Page">Cover Page</SelectItem>
-//                   </SelectContent>
-//                 </Select>
-//               </div>
-//               <div className="flex flex-col gap-3">
-//                 <Label htmlFor="spendtotal">Jumlah Realisasi</Label>
-//               </div>
-//             </div>
-//             <div className="grid grid-cols-2 gap-4">
-//               <div className="flex flex-col gap-3">
-//                 <Label htmlFor="target">Target</Label>
-//                 <Input id="target" defaultValue={item.fundremain} />
-//               </div>
-//               <div className="flex flex-col gap-3">
-//                 <Label htmlFor="limit">Limit</Label>
-//                 <Input id="limit" defaultValue={item.limit} />
-//               </div>
-//             </div>
-//             <div className="flex flex-col gap-3">
-//               <Label htmlFor="reviewer">Reviewer</Label>
-//               <Select defaultValue={item.reviewer}>
-//                 <SelectTrigger id="reviewer" className="w-full">
-//                   <SelectValue placeholder="Select a reviewer" />
-//                 </SelectTrigger>
-//                 <SelectContent>
-//                   <SelectItem value="Eddie Lake">Eddie Lake</SelectItem>
-//                   <SelectItem value="Jamik Tashpulatov">
-//                     Jamik Tashpulatov
-//                   </SelectItem>
-//                   <SelectItem value="Emily Whalen">Emily Whalen</SelectItem>
-//                 </SelectContent>
-//               </Select>
-//             </div>
-//           </form>
-//         </div>
-//         <DrawerFooter>
-//           <Button>Submit</Button>
-//           <DrawerClose asChild>
-//             <Button variant="outline">Done</Button>
-//           </DrawerClose>
-//         </DrawerFooter>
-//       </DrawerContent>
-//     </Drawer>
-//   )
-// }

@@ -36,7 +36,10 @@ export function Navbar() {
             </DrawerTrigger>
             <DrawerContent>
         <div className="flex flex-col gap-2 px-6 pt-4">
-          <div className="px-4 py-2 rounded-md">
+          <div className="px-4 py-2 rounded-md" onClick={()=>navigate("/auth/login")}>
+            Login
+          </div>
+          <div className="px-4 py-2 rounded-md" onClick={()=>navigate("/public-dashboard")}>
             Dashboard
           </div>
             <Accordion type="single" collapsible>

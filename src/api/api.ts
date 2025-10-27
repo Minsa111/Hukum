@@ -1,5 +1,8 @@
 export const API_URL = import.meta.env.VITE_API_URL;
 export const API_PURCHASE = import.meta.env.VITE_API_PURCHASE;
+export const API_ACTIVITY = import.meta.env.VITE_API_ACTIVITY;
+export const API_SCHOOL = import.meta.env.VITE_API_SCHOOL;
+
 
 export function buildApiUrl(endpoint: string) {
   return `${API_URL}${endpoint}`;

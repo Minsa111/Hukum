@@ -40,6 +40,7 @@ export async function loginController(
     const decoded = jwtDecode<JwtPayload>(response.access_token);
 
     localStorage.setItem("token", response.access_token);
+    localStorage.setItem("school_id", response.user.school_id);
     localStorage.setItem("tokenExpiration", tokenExpiration.toISOString());
     localStorage.setItem("username", decoded.username ?? "");
     return response;
@@ -51,6 +52,7 @@ export function useLogoutController(){
         localStorage.removeItem("token");
         localStorage.removeItem("tokenExpiration");
         localStorage.removeItem("username");
+        localStorage.removeItem("school_id");
         navigate("/auth/login");
     }
 }

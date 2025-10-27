@@ -10,7 +10,15 @@ export interface LoginDto {
 export interface LoginResponse {
     access_token: string;
     message: string;
+    user: {
+        id: string;
+        usename: string;
+        role: string;
+        school_id: string;
+        school_name: string;
+    };
 }
+
 
 export async function loginUser(loginDto: LoginDto): Promise<LoginResponse> {
     try {
