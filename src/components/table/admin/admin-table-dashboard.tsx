@@ -93,7 +93,7 @@ import {
 const columns: ColumnDef<z.infer<typeof reportSchema>>[] = [
   {
     accessorKey: "title",
-    header: "Judul",
+    header: "Laporan Pembelanjaan",
   cell: ({ row }) => {
     return (
       <div className="text-left truncate w-64 lg:w-sm px-2 lg:px-4">

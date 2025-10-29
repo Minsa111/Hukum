@@ -1,6 +1,6 @@
 
 import * as React from "react"
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { Input } from "@/components/ui/input"
 import {
   closestCenter,
@@ -88,6 +88,7 @@ import {
   // TabsList,
   // TabsTrigger,
 } from "@/components/ui/tabs"
+import { useActivities } from "@/api/hooks/use-activity"
   
 const columns: ColumnDef<z.infer<typeof schema>>[] = [
   {
@@ -152,7 +153,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     accessorKey: "Harga Satuan",
     header: "Harga Satuan",
     cell: ({ row }) => { 
-      const unitPrice = parseInt(row.original.unitPrice, 10);
+      const unitPrice = parseInt(String(row.original.unitPrice), 10);
       return (
         <div className="w-32 text-left px-2 lg:px-4">
           Rp. {isNaN(unitPrice) ? "-" : unitPrice.toLocaleString("id-ID")}
@@ -184,7 +185,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     accessorKey: "Total Harga",
     header: "Total Harga",
     cell: ({ row }) => {
-      const total = row.original.quantity * parseFloat(row.original.unitPrice);
+      const total = row.original.quantity * parseFloat(String(row.original.unitPrice));
       return (
         <div className="w-32 text-left px-2 lg:px-4">
           Rp. {total.toLocaleString("id-ID")}
@@ -282,15 +283,12 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
   )
 }
 
-export function DataTable({
-  data: initialData,
-}: {
-  data: z.infer<typeof schema>[]
-}) {
-  const [data, setData] = React.useState(() => initialData)
+export function DataTable() {
+  const { purchase_report_id } = useParams<{ purchase_report_id: string }>()
+  const { data: activities, loading } = useActivities(purchase_report_id)
+  const [data, setData] = React.useState<z.infer<typeof schema>[]>([]);
   const [rowSelection, setRowSelection] = React.useState({})
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
+  const [columnVisibility, setColumnVisibility] =React.useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
@@ -305,11 +303,28 @@ export function DataTable({
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {})
   )
+  React.useEffect(() => {
+  if (activities) setData(activities);
+}, [activities]);
 
-  const dataIds = React.useMemo<UniqueIdentifier[]>(
-    () => data?.map(({ id }) => id) || [],
-    [data]
-  )
+
+const dataIds = React.useMemo<UniqueIdentifier[]>(
+  () => data?.map((item) => item.id) || [],
+  [data]
+)
+React.useEffect(() => {
+  if (activities && Array.isArray(activities.activities)) {
+    const normalized = activities.activities.map((a) => ({
+      ...a,
+      activityDate: new Date(a.activityDate),
+      created_at: new Date(a.created_at),
+      updated_at: new Date(a.updated_at),
+    }));
+    setData(normalized);
+  }
+}, [activities]);
+
+
 
   const table = useReactTable({
     data,
@@ -346,8 +361,18 @@ export function DataTable({
       })
     }
   }
+
+  if (loading) {
   return (
-    console.log(data),
+    <div className="flex items-center justify-center p-10 text-gray-500">
+      Loading activities...
+    </div>
+  )
+}
+
+
+  return (
+    
     <Tabs
       defaultValue="semua"
       className="w-full flex-col justify-start gap-6"
@@ -355,9 +380,9 @@ export function DataTable({
       <div className="flex items-center justify-between px-4 lg:px-6">
         <Input
           placeholder="Search by title..."
-          value={(table.getColumn("activity")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("Kegiatan")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("activity")?.setFilterValue(event.target.value)
+            table.getColumn("Kegiatan")?.setFilterValue(event.target.value)
           }
           className="text-sm max-w-sm"
         />

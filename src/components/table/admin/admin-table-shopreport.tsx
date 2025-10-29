@@ -54,6 +54,7 @@ import {
   useReactTable,
   getSortedRowModel,
 } from "@tanstack/react-table"
+import { useReports } from "@/api/hooks/use-report"
 import {reportSchema} from "@/models/schema/admin-shopreport-table"
 
 // import { toast } from "sonner"
@@ -93,7 +94,7 @@ import { ReportShopDialog } from "@/components/shop-report-dialog"
 const columns: ColumnDef<z.infer<typeof reportSchema>>[] = [
   {
       accessorKey: "title",
-      header: "Judul",
+      header: "Laporan Pembelanjaan",
     cell: ({ row }) => {
       return (
         <div className="text-left truncate w-64 lg:w-sm px-2 lg:px-4">
@@ -215,24 +216,24 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof reportSchema>> }) {
   )
 }
 
-export function DataTable({
-  data: initialData,
-}: {
-  data: z.infer<typeof reportSchema>[]
-}) {
-  const [isDialogOpen, setDialogOpen] = React.useState(false)
-  const [data, setData] = React.useState(() => initialData)
+export function DataTable(){
+  const school_id = localStorage.getItem("school_id")
+  const { data: report, reload } = useReports(school_id)
+  const [data, setData] = React.useState<z.infer<typeof reportSchema>[]>([])
+  const [openDialog, setOpenDialog] = React.useState(false)
   const [rowSelection, setRowSelection] = React.useState({})
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [sorting, setSorting] = React.useState<SortingState>([])
-  const [pagination, setPagination] = React.useState({
-    pageIndex: 0,
-    pageSize: 10,
-  })
+  const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 10 })
+
+  React.useEffect(() => {
+  if (report) {
+    setData(report)
+  }
+}, [report])
+
+
   const sortableId = React.useId()
   const sensors = useSensors(
     useSensor(MouseSensor, {}),
@@ -281,11 +282,16 @@ export function DataTable({
     }
   }
   return (
+    
     <Tabs
       defaultValue="semua"
       className="w-full flex-col justify-start gap-4"
     >
-      <ReportShopDialog open={isDialogOpen} onOpenChange={setDialogOpen} />
+      <ReportShopDialog
+            open={openDialog}
+            onOpenChange={setOpenDialog}
+            onSuccess={reload} 
+          />
       <div className="w-full flex flex-col sm:flex-row items-start sm:items-center gap-2 justify-between px-4 lg:px-6">
         <Input
           placeholder="Search by title..."
@@ -299,7 +305,7 @@ export function DataTable({
         <Button
             size="lg"
             className="text hover:bg-primary/80 "
-            onClick={() => setDialogOpen(true)}
+            onClick={() => setOpenDialog(true)}
           >
             <IconPlus />
             <span className="hidden lg:inline">Tambah Laporan</span>
