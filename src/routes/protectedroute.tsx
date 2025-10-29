@@ -1,19 +1,21 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { validateToken } from "@/controllers/auth/authcontroller"; // adjust path if needed
+import { validateToken } from "@/controllers/auth/authcontroller"; 
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
-// ✅ Only allow access if token is valid
 export const ProtectedAdminRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { valid, expired } = validateToken();
 
   if (!valid || expired) {
-    // If token invalid or expired, clear and redirect to login
     localStorage.removeItem("token");
     localStorage.removeItem("tokenExpiration");
+    localStorage.removeItem("username");
+    localStorage.removeItem("school_id");
+    localStorage.removeItem("isLoggedIn");
+    localStorage.setItem("isLoggedIn", "false");
     return <Navigate to="/" replace />;
   }
   return <>{children}</>;

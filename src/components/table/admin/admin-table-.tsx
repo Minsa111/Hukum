@@ -93,8 +93,8 @@ import { ReportShopDialog } from "@/components/shop-report-dialog"
 
 const columns: ColumnDef<z.infer<typeof schema>>[] = [
   {
-    accessorKey: "title",
-    header: "Judul",
+    accessorKey: "Laporan Pembelanjaan",
+    header: "Laporan Pembelanjaan",
     cell: ({ row }) => {
       return (
         <div className="text-left px-2 lg:px-6">

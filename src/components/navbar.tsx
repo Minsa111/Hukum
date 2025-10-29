@@ -1,11 +1,13 @@
 import { NavbarMenu } from "./navbar-menu";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
+
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./ui/accordion";
 import { IconMenu2 } from "@tabler/icons-react";
 import { Drawer, DrawerTrigger, DrawerContent, DrawerClose, DrawerFooter, } from "./ui/drawer";
 // import { CircleUser } from "lucide-react";
 export function Navbar() {
+  const isLogin = localStorage.getItem("isLoggedIn");
   const navigate = useNavigate();
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
@@ -25,7 +27,11 @@ export function Navbar() {
             variant="outline"
             size="sm"
             className="text-sm hidden md:block text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-            onClick={() => navigate("/auth/login")}>Login</Button>
+            onClick={() => navigate(isLogin === "true" ? "/admin" : "/auth/login")}
+          >
+            {isLogin==="true" ? "Admin Dashboard" : "Login"}
+          </Button>
+
           <Drawer>
             <DrawerTrigger asChild>
               <Button
@@ -35,49 +41,49 @@ export function Navbar() {
               ><IconMenu2 /></Button>
             </DrawerTrigger>
             <DrawerContent>
-        <div className="flex flex-col gap-2 px-6 pt-4">
-          <div className="px-4 py-2 rounded-md" onClick={()=>navigate("/auth/login")}>
-            Login
-          </div>
-          <div className="px-4 py-2 rounded-md" onClick={()=>navigate("/public-dashboard")}>
-            Dashboard
-          </div>
-            <Accordion type="single" collapsible>
-              <AccordionItem value="rekap">
-                <AccordionTrigger className="outline outline-blue-100 px-4 py-2 rounded-md">
-                  Rekap
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="flex flex-col gap-2 px-6 py-2">
-                    <a
-                      href="/rekap/harian"
-                      className="text-sm text-gray-700 hover:underline"
-                    >
-                      Rekap Harian
-                    </a>
-                    <a
-                      href="/rekap/bulanan"
-                      className="text-sm text-gray-700 hover:underline"
-                    >
-                      Rekap Bulanan
-                    </a>
-                    <a
-                      href="/rekap/tahunan"
-                      className="text-sm text-gray-700 hover:underline"
-                    >
-                      Rekap Tahunan
-                    </a>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-            </div>
-            <DrawerFooter>
-              <DrawerClose>
-                Tutup
-              </DrawerClose>
+              <div className="flex flex-col gap-2 px-6 pt-4">
+                <div className="px-4 py-2 rounded-md" onClick={() => navigate("/auth/login")}>
+                {isLogin==="true" ? "Admin Dashboard" : "Login"}
+                </div>
+                <div className="px-4 py-2 rounded-md" onClick={() => navigate("/public-dashboard")}>
+                  Dashboard
+                </div>
+                <Accordion type="single" collapsible>
+                  <AccordionItem value="rekap">
+                    <AccordionTrigger className="outline outline-blue-100 px-4 py-2 rounded-md">
+                      Rekap
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="flex flex-col gap-2 px-6 py-2">
+                        <a
+                          href="/rekap/harian"
+                          className="text-sm text-gray-700 hover:underline"
+                        >
+                          Rekap Harian
+                        </a>
+                        <a
+                          href="/rekap/bulanan"
+                          className="text-sm text-gray-700 hover:underline"
+                        >
+                          Rekap Bulanan
+                        </a>
+                        <a
+                          href="/rekap/tahunan"
+                          className="text-sm text-gray-700 hover:underline"
+                        >
+                          Rekap Tahunan
+                        </a>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </div>
+              <DrawerFooter>
+                <DrawerClose>
+                  Tutup
+                </DrawerClose>
 
-            </DrawerFooter>
+              </DrawerFooter>
             </DrawerContent>
 
           </Drawer>

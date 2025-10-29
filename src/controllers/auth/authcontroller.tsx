@@ -43,6 +43,7 @@ export async function loginController(
     localStorage.setItem("school_id", response.user.school_id);
     localStorage.setItem("tokenExpiration", tokenExpiration.toISOString());
     localStorage.setItem("username", decoded.username ?? "");
+    localStorage.setItem("isLoggedIn", "true");
     return response;
 }
 
@@ -53,6 +54,8 @@ export function useLogoutController(){
         localStorage.removeItem("tokenExpiration");
         localStorage.removeItem("username");
         localStorage.removeItem("school_id");
+        localStorage.removeItem("isLoggedIn");
+        localStorage.setItem("isLoggedIn", "false");
         navigate("/auth/login");
     }
 }

@@ -1,32 +1,17 @@
-
+// src/app/dashboard/page.tsx
 import { DataTable } from "@/components/table/admin/admin-table-dashboard"
 import { SectionCards } from "@/components/cards/section-cards"
 import { SiteHeader } from "@/components/site-header"
-import { useState, useEffect } from "react"
-import { fetchWithAuth } from "@/controllers/fetchwithauths"
-import { API_PURCHASE, API_SCHOOL } from "@/api/api"
 import { ChartAreaInteractive } from "@/components/chart-area-interactive"
+import { useReports } from "@/api/hooks/use-report"
 
 export default function Page() {
-  const [report, setReport] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const school_id = localStorage.getItem("school_id");
-  useEffect(() => {
+  const school_id = localStorage.getItem("school_id")
+  const { data: report, loading, error} = useReports(school_id)
 
-    async function loadReport() {
-      try {
-        const data = await fetchWithAuth(`${API_PURCHASE}${API_SCHOOL}/${school_id}`);
-        console.log("✅ Report:", data);
-        setReport(data);
-      } catch (err) {
-        console.error("❌ Error fetching report:", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadReport();
-  });
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p>Loading...</p>
+  if (error) return <p className="text-red-500">Error loading reports.</p>
+
   return (
     <div className="flex flex-1 flex-col">
       <SiteHeader title="Dashboard" />
@@ -34,8 +19,8 @@ export default function Page() {
         <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
           <SectionCards />
           <div className="px-4 lg:px-6">
-                <ChartAreaInteractive chartData={report}/>
-              </div>
+            <ChartAreaInteractive chartData={report} />
+          </div>
           <DataTable data={report} />
         </div>
       </div>

@@ -3,29 +3,29 @@ import { SiteHeader } from "@/components/site-header";
 import { SectionCard } from "@/components/cards/section-cards-activty";
 import { useParams } from "react-router-dom";
 import * as React from "react";
-import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { IconArrowLeft, IconPlus, IconEdit } from "@tabler/icons-react";
 import { fetchWithAuth } from "@/controllers/fetchwithauths";
 import { API_PURCHASE } from "@/api/api";
 import { useNavigate } from "react-router-dom";
-
+import {useActivities} from "@/api/hooks/use-activity";
 import { ReportShopActivityDialog } from "@/components/shop-report-activity-dialog";
 
 export default function Page() {
-  const [isDialogOpen, setDialogOpen] = React.useState(false)
-  
-  const { id } = useParams(); 
-  const [report, setReport] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const { purchase_report_id } = useParams<{ purchase_report_id: string }>()
+  const { reload } = useActivities(purchase_report_id)
+  const [report, setReport] = React.useState<any>(null);
+  const [loading, setLoading] = React.useState(true);
   const navigate = useNavigate();
-useEffect(() => {
-    console.log("fetch running", id);
-    if (!id) return;
+
+React.useEffect(() => {
+    console.log("fetch running", purchase_report_id);
+    if (!purchase_report_id) return;
 
     async function loadReport() {
       try {
-        const data = await fetchWithAuth(`${API_PURCHASE}/${id}`);
+        const data = await fetchWithAuth(`${API_PURCHASE}/${purchase_report_id}`);
         console.log("✅ Report:", data);
         setReport(data);
       } catch (err) {
@@ -36,14 +36,17 @@ useEffect(() => {
     }
 
     loadReport();
-  }, [id]);
+  }, [purchase_report_id]);
 
   if (loading) return <p>Loading...</p>;
   if (!report) return <p>No report found.</p>;
 
   return (
     <div className="flex flex-1 flex-col">
-      <ReportShopActivityDialog open={isDialogOpen} onOpenChange={setDialogOpen} />
+      <ReportShopActivityDialog   
+      open={openDialog}
+      onOpenChange={setOpenDialog}
+      onSuccess={reload} />
       <SiteHeader title="Pembelanjaan" />
       <div className="@container/main flex flex-1 flex-col gap-2">
         <div className="w-full flex flex-col px-4 lg:px-6 items-start pt-2 md:pt-6">
@@ -55,8 +58,8 @@ useEffect(() => {
             <div className="flex gap-2">
               <Button variant={"outline"} size={"lg"} className="hidden sm:inline-flex"><IconEdit /> Edit Sumber Dana</Button>
               <Button variant={"outline"} size={"default"} className="sm:hidden text-xs"><IconEdit /> Edit Sumber Dana</Button>
-              <Button variant={"default"} size={"lg"} className="hidden sm:inline-flex" onClick={() => setDialogOpen(true)}><IconPlus /> Tambah Kegiatan</Button>
-              <Button variant={"default"} size={"default"} className="sm:hidden text-xs"><IconPlus /> Tambah Kegiatan</Button>
+              <Button variant={"default"} size={"lg"} className="hidden sm:inline-flex" onClick={() => setOpenDialog(true)}><IconPlus /> Tambah Kegiatan</Button>
+              <Button variant={"default"} size={"default"} className="sm:hidden text-xs"onClick={() => setOpenDialog(true)}><IconPlus /> Tambah Kegiatan</Button>
             </div>
           </div>
           <div className="flex flex-col lg:flex-row w-full items-start md:items-center gap-2 justify-between">
@@ -72,7 +75,7 @@ useEffect(() => {
           </div>
         </div>
         <div className="flex flex-col gap-4 py-2 md:gap-6 md:py-6">
-          <DataTable data={report?.activities || []} />
+          <DataTable />
         </div>
       </div>
     </div>

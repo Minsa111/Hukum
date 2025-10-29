@@ -43,7 +43,7 @@ const App: React.FC = () => {
                 <ShopReport />
               </ProtectedAdminRoute>
             } />
-            <Route path="pembelanjaan/:id" element={
+            <Route path="pembelanjaan/:purchase_report_id" element={
               <ProtectedAdminRoute>
                 <ShopActivity />
               </ProtectedAdminRoute>
