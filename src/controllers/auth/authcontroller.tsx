@@ -41,6 +41,7 @@ export async function loginController(
 
     localStorage.setItem("token", response.access_token);
     localStorage.setItem("school_id", response.user.school_id);
+    localStorage.setItem("school", response.user.school_name);
     localStorage.setItem("tokenExpiration", tokenExpiration.toISOString());
     localStorage.setItem("username", decoded.username ?? "");
     localStorage.setItem("isLoggedIn", "true");
@@ -54,6 +55,7 @@ export function useLogoutController(){
         localStorage.removeItem("tokenExpiration");
         localStorage.removeItem("username");
         localStorage.removeItem("school_id");
+        localStorage.removeItem("school");
         localStorage.removeItem("isLoggedIn");
         localStorage.setItem("isLoggedIn", "false");
         navigate("/auth/login");

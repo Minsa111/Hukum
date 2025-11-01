@@ -14,6 +14,7 @@ export const ProtectedAdminRoute: React.FC<ProtectedRouteProps> = ({ children })
     localStorage.removeItem("tokenExpiration");
     localStorage.removeItem("username");
     localStorage.removeItem("school_id");
+    localStorage.removeItem("school");
     localStorage.removeItem("isLoggedIn");
     localStorage.setItem("isLoggedIn", "false");
     return <Navigate to="/" replace />;

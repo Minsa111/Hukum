@@ -37,7 +37,6 @@ export function NavMain({
       <SidebarMenu>
         {items.map((item) =>
           item.items ? (
-            // 🔽 Collapsible item (has sub-items)
             <Collapsible
               key={item.title}
               asChild
@@ -68,7 +67,6 @@ export function NavMain({
               </SidebarMenuItem>
             </Collapsible>
           ) : (
-            // ✅ Normal item (no sub-items)
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title}>
                 <a href={item.url}>

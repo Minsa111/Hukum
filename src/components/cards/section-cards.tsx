@@ -21,13 +21,11 @@ export function SectionCards({ data }: { data: any[] }) {
   const prevStart = new Date(sixMonthsAgo)
   prevStart.setMonth(prevStart.getMonth() - 6)
 
-  // 🧮 Helper: check if a date is in range
   const inRange = (dateStr: string, start: Date, end: Date) => {
     const date = new Date(dateStr)
     return date >= start && date <= end
   }
 
-  // 💰 Realization based on activities
   const sumRealization = (start: Date, end: Date) => {
     return data.reduce((total, report) => {
       const activities = report.activities || []
@@ -40,7 +38,6 @@ export function SectionCards({ data }: { data: any[] }) {
     }, 0)
   }
 
-  // 💵 Fund received based on fundingSources
   const sumFund = (start: Date, end: Date) => {
     return data.reduce((total, report) => {
       const funds = report.fundingSources || []
@@ -53,7 +50,6 @@ export function SectionCards({ data }: { data: any[] }) {
     }, 0)
   }
 
-  // 📋 Count activities
   const countActivity = (start: Date, end: Date) => {
     return data.reduce((count, report) => {
       const activities = report.activities || []
