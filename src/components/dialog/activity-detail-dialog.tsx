@@ -12,25 +12,25 @@ import { ChevronDownIcon, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { fetchWithAuth } from "@/controllers/fetchwithauths"
-import { API_PURCHASE, API_ACTIVITY } from "@/api/api"
+import { API_ACTIVITY } from "@/api/api"
 import { Label } from "@/components/ui/label"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { Calendar } from "./ui/calendar"
+import { Calendar } from "../ui/calendar"
 import { useParams } from "react-router-dom"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
   InputGroupText,
-} from "./ui/input-group"
+} from "../ui/input-group"
 import * as React from "react"
 import { toast } from "sonner"
 
-export function ReportShopActivityDialog({
+export function ActivityDetailDialog({
   open,
   onOpenChange,
   onSuccess,
@@ -96,7 +96,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     if (file) formData.append("supporting_file", file)
 
 
-    await fetchWithAuth(`${API_PURCHASE}${API_ACTIVITY}`, {
+    await fetchWithAuth(`${API_ACTIVITY}`, {
       method: "POST",
       body: formData, 
     })
@@ -106,8 +106,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     onSuccess?.() 
 
   } catch (err) {
-    console.error("❌ Error submitting:", err)
-    toast.error("Gagal menambahkan laporan.")
+    toast.error(`Gagal menambahkan laporan: ${err}`)
   } finally {
     setLoading(false)
   }

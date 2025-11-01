@@ -12,10 +12,12 @@ export async function fetchWithAuth(
     ? endpoint
     : `${API_URL}${endpoint}`;
 
-  const headers = {
-    "Content-Type": "application/json",
+  const isFormData = options.body instanceof FormData;
+
+  const headers: HeadersInit = {
     Authorization: token ? `Bearer ${token}` : "",
     ...options.headers,
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
   };
 
   let response = await fetch(url, { ...options, headers });
@@ -25,10 +27,10 @@ export async function fetchWithAuth(
 
     if (refreshed) {
       token = localStorage.getItem("token");
-      const retryHeaders = {
-        "Content-Type": "application/json",
+      const retryHeaders: HeadersInit = {
         Authorization: `Bearer ${token}`,
         ...options.headers,
+        ...(isFormData ? {} : { "Content-Type": "application/json" }),
       };
       response = await fetch(url, { ...options, headers: retryHeaders });
     } else {
@@ -44,12 +46,15 @@ export async function fetchWithAuth(
     throw new Error(`HTTP ${response.status}: ${errorText}`);
   }
 
-  return response.json();
+  try {
+    return await response.json();
+  } catch {
+    return await response.text();
+  }
 }
 
-/**
- * Refresh access token using stored refresh token.
- */
+
+
 async function refreshAccessToken(refreshToken: string): Promise<boolean> {
   try {
     const res = await fetch(`${API_URL}/auth/refresh`, {

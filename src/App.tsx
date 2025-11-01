@@ -17,7 +17,8 @@ const App: React.FC = () => {
       <Toaster />
       <Routes>
         <Route path="/" element={<Navigate to="/public-dashboard" replace />} />
-        <Route path="/public-dashboard" element={<PublicDashboard />} />
+        <Route path="/public-dashboard" element={
+            <PublicDashboard /> } />
 
         {/* Auth */}
         <Route

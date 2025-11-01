@@ -89,8 +89,7 @@ import {
   Tabs,
   TabsContent,
 } from "@/components/ui/tabs"
-import { ReportShopDialog } from "@/components/shop-report-dialog"
-
+import { ReportShopDialog } from "@/components/dialog/shop-report-dialog"
 const columns: ColumnDef<z.infer<typeof reportSchema>>[] = [
   {
       accessorKey: "title",
@@ -150,20 +149,40 @@ const columns: ColumnDef<z.infer<typeof reportSchema>>[] = [
     {
       accessorKey: "Terakhir Diperbarui",
       header: "Terakhir Diperbarui",
-      cell: ({ row }) => (
-        <div className="w-auto px-2 lg:px-4">
-          {row.original.updated_at.toLocaleString()}
+      cell: ({ row }) => {
+      const date = new Date(row.original.updated_at);
+        return (
+        <div className="w-auto text-left px-2 lg:px-4">
+          {date.toLocaleString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          })}
         </div>
-      ),
+      );  
+    },
     },
     {
       accessorKey: "Dibuat Pada",
       header: "Dibuat Pada",
-      cell: ({ row }) => (
-        <div className="w-auto px-2 lg:px-4">
-          {row.original.updated_at.toLocaleString()}
+      cell: ({ row }) => {
+      const date = new Date(row.original.created_at);
+        return (
+        <div className="w-auto text-left px-2 lg:px-4">
+          {date.toLocaleString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          })}
         </div>
-      ),
+      );  
+    },
     },
   {
     id: "actions",

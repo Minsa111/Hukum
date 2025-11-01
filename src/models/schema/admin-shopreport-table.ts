@@ -14,14 +14,8 @@ const activitySchema = z.object({
   ),
   quantity: z.number(),
   unit: z.string(),
-  created_at: z.preprocess(
-    (arg) => (typeof arg === "string" ? new Date(arg) : arg),
-    z.date()
-  ),
-  updated_at: z.preprocess(
-    (arg) => (typeof arg === "string" ? new Date(arg) : arg),
-    z.date()
-  ),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
   totalPrice: z.number(),
 });
 
@@ -33,14 +27,8 @@ const fundingSourceSchema = z.object({
     (arg) => (typeof arg === "string" ? parseFloat(arg) : arg),
     z.number()
   ),
-  created_at: z.preprocess(
-    (arg) => (typeof arg === "string" ? new Date(arg) : arg),
-    z.date()
-  ),
-  updated_at: z.preprocess(
-    (arg) => (typeof arg === "string" ? new Date(arg) : arg),
-    z.date()
-  ),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
 });
 
 // Schema for each report
@@ -49,14 +37,8 @@ export const reportSchema = z.object({
   title: z.string(),
   report_date: z.string(),
   last_edited_date: z.string(),
-  created_at: z.preprocess(
-    (arg) => (typeof arg === "string" ? new Date(arg) : arg),
-    z.date()
-  ),
-  updated_at: z.preprocess(
-    (arg) => (typeof arg === "string" ? new Date(arg) : arg),
-    z.date()
-  ),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
   activities: z.array(activitySchema),
   fundingSources: z.array(fundingSourceSchema),
   total_budget_amount: z.number(),

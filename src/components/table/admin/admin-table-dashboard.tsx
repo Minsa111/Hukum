@@ -123,7 +123,7 @@ const columns: ColumnDef<z.infer<typeof reportSchema>>[] = [
     accessorKey: "Total Dana Anggaran",
     header: "Total Dana Anggaran",
     cell: ({ row }) => (
-      <div className="w-32 text-left px-2 lg:px-4">
+      <div className="w-auto text-left px-2 lg:px-4">
           Rp. {row.original.total_budget_amount.toLocaleString("id-ID")}
       </div>
     ),
@@ -132,7 +132,7 @@ const columns: ColumnDef<z.infer<typeof reportSchema>>[] = [
     accessorKey: "Jumlah Realisasi",
     header: "Jumlah Realisasi",
     cell: ({ row }) => (
-      <div className="w-32 text-left px-2 lg:px-4">
+      <div className="w-auto text-left px-2 lg:px-4">
         Rp. {row.original.realization_amount.toLocaleString("id-ID")}
       </div>
     ),
@@ -141,7 +141,7 @@ const columns: ColumnDef<z.infer<typeof reportSchema>>[] = [
     accessorKey: "Sisa Dana Anggaran",
     header: "Sisa Dana Anggaran",
     cell: ({ row }) => (
-      <div className="w-32 text-left px-2 lg:px-4">
+      <div className="w-auto text-left px-2 lg:px-4">
         Rp. {row.original.remaining_fund.toLocaleString("id-ID")}
       </div>
     ),
@@ -149,20 +149,40 @@ const columns: ColumnDef<z.infer<typeof reportSchema>>[] = [
   {
     accessorKey: "Terakhir Diperbarui",
     header: "Terakhir Diperbarui",
-    cell: ({ row }) => (
-      <div className="w-auto px-2 lg:px-4">
-        {row.original.updated_at.toLocaleString()}
-      </div>
-    ),
+    cell: ({ row }) => {
+      const date = new Date(row.original.updated_at);
+        return (
+        <div className="w-auto text-left px-2 lg:px-4">
+          {date.toLocaleString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          })}
+        </div>
+      );  
+    },
   },
   {
     accessorKey: "Dibuat Pada",
     header: "Dibuat Pada",
-    cell: ({ row }) => (
-      <div className="w-auto px-2 lg:px-4">
-        {row.original.updated_at.toLocaleString()}
-      </div>
-    ),
+    cell: ({ row }) => {
+      const date = new Date(row.original.created_at);
+        return (
+        <div className="w-auto text-left px-2 lg:px-4">
+          {date.toLocaleString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          })}
+        </div>
+      );  
+    },
   },
   {
     id: "actions",
@@ -179,7 +199,7 @@ const columns: ColumnDef<z.infer<typeof reportSchema>>[] = [
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem >Edit</DropdownMenuItem>
           <DropdownMenuItem>Make a copy</DropdownMenuItem>
           <DropdownMenuItem>Favorite</DropdownMenuItem>
           <DropdownMenuSeparator />

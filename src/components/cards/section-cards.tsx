@@ -1,103 +1,194 @@
 import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react"
+// import { useEffect, useState } from "react"
 
 import { Badge } from "@/components/ui/badge"
 import {
   Card,
   CardAction,
+  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 
+export function SectionCards({ data }: { data: any[] }) {
+  const now = new Date()
+  const sixMonthsAgo = new Date()
+  sixMonthsAgo.setMonth(now.getMonth() - 6)
 
-export function SectionCards() {
+  const prevEnd = new Date(sixMonthsAgo)
+  const prevStart = new Date(sixMonthsAgo)
+  prevStart.setMonth(prevStart.getMonth() - 6)
+
+  // 🧮 Helper: check if a date is in range
+  const inRange = (dateStr: string, start: Date, end: Date) => {
+    const date = new Date(dateStr)
+    return date >= start && date <= end
+  }
+
+  // 💰 Realization based on activities
+  const sumRealization = (start: Date, end: Date) => {
+    return data.reduce((total, report) => {
+      const activities = report.activities || []
+      const filtered = activities.filter((a: any) => inRange(a.activityDate, start, end))
+      const sum = filtered.reduce(
+        (s: number, a: any) => s + (parseFloat(a.unitPrice) * (a.quantity || 0)),
+        0
+      )
+      return total + sum
+    }, 0)
+  }
+
+  // 💵 Fund received based on fundingSources
+  const sumFund = (start: Date, end: Date) => {
+    return data.reduce((total, report) => {
+      const funds = report.fundingSources || []
+      const filtered = funds.filter((f: any) => inRange(f.received_date, start, end))
+      const sum = filtered.reduce(
+        (s: number, f: any) => s + (parseFloat(f.budget_amount) || 0),
+        0
+      )
+      return total + sum
+    }, 0)
+  }
+
+  // 📋 Count activities
+  const countActivity = (start: Date, end: Date) => {
+    return data.reduce((count, report) => {
+      const activities = report.activities || []
+      return count + activities.filter((a: any) => inRange(a.activityDate, start, end)).length
+    }, 0)
+  }
+
+  const currentRealization = sumRealization(sixMonthsAgo, now)
+  const currentFund = sumFund(sixMonthsAgo, now)
+  const currentActivities = countActivity(sixMonthsAgo, now)
+
+  const prevRealization = sumRealization(prevStart, prevEnd)
+  const prevFund = sumFund(prevStart, prevEnd)
+  const prevActivities = countActivity(prevStart, prevEnd)
+
+  const calcGrowth = (current: number, previous: number) => {
+    if (previous === 0) return current > 0 ? 100 : 0
+    return ((current - previous) / previous) * 100
+  }
+
+  const realizationGrowth = calcGrowth(currentRealization, prevRealization)
+  const fundGrowth = calcGrowth(currentFund, prevFund)
+  const activityGrowth = calcGrowth(currentActivities, prevActivities)
+
+  const getBadgeVariant = (growth: number) => {
+    if (growth > 0) return "success"
+    if (growth < 0) return "destructive"
+    return "secondary"
+  }
+
   return (
-    <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @lg/main:grid-cols-2 @5xl/main:grid-cols-4">
-      <Card className="@container/card">
+    <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @lg/main:grid-cols-2 @5xl/main:grid-cols-3">
+      <Card className="@container/card gap-2">
         <CardHeader>
-          <CardDescription>Total Revenue</CardDescription>
-          <CardTitle className=" text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            $1,250.00
-          </CardTitle>
+          <CardDescription>Total Anggaran</CardDescription>
           <CardAction>
-            <Badge variant="outline">
-              <IconTrendingUp />
-              +12.5%
+            <Badge variant="outline" className="flex items-center gap-1">
+              {fundGrowth >= 0 
+              ? 
+              <div className="flex gap-1 text-green-600"> 
+                <IconTrendingUp className="size-3"/> 
+                {fundGrowth.toFixed(1)}%
+              </div>
+              :
+              <div className="flex gap-1 text-red-600">
+                <IconTrendingDown className="size-3"/>
+                {fundGrowth.toFixed(1)}%
+              </div>
+              }
             </Badge>
           </CardAction>
         </CardHeader>
+        <CardContent className="flex">
+          <CardTitle className="text-left text-xl font-semibold tabular-nums @[250px]/card:text-2xl">
+            Rp. {currentFund.toLocaleString("id-ID")}
+          </CardTitle>
+        </CardContent>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            Trending up this month <IconTrendingUp className="size-4" />
+            {realizationGrowth >= 0 
+              ?
+              <p className="flex line-clamp-1 gap-2 font-medium">
+                <span>Meningkat
+                  <span className="text-green-600"> {fundGrowth.toFixed(1)}%
+                  </span>
+                </span><IconTrendingUp className="size-4 text-green-600" />
+              </p>
+              :
+              <p className="flex line-clamp-1 gap-2 font-medium">Berkurang <IconTrendingDown className="size-4" /> </p>}
           </div>
-          <div className="text-muted-foreground">
-            Visitors for the last 6 months
+          <div className="text-muted-foreground text-left text-xs">
+            Anggaran yang diterima selama 6 bulan terakhir
           </div>
         </CardFooter>
       </Card>
-      <Card className="@container/card">
+      <Card className="@container/card gap-2">
         <CardHeader>
-          <CardDescription>New Customers</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            1,234
-          </CardTitle>
+          <CardDescription>Total Realisasi</CardDescription>
           <CardAction>
-            <Badge variant="outline">
-              <IconTrendingDown />
-              -20%
+            <Badge variant="outline" >
+              {realizationGrowth >= 0 ? 
+                <div className="flex gap-1 text-red-600"> 
+                  <IconTrendingUp className="size-3"/> {realizationGrowth.toFixed(1)}%
+                </div> 
+                : 
+                <div className="flex gap-1 text-green-600"> 
+                  <IconTrendingDown className="size-3"/> {realizationGrowth.toFixed(1)}%
+                </div>
+              }
             </Badge>
           </CardAction>
         </CardHeader>
+        <CardContent className="flex">
+          <CardTitle className="text-xl text-left font-semibold tabular-nums @[250px]/card:text-2xl">
+            Rp.{currentRealization.toLocaleString("id-ID")}
+          </CardTitle>
+        </CardContent>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            Down 20% this period <IconTrendingDown className="size-4" />
+            {realizationGrowth >= 0 
+              ?
+              <p className="flex line-clamp-1 gap-2 font-medium">
+                <span>Meningkat
+                  <span className="text-red-600"> {realizationGrowth.toFixed(1)}%
+                  </span>
+                </span><IconTrendingUp className="size-4 text-red-600" />
+              </p>
+              :
+              <p className="flex line-clamp-1 gap-2 font-medium text-green-600">Penurunan Realisasi <IconTrendingDown className="size-4 text-green-600" /> </p>}
           </div>
-          <div className="text-muted-foreground">
-            Acquisition needs attention
+          <div className="text-muted-foreground text-xs">
+            Realisasi selama 6 bulan terakhir
           </div>
         </CardFooter>
       </Card>
-      <Card className="@container/card">
+      <Card className="@container/card gap-2">
         <CardHeader>
-          <CardDescription>Active Accounts</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            45,678
-          </CardTitle>
+          <CardDescription>Kegiatan</CardDescription>
           <CardAction>
             <Badge variant="outline">
-              <IconTrendingUp />
-              +12.5%
+              {activityGrowth >= 0 ? <IconTrendingUp /> : <IconTrendingDown />}
+              {activityGrowth.toFixed(1)}%
             </Badge>
           </CardAction>
         </CardHeader>
+        <CardContent className="flex">
+          <CardTitle className="text-l font-semibold tabular-nums @[250px]/card:text-2xl text-left">
+            {currentActivities.toLocaleString("id-ID")}
+          </CardTitle>
+        </CardContent>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
             Strong user retention <IconTrendingUp className="size-4" />
           </div>
-          <div className="text-muted-foreground">Engagement exceed targets</div>
-        </CardFooter>
-      </Card>
-      <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>New Customers</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            1,234
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              <IconTrendingDown />
-              -20%
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Down 20% this period <IconTrendingDown className="size-4" />
-          </div>
-          <div className="text-muted-foreground">
-            Acquisition needs attention
-          </div>
+          <div className="text-muted-foreground text-xs">Jumlah kegiatan selama 6 bulan terakhir</div>
         </CardFooter>
       </Card>
     </div>

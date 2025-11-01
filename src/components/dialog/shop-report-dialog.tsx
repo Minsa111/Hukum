@@ -19,13 +19,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { Calendar } from "./ui/calendar"
+import { Calendar } from "../ui/calendar"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
   InputGroupText,
-} from "./ui/input-group"
+} from "../ui/input-group"
 import * as React from "react"
 import { toast } from "sonner"
 

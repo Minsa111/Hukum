@@ -27,14 +27,8 @@ import {
   IconChevronRight,
   IconChevronsLeft,
   IconChevronsRight,
-  // IconCircleCheckFilled,
   IconDotsVertical,
-  // IconGripVertical,
   IconLayoutColumns,
-  // IconSearch,
-  // IconLoader,
-  // IconPlus,
-  // IconTrendingUp,
 } from "@tabler/icons-react"
 import type {
   ColumnDef,
@@ -88,8 +82,8 @@ import {
   // TabsList,
   // TabsTrigger,
 } from "@/components/ui/tabs"
-import { useActivities } from "@/api/hooks/use-activity"
-  
+
+
 const columns: ColumnDef<z.infer<typeof schema>>[] = [
   {
     accessorKey: "Kegiatan",
@@ -124,11 +118,18 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
   {
     accessorKey: "Tanggal Kegiatan",
     header: "Tanggal Kegiatan",
-    cell: ({ row }) => (
-      <div className="text-left w-32 px-2 lg:px-4">
-        {row.original.activityDate.toLocaleString()}
-      </div>
-    ),
+    cell: ({ row }) => {
+      const date = new Date(row.original.activityDate);
+      return (
+        <div className="w-auto text-left px-2 lg:px-4">
+          {date.toLocaleString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })}
+        </div>
+      );
+    },
   },
 
   {
@@ -195,12 +196,12 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
   },
 
   {
-    accessorKey: "Terakhir Dibuat",
-    header: "Terakhir Dibuat",
+    accessorKey: "Dibuat Pada",
+    header: "Dibuat Pada",
     cell: ({ row }) => {
       const date = new Date(row.original.created_at);
       return (
-        <div className="w-auto px-2 lg:px-4">
+        <div className="w-auto text-left  px-2 lg:px-4">
           {date.toLocaleString("en-GB", {
             day: "2-digit",
             month: "2-digit",
@@ -213,13 +214,14 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
       );
     },
   },
+
   {
     accessorKey: "Terakhir Diperbarui",
     header: "Terakhir Diperbarui",
     cell: ({ row }) => {
       const date = new Date(row.original.updated_at);
       return (
-        <div className="w-auto px-2 lg:px-4">
+        <div className="w-auto px-2 text-left  lg:px-4">
           {date.toLocaleString("en-GB", {
             day: "2-digit",
             month: "2-digit",
@@ -247,9 +249,8 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
+          <DropdownMenuItem>Detail</DropdownMenuItem>
           <DropdownMenuItem>Edit</DropdownMenuItem>
-          <DropdownMenuItem>Make a copy</DropdownMenuItem>
-          <DropdownMenuItem>Favorite</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
         </DropdownMenuContent>
@@ -283,12 +284,11 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
   )
 }
 
-export function DataTable() {
-  const { purchase_report_id } = useParams<{ purchase_report_id: string }>()
-  const { data: activities, loading } = useActivities(purchase_report_id)
+export function DataTable({activities = []}: {activities: any[]}) {
   const [data, setData] = React.useState<z.infer<typeof schema>[]>([]);
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =React.useState<VisibilityState>({})
+  const [loading, setLoading] = React.useState(false)
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
@@ -303,26 +303,25 @@ export function DataTable() {
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {})
   )
-  React.useEffect(() => {
-  if (activities) setData(activities);
-}, [activities]);
-
 
 const dataIds = React.useMemo<UniqueIdentifier[]>(
   () => data?.map((item) => item.id) || [],
   [data]
 )
+
 React.useEffect(() => {
-  if (activities && Array.isArray(activities.activities)) {
-    const normalized = activities.activities.map((a) => ({
+  if (Array.isArray(activities)) {
+    const normalized = activities.map((a) => ({
       ...a,
       activityDate: new Date(a.activityDate),
       created_at: new Date(a.created_at),
       updated_at: new Date(a.updated_at),
-    }));
+    }))
+    .sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
     setData(normalized);
   }
 }, [activities]);
+
 
 
 
@@ -363,20 +362,17 @@ React.useEffect(() => {
   }
 
   if (loading) {
-  return (
-    <div className="flex items-center justify-center p-10 text-gray-500">
-      Loading activities...
-    </div>
-  )
-}
+    return <div className="flex items-center justify-center p-10 text-gray-500">Loading activities...</div>;
+  }
+
 
 
   return (
-    
     <Tabs
       defaultValue="semua"
       className="w-full flex-col justify-start gap-6"
     >
+      
       <div className="flex items-center justify-between px-4 lg:px-6">
         <Input
           placeholder="Search by title..."

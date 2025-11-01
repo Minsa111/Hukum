@@ -89,7 +89,7 @@ import {
   // TabsList,
   // TabsTrigger,
 } from "@/components/ui/tabs"
-import { ReportShopDialog } from "@/components/shop-report-dialog"
+import { ReportShopDialog } from "@/components/dialog/shop-report-dialog"
 
 const columns: ColumnDef<z.infer<typeof schema>>[] = [
   {
