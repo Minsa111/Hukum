@@ -14,7 +14,6 @@ export function AdminLayout() {
     >
       <AppSidebar variant="inset" />
 
-      {/* Page content area */}
       <SidebarInset>
         <Outlet />
       </SidebarInset>

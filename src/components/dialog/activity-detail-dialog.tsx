@@ -12,7 +12,7 @@ import { ChevronDownIcon, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { fetchWithAuth } from "@/controllers/fetchwithauths"
-import { API_ACTIVITY } from "@/api/api"
+import { API_URL, API_ACTIVITY, API_UPLOAD } from "@/api/api"
 import { Label } from "@/components/ui/label"
 import {
   Popover,
@@ -32,25 +32,28 @@ import { toast } from "sonner"
 
 export function ActivityDetailDialog({
   open,
+  activities,
   onOpenChange,
   onSuccess,
 }: {
+  activities: any
   open: boolean
   onOpenChange: (open: boolean) => void
   onSuccess?: () => void
 }) {
-  const [activity, setActivty] = React.useState("")
+  const [activity, setActivity] = React.useState(activities ?? {})
   const [spendingAccount, setSpendingAccount] = React.useState("")
   const [price, setPrice] = React.useState("")
   const [quantity, setQuantity] = React.useState("")
   const [unit, setUnit] = React.useState("")
-  const [submitted, setSubmitted] = React.useState(false)
   const { purchase_report_id } = useParams<{ purchase_report_id: string }>()  
   const [description, setDescription] = React.useState("")
   const [date, setDate] = React.useState<Date | undefined>(undefined)
   const [openDate, setOpenDate] = React.useState(false)
   const [loading, setLoading] = React.useState(false)
   const [file, setFile] = React.useState<File | null>(null)
+  const [isEditing, setIsEditing] = React.useState(false)
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0]
@@ -72,21 +75,15 @@ export function ActivityDetailDialog({
     setQuantity(rawValue)
   }
 
-const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault()
-  setSubmitted(true)
   setLoading(true)
 
-  const isEmpty = !activity || !spendingAccount || !price || !date || !quantity || !unit || !description
-  if (isEmpty) {
-    setLoading(false)
-    return toast.error("Lengkapi form terlebih dahulu.")
-  }
-
   try {
+    const isEditing = !!activity?.id
     const formData = new FormData()
-    formData.append("purchase_report_id", purchase_report_id || "")
-    formData.append("activity", activity)
+
+    formData.append("activity", activity.activity || "")
     formData.append("activity_date", date ? date.toISOString().split("T")[0] : "")
     formData.append("spending_account", spendingAccount)
     formData.append("description", description)
@@ -95,147 +92,300 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     formData.append("unit", unit)
     if (file) formData.append("supporting_file", file)
 
+    const method = isEditing ? "PUT" : "POST"
+    const url = isEditing
+      ? `${API_URL}${API_ACTIVITY}/${activity.id}`
+      : `${API_ACTIVITY}`
 
-    await fetchWithAuth(`${API_ACTIVITY}`, {
-      method: "POST",
-      body: formData, 
-    })
+    const res = await fetchWithAuth(url, { method, body: formData })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
-    toast.success("Laporan berhasil ditambahkan!")
+    toast.success(isEditing ? "Laporan berhasil diperbarui!" : "Laporan berhasil ditambahkan!")
     onOpenChange(false)
-    onSuccess?.() 
-
+    onSuccess?.()
   } catch (err) {
-    toast.error(`Gagal menambahkan laporan: ${err}`)
+    console.error(err)
+    toast.error("Gagal menyimpan data.")
   } finally {
     setLoading(false)
   }
 }
 
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[625px]">
-        <DialogHeader>
-          <DialogTitle>Tambah Laporan</DialogTitle>
-          <DialogDescription>Isi form berikut.</DialogDescription>
-        </DialogHeader>
+const handleDelete = async () => {
+  if (!activity?.id) {
+    console.error("ID not found")
+    return toast.error("ID tidak ditemukan.")
+  }
 
-        <form onSubmit={handleSubmit} className="grid gap-4 py-1">
-          
-          <div className="grid gap-3">
-            <Label htmlFor="activity">Kegiatan</Label>
+  const confirmDelete = confirm("Apakah Anda yakin ingin menghapus data ini?")
+  if (!confirmDelete) return
+
+  try {
+    setLoading(true)
+    await fetchWithAuth(`${API_ACTIVITY}/${activity.id}`, { method: "DELETE" })
+    toast.success("Data berhasil dihapus!")
+    onOpenChange(false)
+    onSuccess?.()
+  } catch (err) {
+    console.error("Delete error:", err)
+    toast.error("Terjadi kesalahan saat menghapus data.")
+  } finally {
+    setLoading(false)
+  }
+
+}
+
+
+React.useEffect(() => {
+  if (activities) {
+    setActivity(activities)
+    setDescription(activities.description || "")
+    setPrice(
+      activities.unitPrice
+        ? Number(activities.unitPrice).toLocaleString("id-ID")
+        : ""
+    )
+    setQuantity(activities.quantity || "")
+    setUnit(activities.unit || "")
+    setDate(
+      activities.activityDate ? new Date(activities.activityDate) : undefined
+    )
+  }
+}, [activities])
+
+return (
+  <Dialog
+    open={open}
+    onOpenChange={(value) => {
+      if (!value) {
+        // 🧠 Reset edit mode and form state when dialog closes
+        setIsEditing(false)
+        setDescription(activity?.description || "")
+        setPrice(
+          activity?.unitPrice
+            ? Number(activity.unitPrice).toLocaleString("id-ID")
+            : ""
+        )
+        setQuantity(activity?.quantity || "")
+        setUnit(activity?.unit || "")
+        setDate(
+          activity?.activityDate ? new Date(activity.activityDate) : undefined
+        )
+        setFile(null)
+      }
+      onOpenChange(value)
+    }}
+  >
+    <DialogContent className="sm:max-w-[625px]">
+      <DialogHeader>
+        <DialogTitle>Detail Laporan</DialogTitle>
+      </DialogHeader>
+
+      <form onSubmit={handleSubmit} className="grid gap-4 py-1">
+        {/* Editable state toggle */}
+        <div className="grid gap-3">
+          <Label htmlFor="activity">Kegiatan</Label>
+          {isEditing ? (
             <Input
               id="activity"
-              value={activity}
-              placeholder="Masukkan Kegiatan"
-              onChange={(e) => setActivty(e.target.value)}
+              value={activity?.activity || ""}
+              onChange={(e) =>
+                setActivity({ ...activity, activity: e.target.value })
+              }
             />
-          </div>
+          ) : (
+            <span>{activity?.activity || ""}</span>
+          )}
+        </div>
 
-          <div className="grid gap-3">
-            <Label htmlFor="date">Tanggal Kegiatan</Label>
+        <div className="grid gap-3">
+          <Label htmlFor="date">Tanggal Kegiatan</Label>
+          {isEditing ? (
             <Popover open={openDate} onOpenChange={setOpenDate}>
               <PopoverTrigger asChild>
-                <Button variant="outline" id="date" className=" justify-between font-normal">
-                  {date ? date.toLocaleDateString() : "Pilih tanggal"}
-                  <ChevronDownIcon />
+                <Button variant="outline" id="date" className="justify-between">
+                  {date
+                    ? date.toLocaleDateString("id-ID", {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                      })
+                    : "Pilih tanggal"}
+                  <ChevronDownIcon className="h-4 w-4 opacity-50" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto overflow-hidden p-0 z-[9995]" align="start">
+              <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
                   selected={date}
-                  captionLayout="dropdown"
-                  onSelect={(date) => {
-                    setDate(date)
+                  onSelect={(newDate) => {
+                    setDate(newDate)
                     setOpenDate(false)
                   }}
                 />
               </PopoverContent>
             </Popover>
-          </div>
+          ) : (
+            <span>
+              {activity?.activityDate
+                ? new Date(activity.activityDate).toLocaleDateString("id-ID", {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                  })
+                : ""}
+            </span>
+          )}
+        </div>
 
-          <div className="grid gap-3">
-            <Label htmlFor="spendingAccount">Rekening Belanja</Label>
+        <div className="grid gap-3">
+          <Label htmlFor="spendingAccount">Rekening Belanja</Label>
+          {isEditing ? (
             <Input
-              
               id="spendingAccount"
-              value={spendingAccount}
-              placeholder="Apa jenis rekening belanja untuk kegiatan tersebut?"
-              onChange={(e) => setSpendingAccount(e.target.value)}
+              value={activity?.spendingAccount || ""}
+              onChange={(e) =>
+                setActivity({
+                  ...activity,
+                  spendingAccount: e.target.value,
+                })
+              }
             />
-          </div>
+          ) : (
+            <p className="break-words">{activity?.spendingAccount || ""}</p>
+          )}
+        </div>
 
-          <div className="grid gap-3">
-            <Label htmlFor="picture">File Pendukung</Label>
-              <Input 
-                id="picture" 
-                type="file"
-                accept="application/pdf"
-                onChange={handleFileChange}
-              />
-          </div>
+        <div className="grid gap-3">
+          <Label htmlFor="file">File Pendukung</Label>
+          {isEditing ? (
+            <Input type="file" accept="application/pdf" onChange={handleFileChange} />
+          ) : (
+            <div className="flex gap-4">
+              <span>{activity?.supportingFile || "File tidak ditemukan"}</span>
+              {activity?.supportingFile && (
+                <Button
+                  type="button" 
+                  variant="outline"
+                  onClick={() =>
+                    window.open(
+                      `${API_URL}${API_UPLOAD}/${activity.supportingFile}`,
+                      "_blank"
+                    )
+                  }
+                >
+                  Lihat File
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
 
-          <div className="flex flex-row items-start justify-between gap-3">
-            <div className="grid w-1/2 gap-3">
-              <Label htmlFor="description">Uraian</Label>
+        <div className="flex flex-wrap gap-3 items-start">
+          <div className="flex-1 min-w-[260px] break-words whitespace-normal">
+            <Label htmlFor="description">Uraian</Label>
+            {isEditing ? (
               <Input
                 id="description"
-                value={description}
-                placeholder="Apa detail barang dan jasanya?"
-                onChange={(e) => setDescription(e.target.value)}
+                value={activity?.description || ""}
+                onChange={(e) =>
+                  setActivity({ ...activity, description: e.target.value })
+                }
               />
-            </div>
+            ) : (
+              <p className="text-sm text-gray-700 break-words">
+                {activity?.description || ""}
+              </p>
+            )}
+          </div>
 
-            <div className="grid w-1/2 gap-3">
-              <Label htmlFor="price">Harga Satuan</Label>
+          <div className="flex-1 min-w-[260px]">
+            <Label htmlFor="price">Harga Satuan</Label>
+            {isEditing ? (
               <InputGroup>
                 <InputGroupAddon>
                   <InputGroupText>Rp.</InputGroupText>
                 </InputGroupAddon>
                 <InputGroupInput
                   id="price"
-                  placeholder="1.000.000"
+                  placeholder="Masukkan harga"
                   className="!pl-1"
                   value={price}
                   onChange={handleChange}
                 />
               </InputGroup>
-            </div>
+            ) : (
+              <p className="text-sm text-gray-700">
+                Rp. {Number(activity?.unitPrice).toLocaleString("id-ID")}
+              </p>
+            )}
           </div>
-          
-          <div className="flex flex-row items-start justify-between gap-3">
-            
-            <div className="grid w-1/2 gap-3">
-              <Label htmlFor="quantity">Kuantitas</Label>
-              <InputGroup>
-                <InputGroupInput
-                  id="quantity"
-                  placeholder="Masukkan Jumlah"
-                  className="!pl-1"
-                  value={quantity}
-                  onChange={handleNumber}
-                />
-              </InputGroup>
-            </div>
+        </div>
 
-            <div className="grid w-1/2 gap-3">
-              <Label htmlFor="unit">Unit</Label>
+        <div className="flex flex-row items-start justify-between gap-3">
+          <div className="grid w-1/2 gap-3">
+            <Label htmlFor="quantity">Jumlah</Label>
+            {isEditing ? (
+              <Input
+                id="quantity"
+                value={quantity}
+                onChange={handleNumber}
+                placeholder="Masukkan jumlah"
+              />
+            ) : (
+              <p>{activity?.quantity || ""}</p>
+            )}
+          </div>
+
+          <div className="grid w-1/2 gap-3">
+            <Label htmlFor="unit">Unit</Label>
+            {isEditing ? (
               <Input
                 id="unit"
                 value={unit}
-                placeholder="Satuan dari barang yang dibeli?"
                 onChange={(e) => setUnit(e.target.value)}
+                placeholder="Masukkan unit"
               />
-            </div>
+            ) : (
+              <p>{activity?.unit || ""}</p>
+            )}
           </div>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline" type="button">
-                Batal
-              </Button>
-            </DialogClose>
+        </div>
 
+        <DialogFooter className="flex justify-between">
+          <DialogClose asChild>
+            <Button variant="outline" type="button">
+              Batal
+            </Button>
+          </DialogClose>
+
+          {!isEditing ? (
+            <>
+              <Button
+                variant="destructive"
+                type="button"
+                onClick={handleDelete}
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="animate-spin mr-2 h-4 w-4" />
+                    Menghapus...
+                  </>
+                ) : (
+                  "Hapus"
+                )}
+              </Button>
+
+              <Button
+                type="button"
+                variant="default"
+                onClick={() => setIsEditing(true)}
+              >
+                Edit
+              </Button>
+            </>
+          ) : (
             <Button type="submit" disabled={loading}>
               {loading ? (
                 <>
@@ -243,12 +393,13 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                   Menyimpan...
                 </>
               ) : (
-                "Tambah"
+                "Simpan"
               )}
             </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
-  )
+          )}
+        </DialogFooter>
+      </form>
+    </DialogContent>
+  </Dialog>
+)
 }

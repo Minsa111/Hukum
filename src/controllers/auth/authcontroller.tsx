@@ -18,7 +18,6 @@ export function validateToken(): { valid: boolean; expired: boolean; user?: JwtP
 
         if (!decoded.exp) return { valid: false, expired: true };
         const isExpired = Date.now() >= decoded.exp * 1000;
-
         return {
             valid: !isExpired,
             expired: isExpired,

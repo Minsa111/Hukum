@@ -19,9 +19,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <SidebarContent className="gap-0 py-1">
-            <p className="text-blue-500 text-2xl font-black">FINSIGHT</p>
-            <p className="text-blue-500 text-lg font-semibold">Financial Insight</p>
+        <SidebarContent className="flex gap-0 py-1">
+            <img className="" src="/images/logoname.png" alt="logo" />
+            {/* <p className="text-blue-500 text-2xl font-black">FINSIGHT</p>
+            <p className="text-blue-500 text-lg font-semibold">Financial Insight</p> */}
           </SidebarContent>
       </SidebarHeader>
       <SidebarContent>

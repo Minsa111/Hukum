@@ -116,7 +116,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[625px]">
         <DialogHeader>
-          <DialogTitle>Tambah Laporan</DialogTitle>
+          <DialogTitle>Tambah Kegiatan</DialogTitle>
           <DialogDescription>Isi form berikut.</DialogDescription>
         </DialogHeader>
 

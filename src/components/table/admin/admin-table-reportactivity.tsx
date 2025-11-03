@@ -82,20 +82,92 @@ import {
   // TabsList,
   // TabsTrigger,
 } from "@/components/ui/tabs"
+import { ActivityDetailDialog } from "@/components/dialog/activity-detail-dialog"
 
+
+  
+
+function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
+  const { transform, transition, setNodeRef, isDragging } = useSortable({
+    id: row.original.id,
+  })
+
+  return (
+    <TableRow
+      data-state={row.getIsSelected() && "selected"}
+      data-dragging={isDragging}
+      ref={setNodeRef}
+      className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition: transition,
+      }}
+    >
+      {row.getVisibleCells().map((cell) => (
+        <TableCell key={cell.id}>
+          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        </TableCell>
+      ))}
+    </TableRow>
+  )
+}
+
+export function DataTable({activities = []}: {activities: any[]}) {
+  const [selectedActivity, setSelectedActivity] = React.useState<any | null>(null)
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false)
+  const [data, setData] = React.useState<z.infer<typeof schema>[]>([]);
+  const [rowSelection, setRowSelection] = React.useState({})
+  const [columnVisibility, setColumnVisibility] =React.useState<VisibilityState>({})
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  )
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: 10,
+  })
+  const sortableId = React.useId()
+  const sensors = useSensors(
+    useSensor(MouseSensor, {}),
+    useSensor(TouchSensor, {}),
+    useSensor(KeyboardSensor, {})
+  )
+
+const dataIds = React.useMemo<UniqueIdentifier[]>(
+  () => data?.map((item) => item.id) || [],
+  [data]
+)
+
+React.useEffect(() => {
+  if (Array.isArray(activities)) {
+    const normalized = activities.map((a) => ({
+      ...a,
+      activityDate: new Date(a.activityDate),
+      created_at: new Date(a.created_at),
+      updated_at: new Date(a.updated_at),
+    }))
+    .sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
+    setData(normalized);
+  }
+}, [activities]);
 
 const columns: ColumnDef<z.infer<typeof schema>>[] = [
-  {
+    {
     accessorKey: "Kegiatan",
     header: "Kegiatan",
     cell: ({ row }) => {
       return (
         <div className="text-left truncate w-64 lg:w-xs px-2 lg:px-4">
-          <Link
-            to={`/admin/pembelanjaan/${row.original.id}`}
+          <button
+            onClick={() => {
+              setSelectedActivity(row.original)
+              console.log("lmaoxd", row.original)
+              setIsDialogOpen(true)
+            }}
+            className="text-left truncate hover:underline"
           >
             {row.original.activity}
-          </Link>
+          </button>
         </div>
       )
     },
@@ -236,7 +308,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
   },
   {
     id: "actions",
-    cell: () => (
+    cell: ({row}) => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -249,7 +321,12 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem>Detail</DropdownMenuItem>
+          <DropdownMenuItem
+          onClick={() => {
+              setSelectedActivity(row.original)
+              setIsDialogOpen(true)
+          }}
+          >Detail</DropdownMenuItem>
           <DropdownMenuItem>Edit</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
@@ -258,71 +335,6 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     ),
   },
 ]
-
-function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
-  const { transform, transition, setNodeRef, isDragging } = useSortable({
-    id: row.original.id,
-  })
-
-  return (
-    <TableRow
-      data-state={row.getIsSelected() && "selected"}
-      data-dragging={isDragging}
-      ref={setNodeRef}
-      className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
-      style={{
-        transform: CSS.Transform.toString(transform),
-        transition: transition,
-      }}
-    >
-      {row.getVisibleCells().map((cell) => (
-        <TableCell key={cell.id}>
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </TableCell>
-      ))}
-    </TableRow>
-  )
-}
-
-export function DataTable({activities = []}: {activities: any[]}) {
-  const [data, setData] = React.useState<z.infer<typeof schema>[]>([]);
-  const [rowSelection, setRowSelection] = React.useState({})
-  const [columnVisibility, setColumnVisibility] =React.useState<VisibilityState>({})
-  const [loading, setLoading] = React.useState(false)
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [pagination, setPagination] = React.useState({
-    pageIndex: 0,
-    pageSize: 10,
-  })
-  const sortableId = React.useId()
-  const sensors = useSensors(
-    useSensor(MouseSensor, {}),
-    useSensor(TouchSensor, {}),
-    useSensor(KeyboardSensor, {})
-  )
-
-const dataIds = React.useMemo<UniqueIdentifier[]>(
-  () => data?.map((item) => item.id) || [],
-  [data]
-)
-
-React.useEffect(() => {
-  if (Array.isArray(activities)) {
-    const normalized = activities.map((a) => ({
-      ...a,
-      activityDate: new Date(a.activityDate),
-      created_at: new Date(a.created_at),
-      updated_at: new Date(a.updated_at),
-    }))
-    .sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
-    setData(normalized);
-  }
-}, [activities]);
-
-
 
 
   const table = useReactTable({
@@ -361,9 +373,6 @@ React.useEffect(() => {
     }
   }
 
-  if (loading) {
-    return <div className="flex items-center justify-center p-10 text-gray-500">Loading activities...</div>;
-  }
 
 
 
@@ -372,7 +381,11 @@ React.useEffect(() => {
       defaultValue="semua"
       className="w-full flex-col justify-start gap-6"
     >
-      
+      <ActivityDetailDialog 
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        activities={selectedActivity}
+      />
       <div className="flex items-center justify-between px-4 lg:px-6">
         <Input
           placeholder="Search by title..."

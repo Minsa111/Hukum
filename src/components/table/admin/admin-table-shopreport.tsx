@@ -104,7 +104,7 @@ const columns: ColumnDef<z.infer<typeof reportSchema>>[] = [
           </Link>
         </div>
       )
-      },
+    },
       enableHiding: false,
     },
   {
