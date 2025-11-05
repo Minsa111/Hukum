@@ -3,6 +3,17 @@ import * as React from "react"
 import { Link, useParams } from "react-router-dom"
 import { Input } from "@/components/ui/input"
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import {
   closestCenter,
   DndContext,
   KeyboardSensor,
@@ -83,7 +94,9 @@ import {
   // TabsTrigger,
 } from "@/components/ui/tabs"
 import { ActivityDetailDialog } from "@/components/dialog/activity-detail-dialog"
-
+import { toast } from "sonner"
+import { API_ACTIVITY } from "@/api/api"
+import { fetchWithAuth } from "@/controllers/fetchwithauths"
 
   
 
@@ -112,12 +125,13 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
   )
 }
 
-export function DataTable({activities = []}: {activities: any[]}) {
+export function DataTable({ activities, onDataChange }: { activities: any[]; onDataChange?: () => void }) {
   const [selectedActivity, setSelectedActivity] = React.useState<any | null>(null)
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
   const [data, setData] = React.useState<z.infer<typeof schema>[]>([]);
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =React.useState<VisibilityState>({})
+  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
@@ -132,11 +146,26 @@ export function DataTable({activities = []}: {activities: any[]}) {
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {})
   )
-
-const dataIds = React.useMemo<UniqueIdentifier[]>(
-  () => data?.map((item) => item.id) || [],
+  
+  const dataIds = React.useMemo<UniqueIdentifier[]>(
+    () => data?.map((item) => item.id) || [],
   [data]
 )
+
+async function handleDelete() {
+  try {
+    await fetchWithAuth(`${API_ACTIVITY}/${selectedActivity.id}`, {
+      method: "DELETE",
+    });
+    if (onDataChange) onDataChange();
+    setIsDialogOpen(false);
+    setSelectedActivity(null);
+    toast.success("Data berhasil dihapus!");
+  } catch (err) {
+    console.error("Delete error:", err);
+    toast.error("Terjadi kesalahan saat menghapus data.");
+  }
+}
 
 React.useEffect(() => {
   if (Array.isArray(activities)) {
@@ -310,6 +339,20 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     id: "actions",
     cell: ({row}) => (
       <DropdownMenu>
+        <AlertDialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete this data.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDelete}>Continue</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
@@ -329,7 +372,10 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
           >Detail</DropdownMenuItem>
           <DropdownMenuItem>Edit</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+            <DropdownMenuItem variant="destructive" onClick={() => {
+              setSelectedActivity(row.original)
+              setOpenDeleteDialog(true)}}>Delete</DropdownMenuItem>
+            
         </DropdownMenuContent>
       </DropdownMenu>
     ),
@@ -385,6 +431,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
         activities={selectedActivity}
+        onSuccess={() => onDataChange?.()}
       />
       <div className="flex items-center justify-between px-4 lg:px-6">
         <Input

@@ -1,3 +1,4 @@
+import { IconHome } from "@tabler/icons-react"
 import { 
   // GalleryVerticalEnd, 
   // AudioWaveform, 
@@ -12,6 +13,11 @@ import {
 export const Dropdown= {
 
   navMain: [
+    {
+      title: "Dashboard Publik",
+      url: "/",
+      icon: IconHome,
+    },
     {
       title: "Dashboard",
       url: "/admin",
@@ -28,11 +34,6 @@ export const Dropdown= {
           url: "/admin/pembelanjaan",
         },
       ],
-    },
-    {
-      title: "Halaman Utama",
-      url: "/",
-      icon: LayoutDashboard,
     },
     {
       title: "Settings",

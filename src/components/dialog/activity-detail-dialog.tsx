@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/popover"
 import { Calendar } from "../ui/calendar"
 import { useParams } from "react-router-dom"
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, AlertDialogAction } from "../ui/alert-dialog"
 import {
   InputGroup,
   InputGroupAddon,
@@ -116,9 +117,6 @@ const handleDelete = async () => {
     console.error("ID not found")
     return toast.error("ID tidak ditemukan.")
   }
-
-  const confirmDelete = confirm("Apakah Anda yakin ingin menghapus data ini?")
-  if (!confirmDelete) return
 
   try {
     setLoading(true)
@@ -353,26 +351,29 @@ return (
         </div>
 
         <DialogFooter className="flex justify-between">
-          
-
           {!isEditing ? (
             <>
-              <Button
-                variant="destructive"
-                type="button"
-                onClick={handleDelete}
-                disabled={loading}
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="animate-spin mr-2 h-4 w-4" />
-                    Menghapus...
-                  </>
-                ) : (
-                  "Hapus"
-                )}
-              </Button>
-
+            <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                  variant="destructive"
+                  type="button"
+                > Hapus </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Apakah anda yakin?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Apakah anda yakin ingin menghapus data laporan ini, aksi ini tidak dapat dibatalkan
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>  
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDelete}>Continue</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+              
               <Button
                 type="button"
                 variant="default"
