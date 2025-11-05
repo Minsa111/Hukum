@@ -82,7 +82,7 @@ const handleSubmit = async (e: React.FormEvent) => {
   try {
     const isEditing = !!activity?.id
     const formData = new FormData()
-
+    
     formData.append("activity", activity.activity || "")
     formData.append("activity_date", date ? date.toISOString().split("T")[0] : "")
     formData.append("spending_account", spendingAccount)
@@ -178,13 +178,13 @@ return (
   >
     <DialogContent className="sm:max-w-[625px]">
       <DialogHeader>
-        <DialogTitle>Detail Laporan</DialogTitle>
+        <DialogTitle>Detail Kegiatan</DialogTitle>
       </DialogHeader>
 
       <form onSubmit={handleSubmit} className="grid gap-4 py-1">
         {/* Editable state toggle */}
-        <div className="grid gap-3">
-          <Label htmlFor="activity">Kegiatan</Label>
+        <div className="grid gap-3 ">
+          <Label htmlFor="activity" ><span className="text-neutral-500">Kegiatan</span></Label>
           {isEditing ? (
             <Input
               id="activity"
@@ -194,12 +194,12 @@ return (
               }
             />
           ) : (
-            <span>{activity?.activity || ""}</span>
+            <span className="border-t-2 border-neutral-200 ">{activity?.activity || ""}</span>
           )}
         </div>
 
         <div className="grid gap-3">
-          <Label htmlFor="date">Tanggal Kegiatan</Label>
+          <Label htmlFor="date"><span className="text-neutral-500">Tanggal Kegiatan</span></Label>
           {isEditing ? (
             <Popover open={openDate} onOpenChange={setOpenDate}>
               <PopoverTrigger asChild>
@@ -239,7 +239,7 @@ return (
         </div>
 
         <div className="grid gap-3">
-          <Label htmlFor="spendingAccount">Rekening Belanja</Label>
+          <Label htmlFor="spendingAccount"><span className="text-neutral-500">Rekening Belanja</span></Label>
           {isEditing ? (
             <Input
               id="spendingAccount"
@@ -257,7 +257,7 @@ return (
         </div>
 
         <div className="grid gap-3">
-          <Label htmlFor="file">File Pendukung</Label>
+          <Label htmlFor="file" > <span className="text-neutral-500">File Pendukung</span></Label>
           {isEditing ? (
             <Input type="file" accept="application/pdf" onChange={handleFileChange} />
           ) : (
@@ -283,7 +283,7 @@ return (
 
         <div className="flex flex-wrap gap-3 items-start">
           <div className="flex-1 min-w-[260px] break-words whitespace-normal">
-            <Label htmlFor="description">Uraian</Label>
+            <Label htmlFor="description"> <span className="text-neutral-500">Uraian</span></Label>
             {isEditing ? (
               <Input
                 id="description"
@@ -300,7 +300,7 @@ return (
           </div>
 
           <div className="flex-1 min-w-[260px]">
-            <Label htmlFor="price">Harga Satuan</Label>
+            <Label htmlFor="price"><span className="text-neutral-500">Harga Satuan</span></Label>
             {isEditing ? (
               <InputGroup>
                 <InputGroupAddon>
@@ -324,7 +324,7 @@ return (
 
         <div className="flex flex-row items-start justify-between gap-3">
           <div className="grid w-1/2 gap-3">
-            <Label htmlFor="quantity">Jumlah</Label>
+            <Label htmlFor="quantity"><span className="text-neutral-500">Jumlah</span></Label>
             {isEditing ? (
               <Input
                 id="quantity"
@@ -338,7 +338,7 @@ return (
           </div>
 
           <div className="grid w-1/2 gap-3">
-            <Label htmlFor="unit">Unit</Label>
+            <Label htmlFor="unit"><span className="text-neutral-500">Unit</span></Label>
             {isEditing ? (
               <Input
                 id="unit"
@@ -353,11 +353,7 @@ return (
         </div>
 
         <DialogFooter className="flex justify-between">
-          <DialogClose asChild>
-            <Button variant="outline" type="button">
-              Batal
-            </Button>
-          </DialogClose>
+          
 
           {!isEditing ? (
             <>
@@ -397,6 +393,11 @@ return (
               )}
             </Button>
           )}
+          <DialogClose asChild>
+            <Button variant="outline" type="button">
+              Kembali
+            </Button>
+          </DialogClose>
         </DialogFooter>
       </form>
     </DialogContent>
