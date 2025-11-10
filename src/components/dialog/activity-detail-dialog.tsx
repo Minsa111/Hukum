@@ -4,7 +4,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog"
@@ -20,8 +20,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Calendar } from "../ui/calendar"
-import { useParams } from "react-router-dom"
-import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, AlertDialogAction, AlertDialogActionDestructive } from "../ui/alert-dialog"
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,   AlertDialogActionDestructive } from "../ui/alert-dialog"
 import {
   InputGroup,
   InputGroupAddon,
@@ -42,13 +41,12 @@ export function ActivityDetailDialog({
   onOpenChange: (open: boolean) => void
   onSuccess?: () => void
 }) {
-  const [activity, setActivity] = React.useState(activities ?? {})
-  const [spendingAccount, setSpendingAccount] = React.useState("")
-  const [price, setPrice] = React.useState("")
-  const [quantity, setQuantity] = React.useState("")
-  const [unit, setUnit] = React.useState("")
-  const { purchase_report_id } = useParams<{ purchase_report_id: string }>()  
-  const [description, setDescription] = React.useState("")
+  const [activityName, setActivityName] = React.useState(activities.activity ?? "")
+  const [spendingAccount, setSpendingAccount] = React.useState(activities?.spendingAccount ?? "")
+  const [price, setPrice] = React.useState(activities?.unit_price ?? "")
+  const [quantity, setQuantity] = React.useState(activities?.quantity ?? "")
+  const [unit, setUnit] = React.useState(activities?.unit ?? "")
+  const [description, setDescription] = React.useState(activities?.description ?? "")
   const [date, setDate] = React.useState<Date | undefined>(undefined)
   const [openDate, setOpenDate] = React.useState(false)
   const [loading, setLoading] = React.useState(false)
@@ -81,10 +79,10 @@ const handleSubmit = async (e: React.FormEvent) => {
   setLoading(true)
 
   try {
-    const isEditing = !!activity?.id
+    const isEditing = !!activities?.id
     const formData = new FormData()
     
-    formData.append("activity", activity.activity || "")
+    formData.append("activity", activityName|| "")
     formData.append("activity_date", date ? date.toISOString().split("T")[0] : "")
     formData.append("spending_account", spendingAccount)
     formData.append("description", description)
@@ -95,7 +93,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
     const method = isEditing ? "PUT" : "POST"
     const url = isEditing
-      ? `${API_URL}${API_ACTIVITY}/${activity.id}`
+      ? `${API_URL}${API_ACTIVITY}/${activities.id}`
       : `${API_ACTIVITY}`
 
     const res = await fetchWithAuth(url, { method, body: formData })
@@ -113,14 +111,14 @@ const handleSubmit = async (e: React.FormEvent) => {
 }
 
 const handleDelete = async () => {
-  if (!activity?.id) {
+  if (!activities?.id) {
     console.error("ID not found")
     return toast.error("ID tidak ditemukan.")
   }
 
   try {
     setLoading(true)
-    await fetchWithAuth(`${API_ACTIVITY}/${activity.id}`, { method: "DELETE" })
+    await fetchWithAuth(`${API_ACTIVITY}/${activities.id}`, { method: "DELETE" })
     toast.success("Data berhasil dihapus!")
     onOpenChange(false)
     onSuccess?.()
@@ -136,7 +134,7 @@ const handleDelete = async () => {
 
 React.useEffect(() => {
   if (activities) {
-    setActivity(activities)
+    setActivityName(activities.activity || "")
     setDescription(activities.description || "")
     setPrice(
       activities.unitPrice
@@ -158,16 +156,16 @@ return (
       if (!value) {
         // 🧠 Reset edit mode and form state when dialog closes
         setIsEditing(false)
-        setDescription(activity?.description || "")
+        setDescription(activities?.description || "")
         setPrice(
-          activity?.unitPrice
-            ? Number(activity.unitPrice).toLocaleString("id-ID")
+          activities?.unitPrice
+            ? Number(activities.unitPrice).toLocaleString("id-ID")
             : ""
         )
-        setQuantity(activity?.quantity || "")
-        setUnit(activity?.unit || "")
+        setQuantity(activities?.quantity || "")
+        setUnit(activities?.unit || "")
         setDate(
-          activity?.activityDate ? new Date(activity.activityDate) : undefined
+          activities?.activityDate ? new Date(activities.activityDate) : undefined
         )
         setFile(null)
       }
@@ -186,13 +184,11 @@ return (
           {isEditing ? (
             <Input
               id="activity"
-              value={activity?.activity || ""}
-              onChange={(e) =>
-                setActivity({ ...activity, activity: e.target.value })
-              }
+              value={activityName || ""}
+              onChange={(e) => setActivityName(e.target.value)}
             />
           ) : (
-            <span >{activity?.activity || ""}</span>
+            <span >{activities?.activity || ""}</span>
           )}
         </div>
 
@@ -225,8 +221,8 @@ return (
             </Popover>
           ) : (
             <span>
-              {activity?.activityDate
-                ? new Date(activity.activityDate).toLocaleDateString("id-ID", {
+              {activities?.activityDate
+                ? new Date(activities.activityDate).toLocaleDateString("id-ID", {
                     day: "2-digit",
                     month: "long",
                     year: "numeric",
@@ -236,21 +232,16 @@ return (
           )}
         </div>
 
-        <div className="grid gap-2">
+        <div className="flex flex-col gap-2 flex-1 min-w-[260px] break-words whitespace-normal">
           <Label htmlFor="spendingAccount"><span className="text-neutral-500">Rekening Belanja</span></Label>
           {isEditing ? (
             <Input
               id="spendingAccount"
-              value={activity?.spendingAccount || ""}
-              onChange={(e) =>
-                setActivity({
-                  ...activity,
-                  spendingAccount: e.target.value,
-                })
-              }
+              value={spendingAccount || ""}
+              onChange={(e) => setSpendingAccount(e.target.value)}
             />
           ) : (
-            <p className="break-words">{activity?.spendingAccount || ""}</p>
+            <p className="break-words whitespace-normal">{activities?.spendingAccount || ""}</p>
           )}
         </div>
 
@@ -260,14 +251,14 @@ return (
             <Input type="file" accept="application/pdf" onChange={handleFileChange} />
           ) : (
             <div className="flex gap-4">
-              <span>{activity?.supportingFile || "File tidak ditemukan"}</span>
-              {activity?.supportingFile && (
+              <span>{activities?.supportingFile || "File tidak ditemukan"}</span>
+              {activities?.supportingFile && (
                 <Button
                   type="button" 
                   variant="outline"
                   onClick={() =>
                     window.open(
-                      `${API_URL}${API_UPLOAD}/${activity.supportingFile}`,
+                      `${API_URL}${API_UPLOAD}/${activities.supportingFile}`,
                       "_blank"
                     )
                   }
@@ -285,14 +276,13 @@ return (
             {isEditing ? (
               <Input
                 id="description"
-                value={activity?.description || ""}
-                onChange={(e) =>
-                  setActivity({ ...activity, description: e.target.value })
+                value={description || ""}
+                onChange={(e) =>setDescription(e.target.value)
                 }
               />
             ) : (
               <p className=" text-gray-700 break-words">
-                {activity?.description || ""}
+                {description}
               </p>
             )}
           </div>
@@ -314,7 +304,7 @@ return (
               </InputGroup>
             ) : (
               <p className="text-gray-700">
-                Rp. {Number(activity?.unitPrice).toLocaleString("id-ID")}
+                Rp. {Number(activities?.unitPrice).toLocaleString("id-ID")}
               </p>
             )}
           </div>
@@ -331,7 +321,7 @@ return (
                 placeholder="Masukkan jumlah"
               />
             ) : (
-              <p>{activity?.quantity || ""}</p>
+              <p>{quantity || ""}</p>
             )}
           </div>
 
@@ -345,7 +335,7 @@ return (
                 placeholder="Masukkan unit"
               />
             ) : (
-              <p>{activity?.unit || ""}</p>
+              <p>{unit || ""}</p>
             )}
           </div>
         </div>
@@ -381,8 +371,15 @@ return (
               >
                 Edit
               </Button>
+          <DialogClose asChild>
+            <Button variant="outline" type="button">
+              Kembali
+            </Button>
+          </DialogClose>
             </>
+            
           ) : (
+          <>
             <Button type="submit" disabled={loading}>
               {loading ? (
                 <>
@@ -393,12 +390,11 @@ return (
                 "Simpan"
               )}
             </Button>
-          )}
-          <DialogClose asChild>
-            <Button variant="outline" type="button">
+            <Button variant="outline" type="button" onClick={() => setIsEditing(false)}>
               Kembali
             </Button>
-          </DialogClose>
+          </>
+          )}
         </DialogFooter>
       </form>
     </DialogContent>

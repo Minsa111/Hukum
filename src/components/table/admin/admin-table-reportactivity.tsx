@@ -184,7 +184,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     header: "Kegiatan",
     cell: ({ row }) => {
       return (
-        <div className="text-left truncate w-64 lg:w-xs px-2 lg:px-4">
+        <div className="text-left truncate w-56 lg:w-xs px-2 lg:px-4">
           <button
             onClick={() => {
               setSelectedActivity(row.original)
@@ -427,7 +427,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
       <ActivityDetailDialog 
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
-        activities={selectedActivity}
+        activities={selectedActivity ?? {}}
         onSuccess={() => onDataChange?.()}
       />
       <div className="flex items-center justify-between px-4 lg:px-6">

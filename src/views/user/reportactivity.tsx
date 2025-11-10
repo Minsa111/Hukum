@@ -19,7 +19,7 @@ import { IconArrowLeft, IconPlus, IconEdit, IconTrash,  IconCashBanknoteEdit } f
 import { fetchWithAuth } from "@/controllers/fetchwithauths";
 import { API_PURCHASE } from "@/api/api";
 import { useNavigate } from "react-router-dom";
-import { ReportShopActivityDialog } from "@/components/dialog/shop-report-activity-dialog";
+import { ReportShopActivityDialog } from "@/components/dialog/activity-add-dialog";
 import { toast } from "sonner";
 import { EditReportShopEdDialog } from "@/components/dialog/shop-report-edit-dialog";
 
@@ -60,15 +60,16 @@ export default function Page() {
 
   if (loading) return <p>Loading...</p>;
   if (!report) return <p>No report found.</p>;
-
   return (
     <div className="flex flex-1 flex-col">
+      
       <ReportShopActivityDialog   
-      open={openDialogReport}
-      onOpenChange={setOpenDialogReport}
-      onSuccess={loadReport} 
+        open={openDialogReport}
+        onOpenChange={setOpenDialogReport}
+        onSuccess={loadReport} 
       />
-        <EditReportShopEdDialog   
+      
+      <EditReportShopEdDialog   
         open={openDialogEditReport}
         onOpenChange={setOpenDialogEditReport}
         report={report}
