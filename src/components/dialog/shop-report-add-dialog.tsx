@@ -54,6 +54,11 @@ export function ReportShopDialog({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
+    if (!title || !fundsource || !value || !date) {
+      toast.error("Harap isi semua data diisi.")
+      setLoading(false)
+      return
+    }
 
     const payload = {
       title,
@@ -114,7 +119,7 @@ export function ReportShopDialog({
           </div>
 
           <div className="flex flex-col gap-3">
-            <Label htmlFor="date">Tanggal Diterima</Label>
+            <Label htmlFor="date">Tanggal Dana Diterima</Label>
             <Popover open={openDate} onOpenChange={setOpenDate}>
               <PopoverTrigger asChild>
                 <Button variant="outline" id="date" className="w-48 justify-between font-normal">

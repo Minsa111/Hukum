@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/popover"
 import { Calendar } from "../ui/calendar"
 import { useParams } from "react-router-dom"
-import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, AlertDialogAction } from "../ui/alert-dialog"
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, AlertDialogAction, AlertDialogActionDestructive } from "../ui/alert-dialog"
 import {
   InputGroup,
   InputGroupAddon,
@@ -179,9 +179,9 @@ return (
         <DialogTitle>Detail Kegiatan</DialogTitle>
       </DialogHeader>
 
-      <form onSubmit={handleSubmit} className="grid gap-4 py-1">
+      <form onSubmit={handleSubmit} className="grid gap-5 py-1">
         {/* Editable state toggle */}
-        <div className="grid gap-3 ">
+        <div className="grid gap-2 ">
           <Label htmlFor="activity" ><span className="text-neutral-500">Kegiatan</span></Label>
           {isEditing ? (
             <Input
@@ -192,11 +192,11 @@ return (
               }
             />
           ) : (
-            <span className="border-t-2 border-neutral-200 ">{activity?.activity || ""}</span>
+            <span >{activity?.activity || ""}</span>
           )}
         </div>
 
-        <div className="grid gap-3">
+        <div className="grid gap-2">
           <Label htmlFor="date"><span className="text-neutral-500">Tanggal Kegiatan</span></Label>
           {isEditing ? (
             <Popover open={openDate} onOpenChange={setOpenDate}>
@@ -236,7 +236,7 @@ return (
           )}
         </div>
 
-        <div className="grid gap-3">
+        <div className="grid gap-2">
           <Label htmlFor="spendingAccount"><span className="text-neutral-500">Rekening Belanja</span></Label>
           {isEditing ? (
             <Input
@@ -254,7 +254,7 @@ return (
           )}
         </div>
 
-        <div className="grid gap-3">
+        <div className="grid gap-2">
           <Label htmlFor="file" > <span className="text-neutral-500">File Pendukung</span></Label>
           {isEditing ? (
             <Input type="file" accept="application/pdf" onChange={handleFileChange} />
@@ -280,7 +280,7 @@ return (
         </div>
 
         <div className="flex flex-wrap gap-3 items-start">
-          <div className="flex-1 min-w-[260px] break-words whitespace-normal">
+          <div className="flex flex-col gap-2 flex-1 min-w-[260px] break-words whitespace-normal">
             <Label htmlFor="description"> <span className="text-neutral-500">Uraian</span></Label>
             {isEditing ? (
               <Input
@@ -291,13 +291,13 @@ return (
                 }
               />
             ) : (
-              <p className="text-sm text-gray-700 break-words">
+              <p className=" text-gray-700 break-words">
                 {activity?.description || ""}
               </p>
             )}
           </div>
 
-          <div className="flex-1 min-w-[260px]">
+          <div className="flex flex-col flex-1 min-w-[260px] gap-2 ">
             <Label htmlFor="price"><span className="text-neutral-500">Harga Satuan</span></Label>
             {isEditing ? (
               <InputGroup>
@@ -313,7 +313,7 @@ return (
                 />
               </InputGroup>
             ) : (
-              <p className="text-sm text-gray-700">
+              <p className="text-gray-700">
                 Rp. {Number(activity?.unitPrice).toLocaleString("id-ID")}
               </p>
             )}
@@ -321,7 +321,7 @@ return (
         </div>
 
         <div className="flex flex-row items-start justify-between gap-3">
-          <div className="grid w-1/2 gap-3">
+          <div className="grid w-1/2 gap-2">
             <Label htmlFor="quantity"><span className="text-neutral-500">Jumlah</span></Label>
             {isEditing ? (
               <Input
@@ -335,7 +335,7 @@ return (
             )}
           </div>
 
-          <div className="grid w-1/2 gap-3">
+          <div className="grid w-1/2 gap-2">
             <Label htmlFor="unit"><span className="text-neutral-500">Unit</span></Label>
             {isEditing ? (
               <Input
@@ -368,8 +368,8 @@ return (
                     </AlertDialogDescription>
                   </AlertDialogHeader>  
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDelete}>Continue</AlertDialogAction>
+                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                    <AlertDialogActionDestructive onClick={handleDelete}>Lanjutkan</AlertDialogActionDestructive>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>

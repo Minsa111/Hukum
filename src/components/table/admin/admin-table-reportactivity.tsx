@@ -1,17 +1,15 @@
 
 import * as React from "react"
-import { Link, useParams } from "react-router-dom"
 import { Input } from "@/components/ui/input"
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
+  AlertDialogActionDestructive,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import {
   closestCenter,
@@ -190,7 +188,6 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
           <button
             onClick={() => {
               setSelectedActivity(row.original)
-              console.log("lmaoxd", row.original)
               setIsDialogOpen(true)
             }}
             className="text-left truncate hover:underline"
@@ -237,7 +234,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     accessorKey: "Rekening Belanja",
     header: "Rekening Belanja",
     cell: ({ row }) => (
-      <div className="w-32 text-left px-2 lg:px-4">
+      <div className="w-48 text-left px-2 lg:px-4 truncate">
         {row.original.spendingAccount}
       </div>
     ),
@@ -342,14 +339,14 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         <AlertDialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogTitle>Are anda yakin?</AlertDialogTitle>
               <AlertDialogDescription>
                 This action cannot be undone. This will permanently delete this data.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handleDelete}>Continue</AlertDialogAction>
+              <AlertDialogCancel>Batal</AlertDialogCancel>
+              <AlertDialogActionDestructive onClick={handleDelete}>Lanjutkan</AlertDialogActionDestructive>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
@@ -435,7 +432,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
       />
       <div className="flex items-center justify-between px-4 lg:px-6">
         <Input
-          placeholder="Search by title..."
+          placeholder="Pencarian Kegiatan..."
           value={(table.getColumn("Kegiatan")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("Kegiatan")?.setFilterValue(event.target.value)

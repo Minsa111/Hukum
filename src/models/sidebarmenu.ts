@@ -15,7 +15,7 @@ export const Dropdown= {
   navMain: [
     {
       title: "Dashboard Publik",
-      url: "/",
+      url: "/public-dashboard",
       icon: IconHome,
     },
     {

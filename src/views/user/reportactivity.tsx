@@ -3,9 +3,9 @@ import { SiteHeader } from "@/components/site-header";
 import { SectionCard } from "@/components/cards/section-cards-activty";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
+  AlertDialogActionDestructive,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
@@ -21,9 +21,11 @@ import { API_PURCHASE } from "@/api/api";
 import { useNavigate } from "react-router-dom";
 import { ReportShopActivityDialog } from "@/components/dialog/shop-report-activity-dialog";
 import { toast } from "sonner";
+import { EditReportShopEdDialog } from "@/components/dialog/shop-report-edit-dialog";
 
 export default function Page() {
   const [openDialogReport, setOpenDialogReport] = React.useState(false);
+  const [openDialogEditReport, setOpenDialogEditReport] = React.useState(false);
   const { purchase_report_id } = useParams<{ purchase_report_id: string }>()
   const [report, setReport] = React.useState<any>(null);
   const [loading, setLoading] = React.useState(true);
@@ -66,6 +68,12 @@ export default function Page() {
       onOpenChange={setOpenDialogReport}
       onSuccess={loadReport} 
       />
+        <EditReportShopEdDialog   
+        open={openDialogEditReport}
+        onOpenChange={setOpenDialogEditReport}
+        report={report}
+        onSuccess={loadReport} 
+      />
       <SiteHeader title="Pembelanjaan" />
       <div className="@container/main flex flex-1 flex-col gap-2">
         <div className="w-full flex flex-col px-4 lg:px-6 items-start pt-2 md:pt-6">
@@ -88,13 +96,13 @@ export default function Page() {
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={deleteReport}>Continue</AlertDialogAction>
+                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                    <AlertDialogActionDestructive onClick={deleteReport}>Lanjutkan</AlertDialogActionDestructive>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
-                <Button variant={"outline"} size={"lg"} className="hidden sm:inline-flex"><IconEdit /> Edit Laporan</Button>
-                <Button variant={"outline"} size={"default"} className="sm:hidden text-xs"><IconEdit /> Edit Laporan</Button>
+                <Button variant={"outline"} size={"lg"} className="hidden sm:inline-flex"onClick={()=>setOpenDialogEditReport(true)}><IconEdit /> Edit Laporan</Button>
+                <Button variant={"outline"} size={"default"} className="sm:hidden text-xs" onClick={()=>setOpenDialogEditReport(true)}><IconEdit /> Edit Laporan</Button>
               </div>
               <div className="flex flex-row gap-2">
                 <Button variant={"outline"} size={"lg"} className="hidden sm:inline-flex"><IconCashBanknoteEdit /> Edit Sumber Dana</Button>
@@ -113,7 +121,10 @@ export default function Page() {
             <div className="flex flex-row gap-2">
               <SectionCard title="Dana Anggaran" fund={report?.budget_amount}/>
               <SectionCard title="Dana Realisasi" fund={report?.realization_amount}/>
-              <SectionCard title="Sisa Dana" fund={report?.remaining_fund}/>
+              {report?.remaining_fund > 0 ?
+              <SectionCard title="Sisa Dana" fund={report?.remaining_fund}/>:
+              <SectionCard title="Sisa Dana"  fund={report?.remaining_fund}/>
+              }
             </div>
           </div>
         </div>

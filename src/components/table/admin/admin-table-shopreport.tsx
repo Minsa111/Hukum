@@ -1,7 +1,7 @@
 
 import * as React from "react"
 import { Link } from "react-router-dom"
-import {Input} from "@/components/ui/input"
+import { Input } from "@/components/ui/input"
 import {
   closestCenter,
   DndContext,
@@ -41,7 +41,7 @@ import type {
   ColumnFiltersState,
   Row,
   SortingState,
-  
+
   VisibilityState,
 } from "@tanstack/react-table"
 import {
@@ -55,7 +55,7 @@ import {
   getSortedRowModel,
 } from "@tanstack/react-table"
 import { useReports } from "@/api/hooks/use-report"
-import {reportSchema} from "@/models/schema/admin-shopreport-table"
+import { reportSchema } from "@/models/schema/admin-shopreport-table"
 
 // import { toast } from "sonner"
 import { z } from "zod"
@@ -89,126 +89,14 @@ import {
   Tabs,
   TabsContent,
 } from "@/components/ui/tabs"
-import { ReportShopDialog } from "@/components/dialog/shop-report-dialog"
-const columns: ColumnDef<z.infer<typeof reportSchema>>[] = [
-  {
-      accessorKey: "title",
-      header: "Laporan Pembelanjaan",
-    cell: ({ row }) => {
-      return (
-        <div className="text-left truncate w-64 lg:w-sm px-2 lg:px-4">
-          <Link 
-            to={`/admin/pembelanjaan/${row.original.id}`}
-          >
-            {row.original.title}
-          </Link>
-        </div>
-      )
-    },
-      enableHiding: false,
-    },
-  {
-    accessorKey: "Sumber Dana",
-    header: "Sumber Dana",
-    cell: ({ row }) => {
-      const sources = row.original.fundingSources?.map(f => f.source_of_fund).join(", ") || "-";
-      return (
-        <div className="text-left truncate w-32 px-2 lg:px-4">
-          {sources}
-        </div>
-      );
-    },
-  },
-    {
-      accessorKey: "Total Dana Anggaran",
-      header: "Total Dana Anggaran",
-      cell: ({ row }) => (
-        <div className="w-32 text-left px-2 lg:px-4">
-            Rp. {row.original.total_budget_amount.toLocaleString("id-ID")}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "Jumlah Realisasi",
-      header: "Jumlah Realisasi",
-      cell: ({ row }) => (
-        <div className="w-32 text-left px-2 lg:px-4">
-          Rp. {row.original.realization_amount.toLocaleString("id-ID")}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "Sisa Dana Anggaran",
-      header: "Sisa Dana Anggaran",
-      cell: ({ row }) => (
-        <div className="w-32 text-left px-2 lg:px-4">
-          Rp. {row.original.remaining_fund.toLocaleString("id-ID")}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "Terakhir Diperbarui",
-      header: "Terakhir Diperbarui",
-      cell: ({ row }) => {
-      const date = new Date(row.original.updated_at);
-        return (
-        <div className="w-auto text-left px-2 lg:px-4">
-          {date.toLocaleString("en-GB", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-          })}
-        </div>
-      );  
-    },
-    },
-    {
-      accessorKey: "Dibuat Pada",
-      header: "Dibuat Pada",
-      cell: ({ row }) => {
-      const date = new Date(row.original.created_at);
-        return (
-        <div className="w-auto text-left px-2 lg:px-4">
-          {date.toLocaleString("en-GB", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-          })}
-        </div>
-      );  
-    },
-    },
-  {
-    id: "actions",
-    cell: () => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-            size="icon"
-          >
-            <IconDotsVertical />
-            <span className="sr-only">Open menu</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
-          <DropdownMenuItem>Make a copy</DropdownMenuItem>
-          <DropdownMenuItem>Favorite</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ),
-  },
-]
+import { ReportShopDialog } from "@/components/dialog/shop-report-add-dialog"
+import { API_PURCHASE } from "@/api/api"
+import { fetchWithAuth } from "@/controllers/fetchwithauths"
+import { AlertDialog,  AlertDialogCancel, AlertDialogContent, AlertDialogActionDestructive, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
+import { toast } from "sonner"
+
+
+
 
 function DraggableRow({ row }: { row: Row<z.infer<typeof reportSchema>> }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
@@ -235,7 +123,7 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof reportSchema>> }) {
   )
 }
 
-export function DataTable(){
+export function DataTable() {
   const school_id = localStorage.getItem("school_id")
   const { data: report, reload } = useReports(school_id)
   const [data, setData] = React.useState<z.infer<typeof reportSchema>[]>([])
@@ -245,12 +133,18 @@ export function DataTable(){
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 10 })
+  const [selectedActivity, setSelectedActivity] = React.useState<any | null>(null)
+  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false)
+
 
   React.useEffect(() => {
-  if (report) {
-    setData(report)
-  }
-}, [report])
+    if (report) {
+      const sorted = [...report].sort(
+        (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+      setData(sorted)
+    }
+  }, [report])
 
 
   const sortableId = React.useId()
@@ -265,6 +159,141 @@ export function DataTable(){
     [data]
   )
 
+
+  async function handleDelete() {
+    try {
+      await fetchWithAuth(`${API_PURCHASE}/${selectedActivity.id}`, {
+        method: "DELETE",
+      });
+      if (reload) reload();
+      setOpenDeleteDialog(false);
+      setSelectedActivity(null);
+      toast.success("Data berhasil dihapus!");
+    } catch (err) {
+      console.error("Delete error:", err);
+      toast.error("Terjadi kesalahan saat menghapus data.");
+    }
+  }
+
+  const columns: ColumnDef<z.infer<typeof reportSchema>>[] = [
+    {
+      accessorKey: "title",
+      header: "Laporan Pembelanjaan",
+      cell: ({ row }) => {
+        return (
+          <div className="text-left truncate w-64 lg:w-sm px-2 lg:px-4">
+            <Link
+              to={`/admin/pembelanjaan/${row.original.id}`}
+            >
+              {row.original.title}
+            </Link>
+          </div>
+        )
+      },
+      enableHiding: false,
+    },
+    {
+      accessorKey: "Sumber Dana",
+      header: "Sumber Dana",
+      cell: ({ row }) => {
+        const sources = row.original.fundingSources?.map(f => f.source_of_fund).join(", ") || "-";
+        return (
+          <div className="text-left truncate w-32 px-2 lg:px-4">
+            {sources}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "Total Dana Anggaran",
+      header: "Total Dana Anggaran",
+      cell: ({ row }) => (
+        <div className="w-32 text-left px-2 lg:px-4">
+          Rp. {row.original.total_budget_amount.toLocaleString("id-ID")}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "Jumlah Realisasi",
+      header: "Jumlah Realisasi",
+      cell: ({ row }) => (
+        <div className="w-32 text-left px-2 lg:px-4">
+          Rp. {row.original.realization_amount.toLocaleString("id-ID")}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "Sisa Dana Anggaran",
+      header: "Sisa Dana Anggaran",
+      cell: ({ row }) => (
+        <div className="w-32 text-left px-2 lg:px-4">
+          Rp. {row.original.remaining_fund.toLocaleString("id-ID")}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "Terakhir Diperbarui",
+      header: "Terakhir Diperbarui",
+      cell: ({ row }) => {
+        const date = new Date(row.original.updated_at);
+        return (
+          <div className="w-auto text-left px-2 lg:px-4">
+            {date.toLocaleString("en-GB", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            })}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "Dibuat Pada",
+      header: "Dibuat Pada",
+      cell: ({ row }) => {
+        const date = new Date(row.original.created_at);
+        return (
+          <div className="w-auto text-left px-2 lg:px-4">
+            {date.toLocaleString("en-GB", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            })}
+          </div>
+        );
+      },
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+              size="icon"
+            >
+              <IconDotsVertical />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-32">
+            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <DropdownMenuItem>Make a copy</DropdownMenuItem>
+            <DropdownMenuItem>Favorite</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem variant="destructive" onClick={() => { setSelectedActivity(row.original); setOpenDeleteDialog(true) }}>Delete</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ),
+    },
+  ]
   const table = useReactTable({
     data,
     columns,
@@ -290,6 +319,7 @@ export function DataTable(){
     getFacetedUniqueValues: getFacetedUniqueValues(),
   })
 
+
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event
     if (active && over && active.id !== over.id) {
@@ -300,28 +330,43 @@ export function DataTable(){
       })
     }
   }
+
   return (
-    
+
     <Tabs
       defaultValue="semua"
       className="w-full flex-col justify-start gap-4"
     >
+      <AlertDialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete this data.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Batal</AlertDialogCancel>
+            <AlertDialogActionDestructive onClick={handleDelete}>Lanjutkan</AlertDialogActionDestructive>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <ReportShopDialog
-            open={openDialog}
-            onOpenChange={setOpenDialog}
-            onSuccess={reload} 
-          />
+        open={openDialog}
+        onOpenChange={setOpenDialog}
+        onSuccess={reload}
+      />
       <div className="w-full flex flex-col sm:flex-row items-start sm:items-center gap-2 justify-between px-4 lg:px-6">
         <Input
-          placeholder="Search by title..."
+          placeholder="Pencarian Laporan..."
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("title")?.setFilterValue(event.target.value)
           }
           className="text-sm max-w-sm"
         />
-      <div className="flex items-center self-end gap-2">
-        <Button
+        <div className="flex items-center self-end gap-2">
+          <Button
             size="lg"
             className="text hover:bg-primary/80 "
             onClick={() => setOpenDialog(true)}
@@ -387,9 +432,9 @@ export function DataTable(){
                           {header.isPlaceholder
                             ? null
                             : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
                         </TableHead>
                       )
                     })}
