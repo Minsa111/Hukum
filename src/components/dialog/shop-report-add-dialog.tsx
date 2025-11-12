@@ -66,18 +66,18 @@ export function ReportShopDialog({
         {
           source_of_fund: fundsource,
           budget_amount: parseInt(value.replace(/\D/g, ""), 10),
-          received_date: date?.toISOString().split("T")[0],
+          received_date: date ? date.toLocaleDateString("sv-SE") : null,
         },
       ],
     }
 
     try {
-      await fetchWithAuth(API_PURCHASE, {
+      const res = await fetchWithAuth(API_PURCHASE, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       })
-
+      console.log("✅ Report:", res)
       toast.success("Laporan berhasil ditambahkan!")
       onOpenChange(false)
       onSuccess?.() 

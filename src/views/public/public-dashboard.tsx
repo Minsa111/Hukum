@@ -1,11 +1,44 @@
-import { DataTable } from "@/components/table/admin/admin-table-dashboard"
-import { ChartPieLegendFund} from "@/components/pie-chart-fund"
-import { ChartPieLegendSpend } from "@/components/pie-chart-spend"
-// import { SiteHeader } from "@/components/site-header"
-import { Navbar } from "@/components/navbar"
+"use client"
 
+import { useState, useMemo } from "react"
+import { ChartPieLegendFund } from "@/components/pie-chart-fund"
+import { ChartPieLegendSpend } from "@/components/pie-chart-spend"
+import { Navbar } from "@/components/navbar"
+import { usePublicReports } from "@/api/hooks/use-public-report"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { DataTable } from "@/components/table/public/public-dashboard-table-"
+import { ChartAreaSpendBySchool } from "@/components/chart/public-chart-area-interactive"
 
 export default function Page() {
+  const { data, loading, error, reload } = usePublicReports()
+  const [selectedYear, setSelectedYear] = useState<string>(
+    new Date().getFullYear().toString()
+  )
+  const availableYears = useMemo(() => {
+    const years = new Set<string>()
+    data?.forEach((school: any) => {
+      school.reports?.forEach((r: any) => {
+        r.fundingSources?.forEach((f: any) => {
+          if (f.received_date) {
+            years.add(new Date(f.received_date).getFullYear().toString())
+          }
+        })
+        r.activities?.forEach((a: any) => {
+          if (a.activityDate) {
+            years.add(new Date(a.activityDate).getFullYear().toString())
+          }
+        })
+      })
+    })
+    const sorted = Array.from(years).sort((a, b) => Number(b) - Number(a))
+    return ["Semua", ...sorted]
+  }, [data])
   return (
     <div
       style={
@@ -15,21 +48,35 @@ export default function Page() {
       }
       className="flex flex-col min-h-screen"
     >
-      <Navbar/>
-      {/* <SiteHeader title="Dashboard" /> */}
-
-      {/* Main Content */}
-        <div className="flex flex-1 flex-col gap-2 bg-background relative lg:px-16 px-2 w-full">
-          <div className="@container/main flex flex-1 flex-col gap-2 ">
-            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-              <div className="grid gap-y-4 gap-x-6 md:grid-cols-2 mx-0 md:mx-6 lg:mx-6">
-                <ChartPieLegendFund />
-                <ChartPieLegendSpend />
-              </div>
-              {/* <DataTable data={data} /> */}
+    <Navbar />
+      <div className="flex flex-1 flex-col gap-2 bg-background relative lg:px-16 px-2 w-full">
+        <div className="@container/main flex flex-1 flex-col gap-2">
+          <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+            <div className="flex justify-end items-center px-2 md:px-6">
+              <Select value={selectedYear} onValueChange={setSelectedYear}>
+                <SelectTrigger className="w-[140px]">
+                  <SelectValue placeholder="Pilih Tahun" />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableYears.map((year) => (
+                    <SelectItem key={year} value={year}>
+                      {year}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
+            <div className="grid gap-y-4 gap-x-6 md:grid-cols-2 mx-0 md:mx-6 lg:mx-6">
+              <ChartPieLegendFund reports={data} year={selectedYear} />
+              <ChartPieLegendSpend reports={data} year={selectedYear} />
+            </div>
+            <div className="grid w-full">
+              <ChartAreaSpendBySchool chartData={data} selectedYear={selectedYear} />
+            </div>
+            <DataTable reports={data}selectedYear={selectedYear}/>
           </div>
         </div>
+      </div>
     </div>
   )
 }

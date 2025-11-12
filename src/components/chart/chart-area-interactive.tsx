@@ -50,26 +50,23 @@ export function ChartAreaInteractive({ chartData }: { chartData: any[] }) {
     if (isMobile) setTimeRange("7d")
   }, [isMobile])
 
-  // ✅ Step 1: Group all data by date
   const groupedData: Record<string, { realization: number; budget: number }> = {}
 
   chartData.forEach((report) => {
-    // Sum of realization per activity date
     report.activities?.forEach((activity: any) => {
       const date = activity.activityDate
       if (!groupedData[date]) groupedData[date] = { realization: 0, budget: 0 }
       groupedData[date].realization += parseFloat(activity.totalPrice) || 0
     })
 
-    // Sum of budgets per report_date
-    const reportDate = report.report_date
-    if (!groupedData[reportDate]) groupedData[reportDate] = { realization: 0, budget: 0 }
-    report.fundingSources?.forEach((fund: any) => {
-      groupedData[reportDate].budget += parseFloat(fund.budget_amount) || 0
-    })
+  report.fundingSources?.forEach((fund: any) => {
+    const receivedDate = fund.received_date
+    if (!receivedDate) return
+    if (!groupedData[receivedDate]) groupedData[receivedDate] = { realization: 0, budget: 0 }
+    groupedData[receivedDate].budget += parseFloat(fund.budget_amount) || 0
+  })
   })
 
-  // ✅ Step 2: Convert and sort by date
   const formattedData = Object.entries(groupedData)
     .map(([date, value]) => ({
       date,
@@ -78,7 +75,6 @@ export function ChartAreaInteractive({ chartData }: { chartData: any[] }) {
     }))
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
-  // ✅ Step 3: Make it cumulative (running total)
   let cumulativeRealization = 0
   let cumulativeBudget = 0
   const cumulativeData = formattedData.map((item) => {
@@ -91,7 +87,6 @@ export function ChartAreaInteractive({ chartData }: { chartData: any[] }) {
     }
   })
 
-  // ✅ Step 4: Filter by selected time range
   const now = new Date()
   const filteredData = cumulativeData.filter((item) => {
     const date = new Date(item.date)
@@ -104,7 +99,6 @@ export function ChartAreaInteractive({ chartData }: { chartData: any[] }) {
     return date >= start
   })
 
-  // ✅ Step 5: Render chart
   return (
     <Card className="@container/card">
       <CardHeader>

@@ -10,8 +10,8 @@ export function Navbar() {
   const isLogin = localStorage.getItem("isLoggedIn");
   const navigate = useNavigate();
   return (
-    <nav className="bg-white border-gray-200 dark:bg-gray-900">
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+    <nav className="bg-white border-1 border-gray-100 dark:bg-gray-900">
+      <div className="max-w-screen flex flex-wrap items-center justify-between mx-auto md:mx-20 px-2 py-4">
         <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <img src="/images/logo.png" className="mx-auto w-12 lg:w-16 h-auto" />
           <span className="self-center text-sm md:text-xl font-semibold whitespace-nowrap dark:text-white text-primary px-2">DIDKDASMEN PDM BATU</span>

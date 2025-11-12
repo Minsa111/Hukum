@@ -1,8 +1,7 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import "./App.css";
 import { Toaster } from "sonner";
-import { ProtectedAdminRoute, ProtectedLoginRoute } from "./routes/protectedroute";
-
+import { ProtectedAdminRoute, ProtectedLoginRoute, ProtectedSuperAdminRoute } from "./routes/protectedroute";
 import PublicDashboard from "./views/public/public-dashboard";
 import LoginPage from "./views/user/login";
 import Dashboard from "./views/user/dashboard";
@@ -29,15 +28,34 @@ const App: React.FC = () => {
             </ProtectedLoginRoute>
           }
         />
-
-        <Route
-          path="/admin"
-          element={
-            <ProtectedAdminRoute>
-              <AdminLayout />
-            </ProtectedAdminRoute>
-          }
-        >
+          <Route
+                path="/superadmin"
+                element={
+                  <ProtectedSuperAdminRoute>
+                    <AdminLayout />
+                  </ProtectedSuperAdminRoute>
+                }
+              >
+              <Route index element={<Dashboard />} />
+              <Route path="pembelanjaan" element={
+                <ProtectedSuperAdminRoute>
+                  <ShopReport />
+                </ProtectedSuperAdminRoute>
+              } />
+              <Route path="pembelanjaan/:purchase_report_id" element={
+                <ProtectedSuperAdminRoute>
+                  <ShopActivity />
+                </ProtectedSuperAdminRoute>
+              } />
+          </Route>
+          <Route
+              path="/admin"
+              element={
+                <ProtectedAdminRoute>
+                  <AdminLayout />
+                </ProtectedAdminRoute>
+              }
+            >
             <Route index element={<Dashboard />} />
             <Route path="pembelanjaan" element={
               <ProtectedAdminRoute>
@@ -59,5 +77,4 @@ const App: React.FC = () => {
     </Router>
   );
 };
-
 export default App;

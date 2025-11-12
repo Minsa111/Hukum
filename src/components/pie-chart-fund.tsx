@@ -1,5 +1,6 @@
 "use client"
 
+import { useMemo } from "react"
 import { Pie, PieChart } from "recharts"
 import {
   Card,
@@ -14,34 +15,68 @@ import {
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
-  ChartTooltipContent
+  ChartTooltipContent,
 } from "@/components/ui/chart"
 import type { ChartConfig } from "@/components/ui/chart"
-import chartData from "@/models/dummy/chartData.json"
 import colors from "@/models/dummy/colorsconfig.json"
 
+interface ChartPieLegendFundProps {
+  reports: any[]
+  year: string
+}
 
-// 🧠 Auto-generate chartConfig from chartData
-const chartConfig: ChartConfig = chartData.reduce(
-  (config, item, index) => {
-    config[item.school] = {
-      label: item.school,
-      color: colors[index % colors.length],
-    }
-    return config
-  },
-  {} as ChartConfig
-)
+export function ChartPieLegendFund({ reports, year }: ChartPieLegendFundProps) {
+  const chartData = useMemo(() => {
+    if (!reports) return []
 
-// Add a label for totalfund
-chartConfig.totalfund = { label: "Total Dana" }
+    return reports.map((school: any, index: number) => {
+      const totalfund = school.reports?.reduce((sum: number, report: any) => {
+        const yearFunds = report.fundingSources?.filter((f: any) => {
+        if (!f.received_date) return false
+        const fundYear = new Date(f.received_date).getFullYear().toString()
+        return year === "Semua" || fundYear === year
+      })
 
-export function ChartPieLegendFund() {
+        const total =
+          yearFunds?.reduce(
+            (acc: number, f: any) => acc + Number(f.budget_amount || 0),
+            0
+          ) || 0
+
+        return sum + total
+      }, 0)
+
+      return {
+        school: school.school_name,
+        totalfund,
+        fill: colors[index % colors.length],
+      }
+    })
+  }, [reports, year])
+
+  const totalAllFunds = useMemo(
+    () =>
+      chartData.reduce((acc: number, curr: any) => acc + curr.totalfund, 0),
+    [chartData]
+  )
+
+  const chartConfig: ChartConfig = useMemo(
+    () =>
+      chartData.reduce((config, item, index) => {
+        config[item.school] = {
+          label: item.school,
+          color: colors[index % colors.length],
+        }
+        return config
+      }, {} as ChartConfig),
+    [chartData]
+  )
+
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle>Dana Anggaran</CardTitle>
-        <CardDescription>Tahun 2025</CardDescription>
+        <CardDescription>Tahun {year}</CardDescription>
       </CardHeader>
 
       <CardContent className="flex-1 pb-0">
@@ -55,12 +90,10 @@ export function ChartPieLegendFund() {
               content={<ChartTooltipContent hideLabel />}
             />
             <Pie
-              data={chartData.map((item, index) => ({
-                ...item,
-                fill: colors[index % colors.length],
-              }))}
+              data={chartData}
               dataKey="totalfund"
               nameKey="school"
+              label
             />
             <ChartLegend
               content={<ChartLegendContent nameKey="school" />}
@@ -70,8 +103,10 @@ export function ChartPieLegendFund() {
         </ChartContainer>
       </CardContent>
 
-      <CardFooter>
-        <CardTitle>Rp. 100.000.000</CardTitle>
+      <CardFooter className="flex items-start">
+        <CardTitle>
+          Total: Rp. {totalAllFunds.toLocaleString("id-ID")}
+        </CardTitle>
       </CardFooter>
     </Card>
   )

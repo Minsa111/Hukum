@@ -1,5 +1,6 @@
 "use client"
 
+import { useMemo } from "react"
 import { Pie, PieChart } from "recharts"
 import {
   Card,
@@ -14,39 +15,79 @@ import {
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
-  ChartTooltipContent
+  ChartTooltipContent,
 } from "@/components/ui/chart"
 import type { ChartConfig } from "@/components/ui/chart"
-import chartData from '@/models/dummy/chartData.json'
-import colors from '@/models/dummy/colorsconfig.json'
+import colors from "@/models/dummy/colorsconfig.json"
 
-// 🧠 Auto-generate chartConfig from chartData
-const chartConfig: ChartConfig = chartData.reduce(
-  (config, item, index) => {
-    config[item.school] = {
-      label: item.school,
-      color: colors[index % colors.length],
-    }
-    return config
-  },
-  {} as ChartConfig
-)
+interface ChartPieLegendSpendProps {
+  reports: any[]
+  year: string
+}
 
-// Add a label for totalfund
-chartConfig.totalspend= { label: "Total Dana" }
+export function ChartPieLegendSpend({ reports, year }: ChartPieLegendSpendProps) {
+  // 🧠 Prepare chart data based on selected year
+  const chartData = useMemo(() => {
+    if (!reports) return []
 
-export function ChartPieLegendSpend() {
+    return reports.map((school: any, index: number) => {
+      // Loop through each school's reports
+      const totalSpend = school.reports?.reduce((sum: number, report: any) => {
+        const yearActivities = report.activities?.filter((a: any) => {
+          if (!a.activityDate) return false
+          const activityYear = new Date(a.activityDate).getFullYear().toString()
+          return year === "Semua" || activityYear === year
+        })
+
+        const total =
+          yearActivities?.reduce(
+            (acc: number, a: any) =>
+              acc + Number(a.unitPrice || 0) * Number(a.quantity || 0),
+            0
+          ) || 0
+
+        return sum + total
+      }, 0)
+
+      return {
+        school: school.school_name,
+        totalspend: totalSpend,
+        fill: colors[index % colors.length],
+      }
+    })
+  }, [reports, year])
+
+  // 🧮 Calculate total spending for footer
+  const totalAllSpends = useMemo(
+    () =>
+      chartData.reduce((acc: number, curr: any) => acc + curr.totalspend, 0),
+    [chartData]
+  )
+
+  // 🧩 Auto-generate chart configuration
+  const chartConfig: ChartConfig = useMemo(
+    () =>
+      chartData.reduce((config, item, index) => {
+        config[item.school] = {
+          label: item.school,
+          color: colors[index % colors.length],
+        }
+        return config
+      }, {} as ChartConfig),
+    [chartData]
+  )
+
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Dana Terealisasi</CardTitle>
-        <CardDescription>Tahun 2025</CardDescription>
+        <CardTitle>Dana Pengeluaran</CardTitle>
+        <CardDescription>Tahun {year}</CardDescription>
       </CardHeader>
 
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square w-full min-h-[265] sm:min-h-[250px] lg:max-h-[400px]"
+          className="mx-auto aspect-square w-full min-h-[265px] sm:min-h-[250px] lg:max-h-[400px]"
         >
           <PieChart>
             <ChartTooltip
@@ -54,23 +95,23 @@ export function ChartPieLegendSpend() {
               content={<ChartTooltipContent hideLabel />}
             />
             <Pie
-              data={chartData.map((item, index) => ({
-                ...item,
-                fill: colors[index % colors.length],
-              }))}
+              data={chartData}
               dataKey="totalspend"
               nameKey="school"
+              label
             />
             <ChartLegend
               content={<ChartLegendContent nameKey="school" />}
-              className="-translate-y-2 flex-wrap gap-4  justify-center"
+              className="-translate-y-2 flex-wrap gap-2 *:justify-center"
             />
           </PieChart>
         </ChartContainer>
       </CardContent>
 
-      <CardFooter>
-        <CardTitle>Rp. 100.000.000</CardTitle>
+      <CardFooter className="flex items-start">
+        <CardTitle>
+          Total: Rp. {totalAllSpends.toLocaleString("id-ID")}
+        </CardTitle>
       </CardFooter>
     </Card>
   )

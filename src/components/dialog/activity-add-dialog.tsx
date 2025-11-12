@@ -87,7 +87,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     const formData = new FormData()
     formData.append("purchase_report_id", purchase_report_id || "")
     formData.append("activity", activity)
-    formData.append("activity_date", date ? date.toISOString().split("T")[0] : "")
+    formData.append("activity_date", date ? date.toLocaleDateString("sv-SE") : "")
     formData.append("spending_account", spendingAccount)
     formData.append("description", description)
     formData.append("unit_price", price.replace(/\D/g, ""))

@@ -17,14 +17,20 @@ export function useLogin() {
     setLoading(true);
 
     try {
-      await loginController(formData);
-      navigate("/admin");
+      const res = await loginController(formData);
+      if (res){
+        if(res.user.role === "instansi"){
+          navigate("/admin");
+        }else if(res.user.role === "admin"){
+          navigate("/superadmin");
+        }else{
+          navigate("/404");
+        }
+      }
       toast.success("Login successful!");
     } catch (err) {
       console.error(err);
       toast.error(`Login failed: ${err}`);
-      // console.log(err);
-      // You can show a toast error here too
     } finally {
       setLoading(false);
     }
