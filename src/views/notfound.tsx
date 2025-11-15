@@ -26,7 +26,7 @@ export default function Page() {
                 variant={"secondary"} 
                 size={"lg"}
                 className="w-32"
-                onClick={() => navigate("/public-dashboard")}>Kembali</Button> 
+                onClick={() => navigate("/")}>Kembali</Button> 
               </div>
             </div>
           </div>

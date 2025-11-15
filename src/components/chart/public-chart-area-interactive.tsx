@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import {
   Area,
   AreaChart,
@@ -40,6 +39,8 @@ export function ChartAreaSpendBySchool({
 }) {
   // Step 1: Collect spending by school and date
   const spendingBySchool: Record<string, Record<string, number>> = {}
+  const formatRupiah = (num: number) =>
+  new Intl.NumberFormat("id-ID").format(num);
 
   chartData?.forEach((report) => {
     const schoolName = report.school_name || "Tidak diketahui"

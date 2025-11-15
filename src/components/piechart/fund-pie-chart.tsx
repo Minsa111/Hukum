@@ -79,10 +79,10 @@ export function ChartPieLegendFund({ reports, year }: ChartPieLegendFundProps) {
         <CardDescription>Tahun {year}</CardDescription>
       </CardHeader>
 
-      <CardContent className="flex-1 pb-0">
+      <CardContent className="flex flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square w-full min-h-[265px] sm:min-h-[250px] lg:max-h-[400px]"
+          className="mx-auto aspect-square w-full min-h-[225px] sm:min-h-[270px] lg:max-h-[300px]"
         >
           <PieChart>
             <ChartTooltip
@@ -93,7 +93,7 @@ export function ChartPieLegendFund({ reports, year }: ChartPieLegendFundProps) {
               data={chartData}
               dataKey="totalfund"
               nameKey="school"
-              label
+              label={({ value }) => `Rp. ${new Intl.NumberFormat("id-ID").format(value as number)}`}
             />
             <ChartLegend
               content={<ChartLegendContent nameKey="school" />}

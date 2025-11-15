@@ -4,10 +4,10 @@ export const activitySchema = z.object({
   id: z.string(),
   activity: z.string(),
   supportingFile: z.string().nullable(),
-  activityDate: z.string(), // ISO date string
+  activityDate: z.string(),
   spendingAccount: z.string(),
   description: z.string(),
-  unitPrice: z.string(), // stored as string, e.g. "123.00"
+  unitPrice: z.string(),
   quantity: z.number(),
   unit: z.string(),
   created_at: z.string(),
@@ -17,8 +17,8 @@ export const activitySchema = z.object({
 export const fundingSourceSchema = z.object({
   id: z.string(),
   source_of_fund: z.string(),
-  budget_amount: z.string(), // stored as string, e.g. "123123.00"
-  received_date: z.string(), // ISO date string
+  budget_amount: z.string(),
+  received_date: z.string(),
   created_at: z.string(),
   updated_at: z.string(),
 })

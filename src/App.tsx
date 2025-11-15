@@ -3,23 +3,26 @@ import "./App.css";
 import { Toaster } from "sonner";
 import { ProtectedAdminRoute, ProtectedLoginRoute, ProtectedSuperAdminRoute } from "./routes/protectedroute";
 import PublicDashboard from "./views/public/public-dashboard";
+import Recap from "./views/public/rekap";
+import SchoolRecap from "./views/public/rekap-school";
 import LoginPage from "./views/user/login";
 import Dashboard from "./views/user/dashboard";
 import ShopReport from "./views/user/shopreport";
 import ShopActivity from "./views/user/reportactivity";
 import NotFoundPage from "./views/notfound";
 import { AdminLayout } from "./views/layout/adminLayout";
+import { NavLayout } from "./views/layout/defLayout";
 
 const App: React.FC = () => {
   return (
     <Router>
       <Toaster />
       <Routes>
-        <Route path="/" element={<Navigate to="/public-dashboard" replace />} />
-        <Route path="/public-dashboard" element={
-            <PublicDashboard /> } />
-
-        {/* Auth */}
+        <Route path="/" element={<NavLayout />} >
+          <Route index element={<PublicDashboard /> } />
+          <Route path="rekap" element={<Recap />} />
+          <Route path="rekap/:nisn" element={<SchoolRecap />} />
+        </Route>
         <Route
           path="/auth/login"
           element={

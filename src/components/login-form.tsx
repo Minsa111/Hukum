@@ -9,8 +9,9 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Eye, EyeOff } from "lucide-react"
+import { Eye, EyeOff, ArrowLeftIcon } from "lucide-react"
 import type { LoginDto } from "@/api/auth" // import the LoginDto type
+import { useNavigate } from "react-router-dom"
 
 interface LoginFormProps extends React.ComponentProps<"div"> {
   formData: LoginDto
@@ -28,12 +29,20 @@ export function LoginForm({
   ...props
 }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false)
-
+  const navigate = useNavigate();
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={cn("flex flex-col gap-2", className)} {...props}>
+          <Button 
+            size="lg" 
+            variant="outline" 
+            className="w-32 text-primary outline-blue-500" 
+            onClick={()=>navigate("/")}
+            >
+              <ArrowLeftIcon/>Kembali
+          </Button>
       <Card className="shadow-lg">
-        <CardHeader className="text-center">
-          <img src="/images/logo.png" alt="logo" className="mx-auto w-24 h-auto" />
+        <CardHeader className="text-center gap-8">
+          <img src="/images/logoname.png" alt="logo" className="mx-auto w-72 h-auto" />
           <CardTitle className="text-xl">Login Administrator</CardTitle>
         </CardHeader>
         <CardContent>

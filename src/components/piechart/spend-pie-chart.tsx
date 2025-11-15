@@ -57,14 +57,12 @@ export function ChartPieLegendSpend({ reports, year }: ChartPieLegendSpendProps)
     })
   }, [reports, year])
 
-  // 🧮 Calculate total spending for footer
   const totalAllSpends = useMemo(
     () =>
       chartData.reduce((acc: number, curr: any) => acc + curr.totalspend, 0),
     [chartData]
   )
 
-  // 🧩 Auto-generate chart configuration
   const chartConfig: ChartConfig = useMemo(
     () =>
       chartData.reduce((config, item, index) => {
@@ -78,7 +76,7 @@ export function ChartPieLegendSpend({ reports, year }: ChartPieLegendSpendProps)
   )
 
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col gap-6">
       <CardHeader className="items-center pb-0">
         <CardTitle>Dana Pengeluaran</CardTitle>
         <CardDescription>Tahun {year}</CardDescription>
@@ -87,7 +85,7 @@ export function ChartPieLegendSpend({ reports, year }: ChartPieLegendSpendProps)
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square w-full min-h-[265px] sm:min-h-[250px] lg:max-h-[400px]"
+          className="mx-auto aspect-square w-full min-h-[225px] sm:min-h-[270px] lg:max-h-[300px]"
         >
           <PieChart>
             <ChartTooltip
@@ -98,7 +96,7 @@ export function ChartPieLegendSpend({ reports, year }: ChartPieLegendSpendProps)
               data={chartData}
               dataKey="totalspend"
               nameKey="school"
-              label
+              label={({ value }) => `Rp. ${new Intl.NumberFormat("id-ID").format(value as number)}`}
             />
             <ChartLegend
               content={<ChartLegendContent nameKey="school" />}

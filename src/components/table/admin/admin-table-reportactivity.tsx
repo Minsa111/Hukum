@@ -44,7 +44,6 @@ import type {
   ColumnFiltersState,
   Row,
   SortingState,
-
   VisibilityState,
 } from "@tanstack/react-table"
 import {

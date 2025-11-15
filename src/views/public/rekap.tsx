@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { DataTable } from "@/components/table/public/public-dashboard-table"
+import { DataTable } from "@/components/table/public/spend-fund-table"
 import { ChartAreaSpendBySchool } from "@/components/chart/public-chart-area-interactive"
 
 export default function Page() {

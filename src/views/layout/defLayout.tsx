@@ -1,9 +1,17 @@
-export function defLayout({ children }: { children: React.ReactNode }) {
+import { Navbar } from "@/components/navbar";
+import { Outlet } from "react-router-dom";
+export function NavLayout() {
     return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
-      <div className="flex w-full max-w-sm flex-col gap-6">
-        {children}
-      </div>
+    <div
+        style={
+          {
+            "--header-height": "calc(var(--spacing) * 12)",
+          } as React.CSSProperties
+        }
+        className="flex flex-col min-h-screen"
+        >
+        <Navbar />
+        <Outlet />
     </div>
     );
 }
