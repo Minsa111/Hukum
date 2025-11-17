@@ -42,7 +42,10 @@ export default function Page() {
       <div className="flex flex-1 flex-col gap-2 bg-background relative lg:px-16 px-2 w-full">
         <div className="@container/main flex flex-1 flex-col gap-2">
           <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-            <div className="flex justify-end items-center px-2 md:px-6">
+            <div className="flex justify-between items-center px-2 md:px-6">
+            <span className="text-2xl font-bold">
+              Dashboard
+            </span>
               <Select value={selectedYear} onValueChange={setSelectedYear}>
                 <SelectTrigger className="w-[140px]">
                   <SelectValue placeholder="Pilih Tahun" />

@@ -28,6 +28,7 @@ const fundingSourceSchema = z.object({
     z.number()
   ),
   created_at: z.string().datetime(),
+  received_date: z.string().datetime(),
   updated_at: z.string().datetime(),
 });
 

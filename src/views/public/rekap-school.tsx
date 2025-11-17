@@ -45,18 +45,20 @@ export default function Page() {
     loadReport()
   }, [])
 
-  const availableYears = useMemo(() => {
+  const availableYears = useMemo(() => {  
     const years = new Set<string>()
-    report?.forEach((r: any) => {
-      r.fundingSources?.forEach((f: any) => {
-        if (f.received_date) {
-          years.add(new Date(f.received_date).getFullYear().toString())
-        }
-      })
-      r.activities?.forEach((a: any) => {
-        if (a.activityDate) {
-          years.add(new Date(a.activityDate).getFullYear().toString())
-        }
+    report?.forEach((school: any) => {
+      school.reports?.forEach((r: any) => {
+        r.fundingSources?.forEach((f: any) => {
+          if (f.received_date) {
+            years.add(new Date(f.received_date).getFullYear().toString())
+          }
+        })
+        r.activities?.forEach((a: any) => {
+          if (a.activityDate) {
+            years.add(new Date(a.activityDate).getFullYear().toString())
+          }
+        })
       })
     })
     const sorted = Array.from(years).sort((a, b) => Number(b) - Number(a))
@@ -66,12 +68,12 @@ export default function Page() {
   if (loading) return <p>Loading...</p>
 
   return (
-    <div className="flex flex-1 flex-col gap-2 bg-background relative lg:px-16 px-2 w-full">
+    <div className="flex flex-1 flex-col gap-2 bg-background relative lg:px-20 px-2 w-full">
       <div className="@container/main flex flex-1 flex-col gap-2">
         <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
           <div className="flex justify-between items-start pl-2 md:pl-6">
             <span className="text-2xl font-bold">
-              {report[0]?.school_name || ""}
+              Rekap {report[0]?.school_name || ""}
             </span>
             <Select value={selectedYear} onValueChange={setSelectedYear}>
               <SelectTrigger className="w-[140px]">
@@ -88,16 +90,14 @@ export default function Page() {
           </div>
 
           {/* 📊 Charts Section */}
-          <div className="grid gap-y-4 gap-x-6 md:grid-cols-[30%_70%] mx-0 md:mx-6 lg:mx-6">
+          <div className="grid gap-y-4 gap-x-6 md:grid-cols-[30%_70%] mx-4 md:mx-6 lg:mx-6">
             <ChartPieLegendFundSpend reports={report} year={selectedYear} />
             <ChartAreaFundVsSpend chartData={report} selectedYear={selectedYear} />
           </div>
 
           {/* 📋 DataTable directly fed from extracted reports[] */}
-          <div className="grid gap-y-4 gap-x-6 mx-0 md:mx-6 lg:mx-6">
-            {report.length > 0 && (
-              <DataTable reports={report[0]?.reports} selectedYear={selectedYear} />
-            )}
+          <div className="w-full flex flex-col items-start gap-y-4 gap-x-6 mx-4 md:mx-6">
+              <DataTable report={report[0].reports} selectedYear={selectedYear} />
           </div>
         </div>
       </div>

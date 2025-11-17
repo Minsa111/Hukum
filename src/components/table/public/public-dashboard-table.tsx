@@ -52,12 +52,12 @@ import {
 import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { ActivityDetailDialog } from "@/components/dialog/activity-detail-dialog"
 import { toast } from "sonner"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 // ✅ Draggable row — uses nisn as id
 function DraggableRow({ row }: { row: Row<any> }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
-    id: row.original.nisn, // ✅ use nisn as row id
+    id: row.original.id, // ✅ use nisn as row id
   })
 
   return (
@@ -93,7 +93,7 @@ export function DataTable({
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
   const [data, setData] = React.useState<
     {
-      nisn: string
+      id: string
       school_name: string
       totalBudget: number
       totalRealization: number
@@ -159,6 +159,7 @@ export function DataTable({
     });
 
     setData(summarized);
+    console.log("Data:", summarized);
   } catch (err) {
     console.error("Invalid data:", err);
     toast.error("Terjadi kesalahan saat memproses data. " + err);
@@ -166,7 +167,7 @@ export function DataTable({
 }, [reports, selectedYear]);
 
   const dataIds = React.useMemo<UniqueIdentifier[]>(
-    () => data?.map((item) => item.nisn) || [],
+    () => data?.map((item) => item.id) || [],
     [data]
   )
 
@@ -181,8 +182,10 @@ export function DataTable({
       accessorKey: "school_name",
       header: "Sekolah",
       cell: ({ row }) => (
-        <div className="text-left truncate w-56 lg:w-xs px-2 lg:px-4 font-medium">
-          {row.original.school_name}
+        <div className="text-left truncate hover:underline w-56 lg:w-xs px-2 lg:px-4 font-medium">
+          <Link to={`/rekap/${row.original.id}`}>
+            {row.original.school_name}
+          </Link>
         </div>
       ),
     },
@@ -226,7 +229,7 @@ export function DataTable({
       id: "actions",
       cell: ({ row }) => {
         return(
-          <Button onClick={() => navigate(`/rekap/${row.original.nisn}`)}>Detail</Button>
+          <Button onClick={() => navigate(`/rekap/${row.original?.id}`)}>Detail</Button>
         )
       },
     },
@@ -236,7 +239,7 @@ export function DataTable({
     data,
     columns,
     state: { sorting, columnVisibility, rowSelection, columnFilters, pagination },
-    getRowId: (row) => row.nisn, // ✅ uses nisn as the true ID
+    getRowId: (row) => row.id, // ✅ uses nisn as the true ID
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
@@ -301,7 +304,7 @@ export function DataTable({
                 {table.getRowModel().rows?.length ? (
                   <SortableContext items={dataIds} strategy={verticalListSortingStrategy}>
                     {table.getRowModel().rows.map((row) => (
-                      <DraggableRow key={row.original.nisn} row={row} />
+                      <DraggableRow key={row.original.id} row={row} />
                     ))}
                   </SortableContext>
                 ) : (

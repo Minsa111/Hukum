@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { DataTable } from "@/components/table/public/spend-fund-table"
+// import { DataTable } from "@/components/table/public/spend-fund-table"
 import { ChartAreaSpendBySchool } from "@/components/chart/public-chart-area-interactive"
 
 export default function Page() {
@@ -63,7 +63,7 @@ export default function Page() {
             <div className="grid gap-y-4 gap-x-6 mx-0 md:mx-6 lg:mx-6">
               <ChartAreaSpendBySchool chartData={data} selectedYear={selectedYear} />
             </div>
-            <DataTable reports={data}selectedYear={selectedYear}/>
+            {/* <DataTable reports={data}selectedYear={selectedYear}/> */}
           </div>
         </div>
       </div>

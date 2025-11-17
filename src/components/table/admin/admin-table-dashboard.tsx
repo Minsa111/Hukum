@@ -96,7 +96,7 @@ const columns: ColumnDef<z.infer<typeof reportSchema>>[] = [
     header: "Laporan Pembelanjaan",
   cell: ({ row }) => {
     return (
-      <div className="text-left truncate w-64 lg:w-sm px-2 lg:px-4">
+      <div className="text-left truncate hover:underline w-64 lg:w-sm px-2 lg:px-4">
         <Link 
           to={`/admin/pembelanjaan/${row.original.id}`}
         >
