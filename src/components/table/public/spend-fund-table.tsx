@@ -188,7 +188,8 @@ export function DataTable({report, selectedYear,}:{report:any[],selectedYear:str
           if (selectedYear === "Semua" || year === selectedYear) {
             totalBudget += parseFloat(fund.budget_amount);
           }
-        })
+        },
+      )
         return(
           <div className="w-32 text-left px-2 lg:px-4">
             Rp. {totalBudget ? 
@@ -207,7 +208,8 @@ export function DataTable({report, selectedYear,}:{report:any[],selectedYear:str
           if (selectedYear === "Semua" || actYear === selectedYear) {
             totalRealization += act.unitPrice * act.quantity;
           }
-        })
+        },
+      )
         return(
           <div className="w-32 text-left px-2 lg:px-4">
             Rp. {totalRealization ? 
@@ -220,11 +222,31 @@ export function DataTable({report, selectedYear,}:{report:any[],selectedYear:str
     {
       accessorKey: "Sisa Dana Anggaran",
       header: "Sisa Dana Anggaran",
-      cell: ({ row }) => (
-        <div className="w-32 text-left px-2 lg:px-4">
-          Rp. {row.original.remaining_fund.toLocaleString("id-ID")}
-        </div>
-      ),
+      cell: ({ row }) => {
+        // re-calc both or share logic
+        let totalBudget = 0;
+        let totalRealization = 0;
+
+        row.original.fundingSources?.forEach((fund) => {
+          const year = new Date(fund.received_date).getFullYear().toString();
+          if (selectedYear === "Semua" || year === selectedYear) {
+            totalBudget += Number(fund.budget_amount);
+          }
+        });
+
+        row.original.activities?.forEach((act) => {
+          const year = new Date(act.activityDate).getFullYear().toString();
+          if (selectedYear === "Semua" || year === selectedYear) {
+            totalRealization += act.unitPrice * act.quantity;
+          }
+        });
+        const sisa = totalBudget - totalRealization;
+        return (
+          <div className="w-32 text-left px-2 lg:px-4">
+            Rp. {sisa.toLocaleString("id-ID")}
+          </div>
+        );
+      },
     },
     {
       accessorKey: "Laporan Terakhir Diperbarui",

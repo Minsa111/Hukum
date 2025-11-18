@@ -95,7 +95,6 @@ import { toast } from "sonner"
 import { API_ACTIVITY } from "@/api/api"
 import { fetchWithAuth } from "@/controllers/fetchwithauths"
 
-  
 
 function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
@@ -125,6 +124,7 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
 export function DataTable({ activities, onDataChange }: { activities: any[]; onDataChange?: () => void }) {
   const [selectedActivity, setSelectedActivity] = React.useState<any | null>(null)
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
+  const [isEditing, setIsEditing] = React.useState(false)
   const [data, setData] = React.useState<z.infer<typeof schema>[]>([]);
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =React.useState<VisibilityState>({})
@@ -187,6 +187,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
           <button
             onClick={() => {
               setSelectedActivity(row.original)
+              setIsEditing(false)
               setIsDialogOpen(true)
             }}
             className="text-left truncate hover:underline"
@@ -363,15 +364,23 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
           <DropdownMenuItem
           onClick={() => {
               setSelectedActivity(row.original)
+              setIsEditing(false)
               setIsDialogOpen(true)
           }}
           >Detail</DropdownMenuItem>
-          <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem
+          onClick={() => {
+            setSelectedActivity(row.original)
+            setIsEditing(true)
+            setIsDialogOpen(true)
+          }}
+          >Edit</DropdownMenuItem>
           <DropdownMenuSeparator />
             <DropdownMenuItem variant="destructive" onClick={() => {
               setSelectedActivity(row.original)
-              setOpenDeleteDialog(true)}}>Delete</DropdownMenuItem>
-            
+              setOpenDeleteDialog(true)
+              }}
+              >Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     ),
@@ -428,6 +437,9 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         onOpenChange={setIsDialogOpen}
         activities={selectedActivity ?? {}}
         onSuccess={() => onDataChange?.()}
+        isEdit = {isEditing}
+        onEdit={() => setIsEditing(true)}
+        onCancelEdit={() => setIsEditing(false)}
       />
       <div className="flex items-center justify-between px-4 lg:px-6">
         <Input

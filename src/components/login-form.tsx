@@ -63,7 +63,6 @@ export function LoginForm({
                     }
                   />
                 </div>
-
                 {/* Password with toggle button */}
                 <div className="grid gap-3">
                   <div className="flex items-center justify-between">
