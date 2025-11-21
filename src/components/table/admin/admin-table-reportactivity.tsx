@@ -94,6 +94,7 @@ import { ActivityDetailDialog } from "@/components/dialog/activity-detail-dialog
 import { toast } from "sonner"
 import { API_ACTIVITY } from "@/api/api"
 import { fetchWithAuth } from "@/controllers/fetchwithauths"
+import { useNavigate } from "react-router-dom"
 
 
 function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
@@ -121,13 +122,13 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
   )
 }
 
-export function DataTable({ activities, onDataChange }: { activities: any[]; onDataChange?: () => void }) {
+export function DataTable({ activities, onDataChange, isPublic }: { activities: any[]; onDataChange?: () => void; isPublic?: boolean }) {
   const [selectedActivity, setSelectedActivity] = React.useState<any | null>(null)
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
   const [isEditing, setIsEditing] = React.useState(false)
   const [data, setData] = React.useState<z.infer<typeof schema>[]>([]);
   const [rowSelection, setRowSelection] = React.useState({})
-  const [columnVisibility, setColumnVisibility] =React.useState<VisibilityState>({})
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -137,255 +138,273 @@ export function DataTable({ activities, onDataChange }: { activities: any[]; onD
     pageIndex: 0,
     pageSize: 10,
   })
+  const navigate = useNavigate()
   const sortableId = React.useId()
+
   const sensors = useSensors(
     useSensor(MouseSensor, {}),
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {})
   )
-  
+
   const dataIds = React.useMemo<UniqueIdentifier[]>(
     () => data?.map((item) => item.id) || [],
-  [data]
-)
+    [data]
+  )
 
-async function handleDelete() {
-  try {
-    await fetchWithAuth(`${API_ACTIVITY}/${selectedActivity.id}`, {
-      method: "DELETE",
-    });
-    if (onDataChange) onDataChange();
-    setIsDialogOpen(false);
-    setSelectedActivity(null);
-    toast.success("Data berhasil dihapus!");
-  } catch (err) {
-    console.error("Delete error:", err);
-    toast.error("Terjadi kesalahan saat menghapus data.");
+  async function handleDelete() {
+    try {
+      await fetchWithAuth(`${API_ACTIVITY}/${selectedActivity.id}`, {
+        method: "DELETE",
+      });
+      if (onDataChange) onDataChange();
+      setIsDialogOpen(false);
+      setSelectedActivity(null);
+      toast.success("Data berhasil dihapus!");
+    } catch (err) {
+      console.error("Delete error:", err);
+      toast.error("Terjadi kesalahan saat menghapus data.");
+    }
   }
-}
 
-React.useEffect(() => {
-  if (Array.isArray(activities)) {
-    const normalized = activities.map((a) => ({
-      ...a,
-      activityDate: new Date(a.activityDate),
-      created_at: new Date(a.created_at),
-      updated_at: new Date(a.updated_at),
-    }))
-    .sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
-    setData(normalized);
-  }
-}, [activities]);
+  React.useEffect(() => {
+    if (Array.isArray(activities)) {
+      const normalized = activities.map((a) => ({
+        ...a,
+        activityDate: new Date(a.activityDate),
+        created_at: new Date(a.created_at),
+        updated_at: new Date(a.updated_at),
+      }))
+        .sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
+      setData(normalized);
+    }
+  }, [activities]);
 
-const columns: ColumnDef<z.infer<typeof schema>>[] = [
+  const columns: ColumnDef<z.infer<typeof schema>>[] = [
     {
-    accessorKey: "Kegiatan",
-    header: "Kegiatan",
-    cell: ({ row }) => {
-      return (
-        <div className="text-left truncate w-56 lg:w-xs px-2 lg:px-4">
-          <button
-            onClick={() => {
-              setSelectedActivity(row.original)
-              setIsEditing(false)
-              setIsDialogOpen(true)
-            }}
-            className="text-left truncate hover:underline"
-          >
-            {row.original.activity}
-          </button>
-        </div>
-      )
-    },
-    enableHiding: false,
-  },
-  {
-    accessorKey: "File Pendukung",
-    header: "File Pendukung",
-    cell: ({ row }) => {
-      const hasFile = !!row.original.supportingFile; // true if file exists
-      return (
-        <div className="text-left w-32 px-2 lg:px-4">
-          <span>
-            {hasFile ? <Badge variant={"outline"}>Ada</Badge> : <Badge variant={"outline"}>Tidak ada</Badge>}
-          </span>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "Tanggal Kegiatan",
-    header: "Tanggal Kegiatan",
-    cell: ({ row }) => {
-      const date = new Date(row.original.activityDate);
-      return (
-        <div className="w-auto text-left px-2 lg:px-4">
-          {date.toLocaleString("en-GB", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-          })}
-        </div>
-      );
-    },
-  },
-
-  {
-    accessorKey: "Rekening Belanja",
-    header: "Rekening Belanja",
-    cell: ({ row }) => (
-      <div className="w-48 text-left px-2 lg:px-4 truncate">
-        {row.original.spendingAccount}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "Uraian",
-    header: "Uraian",
-    cell: ({ row }) => (
-      <div className="w-52 truncate text-left px-2 lg:px-4">
-        {row.original.description}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "Harga Satuan",
-    header: "Harga Satuan",
-    cell: ({ row }) => { 
-      const unitPrice = parseInt(String(row.original.unitPrice), 10);
-      return (
-        <div className="w-32 text-left px-2 lg:px-4">
-          Rp. {isNaN(unitPrice) ? "-" : unitPrice.toLocaleString("id-ID")}
-        </div>
-      );
-    },
-  },
-
-  {
-    accessorKey: "Kuantitas",
-    header: "Kuantitas",
-    cell: ({ row }) => (
-      <div className="w-32 text-left px-2 lg:px-4">
-        {row.original.quantity}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "Unit",
-    header: "Unit",
-    cell: ({ row }) => (
-      <div className="w-32 text-left px-2 lg:px-4">
-        {row.original.unit}
-      </div>
-    ),
-  },
-
-  {
-    accessorKey: "Total Harga",
-    header: "Total Harga",
-    cell: ({ row }) => {
-      const total = row.original.quantity * parseFloat(String(row.original.unitPrice));
-      return (
-        <div className="w-32 text-left px-2 lg:px-4">
-          Rp. {total.toLocaleString("id-ID")}
-        </div>
-      );
-    },
-  },
-
-  {
-    accessorKey: "Dibuat Pada",
-    header: "Dibuat Pada",
-    cell: ({ row }) => {
-      const date = new Date(row.original.created_at);
-      return (
-        <div className="w-auto text-left  px-2 lg:px-4">
-          {date.toLocaleString("en-GB", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-          })}
-        </div>
-      );
-    },
-  },
-
-  {
-    accessorKey: "Terakhir Diperbarui",
-    header: "Terakhir Diperbarui",
-    cell: ({ row }) => {
-      const date = new Date(row.original.updated_at);
-      return (
-        <div className="w-auto px-2 text-left  lg:px-4">
-          {date.toLocaleString("en-GB", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-          })}
-        </div>
-      );
-    },
-  },
-  {
-    id: "actions",
-    cell: ({row}) => (
-      <DropdownMenu>
-        <AlertDialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are anda yakin?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete this data.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Batal</AlertDialogCancel>
-              <AlertDialogActionDestructive onClick={handleDelete}>Lanjutkan</AlertDialogActionDestructive>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-            size="icon"
-          >
-            <IconDotsVertical />
-            <span className="sr-only">Open menu</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem
-          onClick={() => {
-              setSelectedActivity(row.original)
-              setIsEditing(false)
-              setIsDialogOpen(true)
-          }}
-          >Detail</DropdownMenuItem>
-          <DropdownMenuItem
-          onClick={() => {
-            setSelectedActivity(row.original)
-            setIsEditing(true)
-            setIsDialogOpen(true)
-          }}
-          >Edit</DropdownMenuItem>
-          <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive" onClick={() => {
-              setSelectedActivity(row.original)
-              setOpenDeleteDialog(true)
+      accessorKey: "Kegiatan",
+      header: "Kegiatan",
+      cell: ({ row }) => {
+        return (
+          <div className="text-left truncate w-56 lg:w-xs px-2 lg:px-4">
+            <button
+              onClick={() => {
+                setSelectedActivity(row.original)
+                setIsEditing(false)
+                setIsDialogOpen(true)
               }}
-              >Delete</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ),
-  },
-]
+              className="text-left truncate hover:underline"
+            >
+              {row.original.activity}
+            </button>
+          </div>
+        )
+      },
+      enableHiding: false,
+    },
+    {
+      accessorKey: "Tanggal Kegiatan",
+      header: "Tanggal Kegiatan",
+      cell: ({ row }) => {
+        const date = new Date(row.original.activityDate);
+        return (
+          <div className="w-auto text-left px-2 lg:px-4">
+            {date.toLocaleString("en-GB", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            })}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "File Pendukung",
+      header: "File Pendukung",
+      cell: ({ row }) => {
+        const hasFile = !!row.original.supportingFile; // true if file exists
+        return (
+          <div className="text-left w-32 px-2 lg:px-4">
+            <span>
+              {hasFile ? <Badge variant={"outline"}>Ada</Badge> : <Badge variant={"outline"}>Tidak ada</Badge>}
+            </span>
+          </div>
+        );
+      },
+    },
+
+    {
+      accessorKey: "Rekening Belanja",
+      header: "Rekening Belanja",
+      cell: ({ row }) => (
+        <div className="w-48 text-left px-2 lg:px-4 truncate">
+          {row.original.spendingAccount}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "Uraian",
+      header: "Uraian",
+      cell: ({ row }) => (
+        <div className="w-52 truncate text-left px-2 lg:px-4">
+          {row.original.description}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "Harga Satuan",
+      header: "Harga Satuan",
+      cell: ({ row }) => {
+        const unitPrice = parseInt(String(row.original.unitPrice), 10);
+        return (
+          <div className="w-32 text-left px-2 lg:px-4">
+            Rp. {isNaN(unitPrice) ? "-" : unitPrice.toLocaleString("id-ID")}
+          </div>
+        );
+      },
+    },
+
+    {
+      accessorKey: "Kuantitas",
+      header: "Kuantitas",
+      cell: ({ row }) => (
+        <div className="w-32 text-left px-2 lg:px-4">
+          {row.original.quantity}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "Unit",
+      header: "Unit",
+      cell: ({ row }) => (
+        <div className="w-32 text-left px-2 lg:px-4">
+          {row.original.unit}
+        </div>
+      ),
+    },
+
+    {
+      accessorKey: "Total Harga",
+      header: "Total Harga",
+      cell: ({ row }) => {
+        const total = row.original.quantity * parseFloat(String(row.original.unitPrice));
+        return (
+          <div className="w-32 text-left px-2 lg:px-4">
+            Rp. {total.toLocaleString("id-ID")}
+          </div>
+        );
+      },
+    },
+
+    {
+      accessorKey: "Dibuat Pada",
+      header: "Dibuat Pada",
+      cell: ({ row }) => {
+        const date = new Date(row.original.created_at);
+        return (
+          <div className="w-auto text-left  px-2 lg:px-4">
+            {date.toLocaleString("en-GB", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            })}
+          </div>
+        );
+      },
+    },
+
+    {
+      accessorKey: "Terakhir Diperbarui",
+      header: "Terakhir Diperbarui",
+      cell: ({ row }) => {
+        const date = new Date(row.original.updated_at);
+        return (
+          <div className="w-auto px-2 text-left  lg:px-4">
+            {date.toLocaleString("en-GB", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            })}
+          </div>
+        );
+      },
+    },
+
+    ...(isPublic
+      ?
+      [
+      {
+            id: "actions",
+            cell: ({ row }) => {
+              return(
+                <Button onClick={() => navigate(`/rekap/${row.original?.id}`)}>Detail</Button>
+              )
+            },
+          }
+      ]
+      :
+      [
+        {
+          id: "actions",
+          cell: ({ row }) => (
+            <DropdownMenu>
+              <AlertDialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog}>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Apakah anda yakin?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete this data.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                    <AlertDialogActionDestructive onClick={handleDelete}>Lanjutkan</AlertDialogActionDestructive>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+                  size="icon"
+                >
+                  <IconDotsVertical />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-32">
+                <DropdownMenuItem
+                  onClick={() => {
+                    setSelectedActivity(row.original)
+                    setIsEditing(false)
+                    setIsDialogOpen(true)
+                  }}
+                >Detail</DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setSelectedActivity(row.original)
+                    setIsEditing(true)
+                    setIsDialogOpen(true)
+                  }}
+                >Edit</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem variant="destructive" onClick={() => {
+                  setSelectedActivity(row.original)
+                  setOpenDeleteDialog(true)
+                }}
+                >Delete</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ),
+        },
+      ]),
+  ]
 
 
   const table = useReactTable({
@@ -432,12 +451,12 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
       defaultValue="semua"
       className="w-full flex-col justify-start gap-6"
     >
-      <ActivityDetailDialog 
+      <ActivityDetailDialog
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
         activities={selectedActivity ?? {}}
         onSuccess={() => onDataChange?.()}
-        isEdit = {isEditing}
+        isEdit={isEditing}
         onEdit={() => setIsEditing(true)}
         onCancelEdit={() => setIsEditing(false)}
       />

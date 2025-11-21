@@ -16,9 +16,8 @@ import { ChartAreaSpendBySchool } from "@/components/chart/public-chart-area-int
 
 export default function Page() {
   const { data, loading, error, reload } = usePublicReports()
-  const [selectedYear, setSelectedYear] = useState<string>(
-    new Date().getFullYear().toString()
-  )
+  const [selectedYear, setSelectedYear] = useState<string>(new Date().getFullYear().toString())
+  
   const availableYears = useMemo(() => {
     const years = new Set<string>()
     data?.forEach((school: any) => {
@@ -46,6 +45,7 @@ export default function Page() {
             <span className="text-2xl font-bold">
               Dashboard
             </span>
+            <div>
               <Select value={selectedYear} onValueChange={setSelectedYear}>
                 <SelectTrigger className="w-[140px]">
                   <SelectValue placeholder="Pilih Tahun" />
@@ -58,6 +58,7 @@ export default function Page() {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
             </div>
             <div className="grid gap-y-4 gap-x-6 md:grid-cols-2 mx-0 md:mx-6 lg:mx-6">
               <ChartPieLegendFund reports={data} year={selectedYear} />

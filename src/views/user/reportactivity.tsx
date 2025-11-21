@@ -22,10 +22,12 @@ import { useNavigate } from "react-router-dom";
 import { ReportShopActivityDialog } from "@/components/dialog/activity-add-dialog";
 import { toast } from "sonner";
 import { EditReportShopEdDialog } from "@/components/dialog/shop-report-edit-dialog";
+import { EditFundDialog } from "@/components/dialog/edit-fund-source-dialog";
 
 export default function Page() {
   const [openDialogReport, setOpenDialogReport] = React.useState(false);
   const [openDialogEditReport, setOpenDialogEditReport] = React.useState(false);
+  const [openDialogEditFund, setOpenDialogEditFund] = React.useState(false);
   const { purchase_report_id } = useParams<{ purchase_report_id: string }>()
   const [report, setReport] = React.useState<any>(null);
   const [loading, setLoading] = React.useState(true);
@@ -75,6 +77,11 @@ export default function Page() {
         report={report}
         onSuccess={loadReport} 
       />
+      <EditFundDialog   
+        open={openDialogEditFund}
+        onOpenChange={setOpenDialogEditFund}
+        onSuccess={loadReport}
+      />
       <SiteHeader title="Pembelanjaan" />
       <div className="@container/main flex flex-1 flex-col gap-2">
         <div className="w-full flex flex-col px-4 lg:px-6 items-start pt-2 md:pt-6">
@@ -106,8 +113,8 @@ export default function Page() {
                 <Button variant={"outline"} size={"default"} className="sm:hidden text-xs" onClick={()=>setOpenDialogEditReport(true)}><IconEdit /> Edit Laporan</Button>
               </div>
               <div className="flex flex-row gap-2">
-                <Button variant={"outline"} size={"lg"} className="hidden sm:inline-flex"><IconCashBanknoteEdit /> Edit Sumber Dana</Button>
-                <Button variant={"outline"} size={"default"} className="sm:hidden text-xs"><IconCashBanknoteEdit/> Edit Sumber Dana</Button>
+                <Button variant={"outline"} size={"lg"} className="hidden sm:inline-flex"onClick={()=>setOpenDialogEditFund(true)}><IconCashBanknoteEdit /> Edit Sumber Dana</Button>
+                <Button variant={"outline"} size={"default"} className="sm:hidden text-xs"onClick={()=>setOpenDialogEditFund(true)}><IconCashBanknoteEdit /> Edit Sumber Dana</Button>
                 <Button variant={"default"} size={"lg"} className="hidden sm:inline-flex" onClick={() => setOpenDialogReport(true)}><IconPlus /> Tambah Kegiatan</Button>
                 <Button variant={"default"} size={"default"} className="sm:hidden text-xs"onClick={() => setOpenDialogReport(true)}><IconPlus /> Tambah Kegiatan</Button>
               </div>
@@ -120,12 +127,15 @@ export default function Page() {
               <span className="text-xs sm:text-sm items-start">Sumber Dana: {report.source_of_fund}</span>
             </div>
             <div className="flex flex-row gap-2">
-              <SectionCard title="Dana Anggaran" fund={report?.budget_amount}/>
-              <SectionCard title="Dana Realisasi" fund={report?.realization_amount}/>
-              {report?.remaining_fund > 0 ?
-              <SectionCard title="Sisa Dana" fund={report?.remaining_fund}/>:
-              <SectionCard title="Sisa Dana"  fund={report?.remaining_fund}/>
-              }
+              <SectionCard title="Dana Anggaran">
+                {report?.budget_amount}
+              </SectionCard>
+              <SectionCard title="Dana Realisasi" >
+                {report?.realization_amount}
+              </SectionCard>
+              <SectionCard title="Sisa Dana">
+                {report?.remaining_fund}
+              </SectionCard>
             </div>
           </div>
         </div>

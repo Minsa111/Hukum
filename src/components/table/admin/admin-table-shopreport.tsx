@@ -94,6 +94,8 @@ import { API_PURCHASE } from "@/api/api"
 import { fetchWithAuth } from "@/controllers/fetchwithauths"
 import { AlertDialog,  AlertDialogCancel, AlertDialogContent, AlertDialogActionDestructive, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
 import { toast } from "sonner"
+import { Edit } from "lucide-react"
+import { EditReportShopEdDialog } from "@/components/dialog/shop-report-edit-dialog"
 
 
 
@@ -135,6 +137,7 @@ export function DataTable() {
   const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 10 })
   const [selectedActivity, setSelectedActivity] = React.useState<any | null>(null)
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false)
+  const [openDialogEditReport, setOpenDialogEditReport] = React.useState(false)
 
 
   React.useEffect(() => {
@@ -284,9 +287,12 @@ export function DataTable() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-32">
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem>Make a copy</DropdownMenuItem>
-            <DropdownMenuItem>Favorite</DropdownMenuItem>
+            <DropdownMenuItem 
+              onClick={() => { 
+                setSelectedActivity(row.original)
+                setOpenDialogEditReport(true) 
+              }}
+            >Edit</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem variant="destructive" onClick={() => { setSelectedActivity(row.original); setOpenDeleteDialog(true) }}>Delete</DropdownMenuItem>
           </DropdownMenuContent>
@@ -342,7 +348,7 @@ export function DataTable() {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete this data.
+              This action cannot be undone. This will permanently delete {selectedActivity?.title}.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -354,6 +360,12 @@ export function DataTable() {
       <ReportShopDialog
         open={openDialog}
         onOpenChange={setOpenDialog}
+        onSuccess={reload}
+      />
+      <EditReportShopEdDialog   
+        open={openDialogEditReport}
+        onOpenChange={setOpenDialogEditReport}
+        report={selectedActivity}
         onSuccess={reload}
       />
       <div className="w-full flex flex-col sm:flex-row items-start sm:items-center gap-2 justify-between px-4 lg:px-6">

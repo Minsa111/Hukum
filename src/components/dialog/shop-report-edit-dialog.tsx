@@ -40,9 +40,8 @@ export function EditReportShopEdDialog({
   report: any
   onSuccess?: () => void
 }) {
-  const [title, setTitle] = React.useState(report?.title || "")
+  const [title, setTitle] = React.useState(report?.title)
   const [loading, setLoading] = React.useState(false)
-
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -69,9 +68,14 @@ export function EditReportShopEdDialog({
       setLoading(false)
     }
   }
-
+  React.useEffect(() => {
+    if (open) {
+      setTitle(report?.title)
+    }
+  },[open, report])
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={(value) => {
+      onOpenChange(value)}}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Edit Laporan</DialogTitle>

@@ -1,7 +1,7 @@
 // src/hooks/useReports.ts
 import { useState, useEffect } from "react"
 import { fetchWithAuth } from "@/controllers/fetchwithauths"
-import { API_PUBLIC, API_PURCHASE, } from "@/api/api"
+import { API_PUBLIC_ALL, API_PURCHASE, } from "@/api/api"
 import { toast } from "sonner"
 
 export function usePublicReports() {
@@ -13,7 +13,7 @@ export function usePublicReports() {
     setLoading(true)
     setError(null)
     try {
-      const response = await fetchWithAuth(`${API_PURCHASE}${API_PUBLIC}`)
+      const response = await fetchWithAuth(`${API_PURCHASE}${API_PUBLIC_ALL}`)
       setData(response)
     } catch (err: any) {
       toast.error(`Error fetching reports: ${err}`)

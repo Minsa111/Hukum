@@ -5,6 +5,7 @@ import { ProtectedAdminRoute, ProtectedLoginRoute, ProtectedSuperAdminRoute } fr
 import PublicDashboard from "./views/public/public-dashboard";
 import Recap from "./views/public/rekap";
 import SchoolRecap from "./views/public/rekap-school";
+import ReportRecap from "./views/public/public-report-activity";
 import LoginPage from "./views/user/login";
 import Dashboard from "./views/user/dashboard";
 import ShopReport from "./views/user/shopreport";
@@ -22,6 +23,7 @@ const App: React.FC = () => {
           <Route index element={<PublicDashboard /> } />
           <Route path="rekap" element={<Recap />} />
           <Route path="rekap/:nisn" element={<SchoolRecap />} />
+          <Route path="rekap/:nisn/pembelanjaan/:purchase_report_id" element={<ReportRecap />} />
         </Route>
         <Route
           path="/auth/login"

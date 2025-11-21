@@ -25,9 +25,9 @@ export default function Page() {
   )
 
   // 🧠 Load data immediately and extract reports[]
-  async function loadReport() {
+  async function loadReport(id: string) {
     try {
-      const json = await fetchWithAuth(`${API_PURCHASE}${API_NISN}/${nisn}`)
+      const json = await fetchWithAuth(`${API_PURCHASE}${API_NISN}/${id}`)
 
       const parsed = reportDataSchema.parse(json) // ✅ validate here
 
@@ -42,8 +42,11 @@ export default function Page() {
   }
 
   useEffect(() => {
-    loadReport()
-  }, [])
+    if (nisn) {
+      setLoading(true)
+      loadReport(nisn)
+    }
+  }, [nisn])
 
   const availableYears = useMemo(() => {  
     const years = new Set<string>()
@@ -97,7 +100,7 @@ export default function Page() {
 
           {/* 📋 DataTable directly fed from extracted reports[] */}
           <div className="w-full flex flex-col items-start gap-y-4 gap-x-6 mx-4 md:mx-6">
-              <DataTable report={report[0].reports} selectedYear={selectedYear} />
+              <DataTable report={report[0].reports} nisn = {report[0]?.nisn} selectedYear={selectedYear} />
           </div>
         </div>
       </div>

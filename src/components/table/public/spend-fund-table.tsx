@@ -116,13 +116,14 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof reportSchema>> }) {
   )
 }
 
-export function DataTable({report, selectedYear,}:{report:any[],selectedYear:string}) {
+export function DataTable({report, nisn, selectedYear,}:{report:any[], nisn:string, selectedYear:string}) {
   const [data, setData] = React.useState<z.infer<typeof reportSchema>[]>([])
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 10 })
+  
 
 
   React.useEffect(() => {
@@ -157,7 +158,7 @@ export function DataTable({report, selectedYear,}:{report:any[],selectedYear:str
         return (
           <div className="text-left truncate w-64 lg:w-sm px-2 lg:px-4">
             <Link
-              to={`/admin/pembelanjaan/${row.original.id}`}
+              to={`/rekap/${nisn}/pembelanjaan/${row.original.id}`}
             >
               {row.original.title}
             </Link>
@@ -472,8 +473,6 @@ export function DataTable({report, selectedYear,}:{report:any[],selectedYear:str
         </div>
         <div className="flex items-center justify-between px-4">
           <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
           </div>
           <div className="flex w-full items-center gap-8 lg:w-fit">
             <div className="hidden items-center gap-2 lg:flex">

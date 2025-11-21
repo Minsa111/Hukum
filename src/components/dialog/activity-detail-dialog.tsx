@@ -1,4 +1,3 @@
-// src/components/report-shop-dialog.tsx
 import {
   Dialog,
   DialogContent,
@@ -97,16 +96,7 @@ export function ActivityDetailDialog({
     }
   }, [open, activities, isEdit, resetForm])
 
-  // ----- FILE -----
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selected = e.target.files?.[0]
-    if (selected && selected.type !== "application/pdf") {
-      toast.error("File harus PDF.")
-      e.target.value = ""
-      return
-    }
-    setFile(selected ?? null)
-  }
+
 
   // ----- PRICE HANDLER -----
   const handlePriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,7 +109,15 @@ export function ActivityDetailDialog({
     const raw = e.target.value.replace(/\D/g, "")
     setQuantity(raw)
   }
-
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0]
+    if (selectedFile && selectedFile.type !== "application/pdf") {
+      toast.error("Please upload a PDF file only.")
+      e.target.value = "" // reset the input
+      return
+    }
+    setFile(selectedFile || null)
+  }
   // ----- SUBMIT -----
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -131,20 +129,23 @@ export function ActivityDetailDialog({
       formData.append("activity_date", date ? date.toISOString().split("T")[0] : "")
       formData.append("spending_account", spendingAccount)
       formData.append("description", description)
-      formData.append("unit_price", price.replace(/\D/g, ""))
+      formData.append("unitPrice", price.replace(/\D/g, ""))
       formData.append("quantity", quantity)
       formData.append("unit", unit)
-      if (file) formData.append("supporting_file", file)
+      if (file) {
+        formData.append("supporting_file", file)
+      } else {
+        formData.append(
+          "supporting_file",
+          activities.supportingFile || ""
+        )
+      }
 
-      const method = isEdit ? "PUT" : "POST"
-      const url = isEdit
-        ? `${API_URL}${API_ACTIVITY}/${activities.id}`
-        : `${API_ACTIVITY}`
-
-      const res = await fetchWithAuth(url, { method, body: formData })
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
-
-      toast.success(isEdit ? "Berhasil diperbarui!" : "Berhasil ditambahkan!")
+      // ⛔ POST removed — this dialog only updates existing data
+      const method = "PUT"
+      const url = `${API_ACTIVITY}/${activities.id}`
+      await fetchWithAuth(url, { method, body: formData })
+      toast.success("Berhasil diperbarui!")
       onOpenChange(false)
       onSuccess?.()
     } catch (err) {
@@ -263,9 +264,8 @@ export function ActivityDetailDialog({
 
           {/* SUPPORTING FILE */}
           <div className="grid gap-2">
-            {isEdit ? (
             <Label>File Pendukung</Label>
-            ) : (
+          {!isEdit ? (
               <div className="flex gap-2">
                 <span>{activities?.supportingFile || "Tidak ada file"}</span>
                 {activities?.supportingFile && (
@@ -283,7 +283,13 @@ export function ActivityDetailDialog({
                   </Button>
                 )}
               </div>
-            )}
+          ) :(
+            <Input 
+            id="file" 
+            type="file"
+            accept="application/pdf"
+            onChange={handleFileChange}
+            />)}
           </div>
 
           {/* DESCRIPTION + PRICE */}

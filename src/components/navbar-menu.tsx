@@ -45,7 +45,8 @@ const components: { title: string; href: string; description: string }[] = [
     },
 ]
 
-export function NavbarMenu() {
+export function NavbarMenu({rekap} : {rekap : any[]}) {
+    console.log("reakp",rekap)
     return (
         <NavigationMenu viewport={true}>
             <NavigationMenuList>
@@ -56,94 +57,15 @@ export function NavbarMenu() {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                    <NavigationMenuTrigger>Components</NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                        <ul className="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                            {components.map((component) => (
-                                <ListItem key={component.title} to={component.href} title={component.title}>
-                                    {component.description}
-                                </ListItem>
-                            ))}
-                        </ul>
-                    </NavigationMenuContent>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                    <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                        <Link to="/docs">Docs</Link>
-                    </NavigationMenuLink>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                    <NavigationMenuTrigger>List</NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                        <ul className="grid w-[300px] gap-4">
-                            <li>
-                                <NavigationMenuLink asChild>
-                                    <Link to="#">
-                                        <div className="font-medium">Components</div>
-                                        <div className="text-muted-foreground">Browse all components in the library.</div>
-                                    </Link>
-                                </NavigationMenuLink>
-                                <NavigationMenuLink asChild>
-                                    <Link to="#">
-                                        <div className="font-medium">Documentation</div>
-                                        <div className="text-muted-foreground">Learn how to use the library.</div>
-                                    </Link>
-                                </NavigationMenuLink>
-                                <NavigationMenuLink asChild>
-                                    <Link to="#">
-                                        <div className="font-medium">Blog</div>
-                                        <div className="text-muted-foreground">Read our latest blog posts.</div>
-                                    </Link>
-                                </NavigationMenuLink>
-                            </li>
-                        </ul>
-                    </NavigationMenuContent>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                    <NavigationMenuTrigger>Simple</NavigationMenuTrigger>
+                    <NavigationMenuTrigger>Rekap</NavigationMenuTrigger>
                     <NavigationMenuContent>
                         <ul className="grid w-[200px] gap-4">
                             <li>
-                                <NavigationMenuLink asChild>
-                                    <Link to="#">Components</Link>
-                                </NavigationMenuLink>
-                                <NavigationMenuLink asChild>
-                                    <Link to="#">Documentation</Link>
-                                </NavigationMenuLink>
-                                <NavigationMenuLink asChild>
-                                    <Link to="#">Blocks</Link>
-                                </NavigationMenuLink>
-                            </li>
-                        </ul>
-                    </NavigationMenuContent>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                    <NavigationMenuTrigger>With Icon</NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                        <ul className="grid w-[200px] gap-4">
-                            <li>
-                                <NavigationMenuLink asChild>
-                                    <Link to="#" className="flex-row items-center gap-2">
-                                        <CircleHelpIcon />
-                                        Backlog
-                                    </Link>
-                                </NavigationMenuLink>
-                                <NavigationMenuLink asChild>
-                                    <Link to="#" className="flex-row items-center gap-2">
-                                        <CircleIcon />
-                                        To Do
-                                    </Link>
-                                </NavigationMenuLink>
-                                <NavigationMenuLink asChild>
-                                    <Link to="#" className="flex-row items-center gap-2">
-                                        <CircleCheckIcon />
-                                        Done
-                                    </Link>
-                                </NavigationMenuLink>
+                                {rekap.map((rekap) => (
+                                    <NavigationMenuLink asChild>
+                                        <Link to={`/rekap/${rekap?.nisn}`}>{rekap.school_name}</Link>
+                                    </NavigationMenuLink>
+                                ))}
                             </li>
                         </ul>
                     </NavigationMenuContent>

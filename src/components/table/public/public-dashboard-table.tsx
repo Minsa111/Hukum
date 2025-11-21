@@ -38,7 +38,6 @@ import {
   getSortedRowModel,
 } from "@tanstack/react-table"
 import { reportDataSchema } from "@/models/schema/public-dashboard-table"
-import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -172,7 +171,7 @@ export function DataTable({
   )
 
   const columns: ColumnDef<{
-    nisn: string
+    id: string
     school_name: string
     totalBudget: number
     totalRealization: number

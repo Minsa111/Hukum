@@ -7,10 +7,12 @@ import { IconMenu2 } from "@tabler/icons-react";
 import { Drawer, DrawerTrigger, DrawerContent, DrawerClose, DrawerFooter, } from "./ui/drawer";
 import { useEffect, useState } from "react";
 import { validateToken } from "@/controllers/auth/authcontroller";
+import { usePublicReports } from "@/api/hooks/use-public-report";
 export function Navbar() {
   const [isLogin,setIslogin] = useState(false);
   const navigate = useNavigate();
   const { valid, expired } = validateToken();
+  const {data} = usePublicReports();
 
   useEffect(() => {
     if (!valid || expired) {
@@ -98,7 +100,7 @@ export function Navbar() {
           </Drawer>
         </div>
         <div className="text-left justify-between hidden w-full md:flex md:w-auto md:order-1 z-10" id="navbar-user">
-          <NavbarMenu />
+          <NavbarMenu rekap={data ?? []} />
         </div>
       </div>
     </nav>)
