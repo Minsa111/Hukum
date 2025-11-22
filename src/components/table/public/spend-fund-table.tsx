@@ -321,7 +321,7 @@ export function DataTable({report, nisn, selectedYear,}:{report:any[], nisn:stri
     id: "actions",
       cell: ({ row }) => (
         <Button >
-          <Link to={`/rekap/pembelanjaan/${row.original.id}`}>
+          <Link to={`/rekap/${nisn}/pembelanjaan/${row.original.id}`}>
             Detail
           </Link>
         </Button>

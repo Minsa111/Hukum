@@ -81,6 +81,7 @@ export default function Page() {
         open={openDialogEditFund}
         onOpenChange={setOpenDialogEditFund}
         onSuccess={loadReport}
+        report={report}
       />
       <SiteHeader title="Pembelanjaan" />
       <div className="@container/main flex flex-1 flex-col gap-2">
@@ -126,16 +127,23 @@ export default function Page() {
               <span className="text-xs sm:text-sm items-start">Terakhir Diperbarui: {new Date(report.updated_at).toLocaleString('en-GB')}</span>
               <span className="text-xs sm:text-sm items-start">Sumber Dana: {report.source_of_fund}</span>
             </div>
-            <div className="flex flex-row gap-2">
-              <SectionCard title="Dana Anggaran">
-                {report?.budget_amount}
-              </SectionCard>
-              <SectionCard title="Dana Realisasi" >
-                {report?.realization_amount}
-              </SectionCard>
-              <SectionCard title="Sisa Dana">
-                {report?.remaining_fund}
-              </SectionCard>
+            <div className="flex flex-col w-full sm:w-auto sm:flex-row gap-2">
+              <div className="flex flex-row gap-2">
+                <SectionCard title="Dana Anggaran">
+                  Rp. {report?.budget_amount.toLocaleString("id-ID")}
+                </SectionCard>
+                <SectionCard title="Dana Realisasi" >
+                  Rp. {report?.realization_amount.toLocaleString("id-ID")}
+                </SectionCard>
+              </div>
+              <div className="flex flex-row gap-2">
+                <SectionCard title="Sisa Dana">
+                  Rp. {report?.remaining_fund.toLocaleString("id-ID")}
+                </SectionCard>
+                <SectionCard title="Jumlah Kegiatan">
+                  {report?.activities.length}
+                </SectionCard>
+              </div>
             </div>
           </div>
         </div>

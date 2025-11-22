@@ -46,6 +46,7 @@ export function ActivityDetailDialog({
   isEdit,
   onEdit,
   onCancelEdit,
+  isPublics,
 }: {
   activities: any
   open: boolean
@@ -54,6 +55,7 @@ export function ActivityDetailDialog({
   isEdit?: boolean
   onEdit?: () => void
   onCancelEdit?: () => void
+  isPublics?: boolean
 }) {
   // ----- MAIN CONTROLS -----
   const [loading, setLoading] = React.useState(false)
@@ -129,7 +131,7 @@ export function ActivityDetailDialog({
       formData.append("activity_date", date ? date.toISOString().split("T")[0] : "")
       formData.append("spending_account", spendingAccount)
       formData.append("description", description)
-      formData.append("unitPrice", price.replace(/\D/g, ""))
+      formData.append("unit_price", price.replace(/\D/g, ""))
       formData.append("quantity", quantity)
       formData.append("unit", unit)
       if (file) {
@@ -197,7 +199,7 @@ export function ActivityDetailDialog({
 
           {/* ACTIVITY NAME */}
           <div className="grid gap-2">
-            <Label>Kegiatan</Label>
+            <Label className="text-neutral-500">Kegiatan</Label>
             {isEdit ? (
               <Input
                 value={activityName}
@@ -210,7 +212,7 @@ export function ActivityDetailDialog({
 
           {/* DATE */}
           <div className="grid gap-2">
-            <Label>Tanggal Kegiatan</Label>
+            <Label className="text-neutral-500">Tanggal Kegiatan</Label>
             {isEdit ? (
               <Popover open={openDate} onOpenChange={setOpenDate}>
                 <PopoverTrigger asChild>
@@ -251,7 +253,7 @@ export function ActivityDetailDialog({
 
           {/* SPENDING ACCOUNT */}
           <div className="grid gap-2">
-            <Label>Rekening Belanja</Label>
+            <Label className="text-neutral-500">Rekening Belanja</Label>
             {isEdit ? (
               <Input
                 value={spendingAccount}
@@ -264,9 +266,9 @@ export function ActivityDetailDialog({
 
           {/* SUPPORTING FILE */}
           <div className="grid gap-2">
-            <Label>File Pendukung</Label>
+            <Label className="text-neutral-500">File Pendukung</Label>
           {!isEdit ? (
-              <div className="flex gap-2">
+              <div className="flex gap-8">
                 <span>{activities?.supportingFile || "Tidak ada file"}</span>
                 {activities?.supportingFile && (
                   <Button
@@ -295,7 +297,7 @@ export function ActivityDetailDialog({
           {/* DESCRIPTION + PRICE */}
           <div className="flex flex-wrap gap-3">
             <div className="flex-1 grid gap-2">
-              <Label>Uraian</Label>
+              <Label className="text-neutral-500">Uraian</Label>
               {isEdit ? (
                 <Input
                   value={description}
@@ -307,7 +309,7 @@ export function ActivityDetailDialog({
             </div>
 
             <div className="flex-1 grid gap-2">
-              <Label>Harga Satuan</Label>
+              <Label className="text-neutral-500">Harga Satuan</Label>
               {isEdit ? (
                 <InputGroup>
                   <InputGroupAddon>
@@ -324,7 +326,7 @@ export function ActivityDetailDialog({
           {/* QUANTITY + UNIT */}
           <div className="flex gap-3">
             <div className="w-1/2 grid gap-2">
-              <Label>Jumlah</Label>
+              <Label className="text-neutral-500">Jumlah</Label>
               {isEdit ? (
                 <Input value={quantity} onChange={handleNumber} />
               ) : (
@@ -333,7 +335,7 @@ export function ActivityDetailDialog({
             </div>
 
             <div className="w-1/2 grid gap-2">
-              <Label>Unit</Label>
+              <Label className="text-neutral-500">Unit</Label>
               {isEdit ? (
                 <Input value={unit} onChange={(e) => setUnit(e.target.value)} />
               ) : (
@@ -347,7 +349,8 @@ export function ActivityDetailDialog({
 
             {!isEdit ? (
               <>
-                {/* DELETE */}
+              {!isPublics ? (
+                <>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="destructive" type="button">
@@ -374,12 +377,19 @@ export function ActivityDetailDialog({
                 <Button type="button" onClick={() => onEdit?.()}>
                   Edit
                 </Button>
-
                 <DialogClose asChild>
                   <Button variant="outline" type="button">
                     Kembali
                   </Button>
                 </DialogClose>
+                </>
+                ) : (
+                <DialogClose asChild>
+                  <Button variant="outline" type="button">
+                    Kembali
+                  </Button>
+                </DialogClose>
+                )}
               </>
             ) : (
               <>

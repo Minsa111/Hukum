@@ -6,7 +6,8 @@ import { fetchWithAuth } from "@/controllers/fetchwithauths";
 import { useNavigate } from "react-router-dom";
 import { API_PUBLIC, API_PURCHASE } from "@/api/api";
 import { toast } from "sonner";
-import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { IconArrowLeft } from "@tabler/icons-react";
 
 
 export default function Page() {
@@ -49,6 +50,9 @@ export default function Page() {
   return (
     <div className="flex flex-1 flex-col gap-2 bg-background relative lg:px-16 px-2 w-full">
       <div className="@container/main flex flex-1 flex-col gap-2">
+        <Button variant={"outline"} size={"lg"} className="text-blue-500" onClick={() => navigate(`/admin/pembelanjaan`)}>
+          <IconArrowLeft /> Kembali
+        </Button>
         <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
           <div className="flex justify-between items-center px-2 md:px-6">
             <div className="flex flex-col items-start">
@@ -62,19 +66,23 @@ export default function Page() {
               <span className="text-xs sm:text-sm items-start">Terakhir Diperbarui: {new Date(report?.updated_at).toLocaleString('en-GB')}</span>
               <span className="text-xs sm:text-sm items-start">Sumber Dana: {report?.source_of_fund}</span>
             </div>
-            <div className="flex flex-row gap-2">
-              <SectionCard title="Dana Anggaran" >
-                Rp. {report?.budget_amount.toLocaleString('id-ID')}
-              </SectionCard>
-              <SectionCard title="Sisa Dana" >
-                Rp. {report?.remaining_fund.toLocaleString('id-ID')}
-              </SectionCard>
-              <SectionCard title="Dana Realisasi" >
-                Rp. {report?.realization_amount.toLocaleString('id-ID')}
-              </SectionCard>
-              <SectionCard title="Jumlah Kegiatan"  >
-                {report?.activities?.length}
-              </SectionCard>
+            <div className="flex flex-col w-full sm:w-auto sm:flex-row gap-2">
+              <div className="flex flex-row gap-2">
+                <SectionCard title="Dana Anggaran" >
+                  Rp. {report?.budget_amount.toLocaleString('id-ID')}
+                </SectionCard>
+                <SectionCard title="Sisa Dana" >
+                  Rp. {report?.remaining_fund.toLocaleString('id-ID')}
+                </SectionCard>
+              </div>
+              <div className="flex flex-row gap-2">
+                <SectionCard title="Dana Realisasi">
+                  Rp. {report?.realization_amount.toLocaleString('id-ID')}
+                </SectionCard>
+                <SectionCard title="Jumlah Kegiatan">
+                  {report?.activities?.length}
+                </SectionCard>
+              </div>
             </div>
           </div>
         </div>

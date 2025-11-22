@@ -1,6 +1,6 @@
 import { NavbarMenu } from "./navbar-menu";
 import { Button } from "./ui/button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./ui/accordion";
 import { IconMenu2 } from "@tabler/icons-react";
@@ -9,15 +9,14 @@ import { useEffect, useState } from "react";
 import { validateToken } from "@/controllers/auth/authcontroller";
 import { usePublicReports } from "@/api/hooks/use-public-report";
 export function Navbar() {
-  const [isLogin,setIslogin] = useState(false);
+  const [isLogin, setIslogin] = useState(false);
   const navigate = useNavigate();
   const { valid, expired } = validateToken();
-  const {data} = usePublicReports();
-
+  const { data } = usePublicReports();
   useEffect(() => {
     if (!valid || expired) {
       return setIslogin(false);
-    }else{
+    } else {
       return setIslogin(true);
     }
   }, [valid, expired, isLogin]);
@@ -54,36 +53,28 @@ export function Navbar() {
             <DrawerContent>
               <div className="flex flex-col gap-2 px-6 pt-4">
                 <div className="px-4 py-2 rounded-md" onClick={() => navigate("/auth/login")}>
-                {isLogin ? "Admin Dashboard" : "Login"}
+                  {isLogin ? "Admin Dashboard" : "Login"}
                 </div>
-                <div className="px-4 py-2 rounded-md" onClick={() => navigate("/")}>
+                <div className="px-4 py-2 rounded-md text-base" onClick={() => navigate("/")}>
                   Dashboard
                 </div>
                 <Accordion type="single" collapsible>
                   <AccordionItem value="rekap">
                     <AccordionTrigger className="outline outline-blue-100 px-4 py-2 rounded-md">
-                      Rekap
+                      <span className="text-base font-normal">Rekap</span>
                     </AccordionTrigger>
                     <AccordionContent>
-                      <div className="flex flex-col gap-2 px-6 py-2">
-                        <a
-                          href="/rekap/harian"
-                          className="text-sm text-gray-700 hover:underline"
-                        >
-                          Rekap Harian
-                        </a>
-                        <a
-                          href="/rekap/bulanan"
-                          className="text-sm text-gray-700 hover:underline"
-                        >
-                          Rekap Bulanan
-                        </a>
-                        <a
-                          href="/rekap/tahunan"
-                          className="text-sm text-gray-700 hover:underline"
-                        >
-                          Rekap Tahunan
-                        </a>
+                      <div className="flex flex-col gap-4 px-6 py-2">
+                        {
+                        data?.map((data?: any) => (
+                          <Link
+                            to={`/rekap/${data?.nisn}`}
+                            className="text-sm text-neutral-800 hover:underline"
+                          >
+                            {data?.school_name}
+                          </Link>
+                        ))
+                        }
                       </div>
                     </AccordionContent>
                   </AccordionItem>

@@ -15,7 +15,7 @@ import { DataTable } from "@/components/table/public/public-dashboard-table"
 import { ChartAreaSpendBySchool } from "@/components/chart/public-chart-area-interactive"
 
 export default function Page() {
-  const { data, loading, error, reload } = usePublicReports()
+  const { data,} = usePublicReports()
   const [selectedYear, setSelectedYear] = useState<string>(new Date().getFullYear().toString())
   
   const availableYears = useMemo(() => {

@@ -341,9 +341,9 @@ export function DataTable({ activities, onDataChange, isPublic }: { activities: 
       [
       {
             id: "actions",
-            cell: ({ row }) => {
+            cell: () => {
               return(
-                <Button onClick={() => navigate(`/rekap/${row.original?.id}`)}>Detail</Button>
+                <Button onClick={() => setIsDialogOpen(true)}>Detail</Button>
               )
             },
           }
@@ -454,11 +454,13 @@ export function DataTable({ activities, onDataChange, isPublic }: { activities: 
       <ActivityDetailDialog
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
+        isPublics={isPublic}
         activities={selectedActivity ?? {}}
         onSuccess={() => onDataChange?.()}
         isEdit={isEditing}
         onEdit={() => setIsEditing(true)}
         onCancelEdit={() => setIsEditing(false)}
+
       />
       <div className="flex items-center justify-between px-4 lg:px-6">
         <Input
@@ -469,7 +471,7 @@ export function DataTable({ activities, onDataChange, isPublic }: { activities: 
           }
           className="text-sm max-w-sm"
         />
-        <div className=" flex items-center gap-2">
+        <div className="flex items-center gap-2">
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
