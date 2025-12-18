@@ -29,9 +29,8 @@ import {
 import { ScrollArea } from "../ui/scroll-area"
 import * as React from "react"
 import { toast } from "sonner"
-import { Separator } from "../ui/separator"
 import { IconCircleMinus, IconCirclePlus, IconPlus } from "@tabler/icons-react"
-import { id } from "date-fns/locale"
+import { AlertDialog, AlertDialogActionDestructive, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "../ui/alert-dialog"
 
 export function EditFundDialog({
   open,
@@ -53,16 +52,12 @@ export function EditFundDialog({
       openDate: false,
     },
   ])
-  const [value, setValue] = React.useState("")
+  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false)
+  const [selectedFund, setSelectedFund] = React.useState<any | null>(null)
   const [date, setDate] = React.useState<Date | undefined>(undefined)
   const [openDate, setOpenDate] = React.useState(false)
   const [loading, setLoading] = React.useState(false)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value.replace(/\D/g, "")
-    const formatted = rawValue ? Number(rawValue).toLocaleString("id-ID") : ""
-    setValue(formatted)
-  }
 
   const addFund = () => {
     setFunds(prev => [
@@ -86,7 +81,12 @@ export function EditFundDialog({
   const removeFund = (index: number) => {
     setFunds(prev => prev.filter((_, i) => i !== index))
   }
-
+  const deleteFund = async (id: string) => {
+    await fetchWithAuth(
+      `${API_PURCHASE}/${report.id}/funding-sources/${id}`,
+      { method: "DELETE" }
+    )
+  }
 
 const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault()
@@ -123,7 +123,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         }
       )
     }
-
+    
     // -----------------------------
     // 2️⃣ PUT existing funding sources
     // -----------------------------
@@ -180,7 +180,36 @@ React.useEffect(() => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
+      <AlertDialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Apaka anda yakin?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Anda akan menghapus anggaran {selectedFund?.source_of_fund}.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Batal</AlertDialogCancel>
+            <AlertDialogActionDestructive 
+            onClick={async () => {
+              if (selectedFund?.id){
+                try{
+                  await deleteFund(selectedFund?.id)
+                  toast.success("Data berhasil dihapus!")
+                  setSelectedFund(null)
+                  setOpenDeleteDialog(false)
+                  removeFund(funds.indexOf(selectedFund))
+                }catch(err){
+                  console.error(err)
+                  toast.error("Terjadi kesalahan saat menghapus data.")
+                }
+            }
+          }}>Lanjutkan</AlertDialogActionDestructive>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <DialogContent className="sm:max-w-[425px]">
+
         <DialogHeader>
           <DialogTitle>Sumber Dana</DialogTitle>
         </DialogHeader>
@@ -197,7 +226,11 @@ React.useEffect(() => {
                   {funds.length > 1 && (
                     <button
                       type="button"
-                      onClick={() => removeFund(index)}
+                      onClick={() => {
+                        setSelectedFund(fund)
+                        setOpenDeleteDialog(true)
+                      }
+                      }
                       className="absolute right-2 top-2 text-red-500"
                     >
                       <IconCircleMinus />

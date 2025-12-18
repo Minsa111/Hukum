@@ -31,6 +31,7 @@ export default function Page() {
       setLoading(false);
     }
   }
+  
 
   React.useEffect(() => {
     if (purchase_report_id) {
@@ -50,10 +51,12 @@ export default function Page() {
   return (
     <div className="flex flex-1 flex-col gap-2 bg-background relative lg:px-16 px-2 w-full">
       <div className="@container/main flex flex-1 flex-col gap-2">
-        <Button variant={"outline"} size={"lg"} className="text-blue-500" onClick={() => navigate(`/admin/pembelanjaan`)}>
-          <IconArrowLeft /> Kembali
-        </Button>
         <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+        <div className="w-32 px-2 md:px-6">
+          <Button variant={"outline"} size={"lg"} className="text-blue-500" onClick={() => navigate(`/rekap/${nisn}`)}>
+            <IconArrowLeft /> Kembali
+          </Button>
+        </div>
           <div className="flex justify-between items-center px-2 md:px-6">
             <div className="flex flex-col items-start">
               <span className="text-md lg:text-2xl font-bold items-start">{report?.school?.school_name}</span>

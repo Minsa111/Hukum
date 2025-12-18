@@ -52,10 +52,16 @@ import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { ActivityDetailDialog } from "@/components/dialog/activity-detail-dialog"
 import { toast } from "sonner"
 import { Link, useNavigate } from "react-router-dom"
+import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogActionDestructive, AlertDialogCancel, AlertDialogTrigger, AlertDialogFooter } from "@/components/ui/alert-dialog"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { IconDotsVertical } from "@tabler/icons-react"
+import { fetchWithAuth } from "@/controllers/fetchwithauths"
+import { API_SCHOOLS } from "@/api/api"
 
+// ✅ Draggable row — uses nisn as id
 function DraggableRow({ row }: { row: Row<any> }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
-    id: row.original.id,
+    id: row.original.id, // ✅ use nisn as row id
   })
 
   return (
@@ -82,10 +88,12 @@ export function DataTable({
   reports,
   selectedYear,
   onDataChange,
+  isSuperAdmin,
 }: {
   reports: any[]
   selectedYear: string
   onDataChange?: () => void
+  isSuperAdmin: boolean
 }) {
   const [selectedActivity, setSelectedActivity] = React.useState<any | null>(null)
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
@@ -111,7 +119,21 @@ export function DataTable({
     useSensor(KeyboardSensor, {})
   )
   const navigate = useNavigate()
-
+  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+  async function handleDelete() {
+    try {
+      await fetchWithAuth(`${API_SCHOOLS}/${selectedActivity.id}`, {
+        method: "DELETE",
+      });
+      if (onDataChange) onDataChange();
+      setIsDialogOpen(false);
+      setSelectedActivity(null);
+      toast.success("Data berhasil dihapus!");
+    } catch (err) {
+      console.error("Delete error:", err);
+      toast.error("Terjadi kesalahan saat menghapus data.");
+    }
+  }
   React.useEffect(() => {
   if (!reports) return;
 
@@ -147,7 +169,7 @@ export function DataTable({
       });
 
       return {
-        id: school.nisn,
+        id: school.nisn, 
         school_name: school.school_name,
         totalBudget,
         totalRealization,
@@ -180,7 +202,7 @@ export function DataTable({
       header: "Sekolah",
       cell: ({ row }) => (
         <div className="text-left truncate hover:underline w-56 lg:w-xs px-2 lg:px-4 font-medium">
-          <Link to={`/rekap/${row.original.id}`}>
+          <Link to={`/superadmin/sekolah/${row.original.id}`}>
             {row.original.school_name}
           </Link>
         </div>
@@ -222,14 +244,73 @@ export function DataTable({
         </div>
       ),
     },
-    {
-      id: "actions",
-      cell: ({ row }) => {
-        return(
-          <Button onClick={() => navigate(`/rekap/${row.original?.id}`)}>Detail</Button>
-        )
-      },
-    },
+    ...(isSuperAdmin
+      ?
+      [
+        {
+          id: "actions",
+          cell: ({ row }) => (
+            <DropdownMenu>
+              <AlertDialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog}>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Apakah anda yakin?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete this data.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                    <AlertDialogActionDestructive onClick={handleDelete}>Lanjutkan</AlertDialogActionDestructive>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+                  size="icon"
+                >
+                  <IconDotsVertical />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-32">
+                <DropdownMenuItem
+                  onClick={() => {
+                    setSelectedActivity(row.original)
+                    setIsDialogOpen(true)
+                  }}
+                >Detail</DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setSelectedActivity(row.original)
+                    setIsDialogOpen(true)
+                  }}
+                >Edit</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem variant="destructive" onClick={() => {
+                  setSelectedActivity(row.original)
+                  setOpenDeleteDialog(true)
+                }}
+                >Delete</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ),
+        },
+      ]
+      :
+      [
+      {
+            id: "actions",
+            cell: () => {
+              return(
+                <Button onClick={() => setIsDialogOpen(true)}>Detail</Button>
+              )
+            },
+          }
+      ]
+    ),
   ]
 
   const table = useReactTable({
@@ -261,6 +342,7 @@ export function DataTable({
       })
     }
   }
+
 
   return (
     <Tabs defaultValue="semua" className="w-full flex-col justify-start gap-6">

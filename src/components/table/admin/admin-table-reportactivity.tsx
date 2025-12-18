@@ -122,7 +122,7 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
   )
 }
 
-export function DataTable({ activities, onDataChange, isPublic }: { activities: any[]; onDataChange?: () => void; isPublic?: boolean }) {
+export function DataTable({ activities, onDataChange, isPublic, }: { activities: any[]; onDataChange?: () => void; isPublic?: boolean;}) {
   const [selectedActivity, setSelectedActivity] = React.useState<any | null>(null)
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
   const [isEditing, setIsEditing] = React.useState(false)
@@ -460,7 +460,7 @@ export function DataTable({ activities, onDataChange, isPublic }: { activities: 
         isEdit={isEditing}
         onEdit={() => setIsEditing(true)}
         onCancelEdit={() => setIsEditing(false)}
-
+        
       />
       <div className="flex items-center justify-between px-4 lg:px-6">
         <Input

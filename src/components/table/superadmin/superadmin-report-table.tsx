@@ -1,6 +1,6 @@
 
 import * as React from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Input } from "@/components/ui/input"
 import {
   closestCenter,
@@ -54,8 +54,7 @@ import {
   useReactTable,
   getSortedRowModel,
 } from "@tanstack/react-table"
-import { useReports } from "@/api/hooks/use-report"
-import { reportSchema } from "@/models/schema/admin-shopreport-table"
+import { reportSchema, schoolReportSchema } from "@/models/schema/public-dashboard-table"
 
 // import { toast } from "sonner"
 import { z } from "zod"
@@ -124,9 +123,15 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof reportSchema>> }) {
   )
 }
 
-export function DataTable() {
-  const school_id = localStorage.getItem("school_id")
-  const { data: report, reload } = useReports(school_id)
+export function DataTable({
+  report, 
+  selectedYear,
+  onDataChange,
+}: {
+  report: z.infer<typeof schoolReportSchema>[],
+  selectedYear: string
+  onDataChange?: () => void
+}) {
   const [data, setData] = React.useState<z.infer<typeof reportSchema>[]>([])
   const [openDialog, setOpenDialog] = React.useState(false)
   const [rowSelection, setRowSelection] = React.useState({})
@@ -137,16 +142,25 @@ export function DataTable() {
   const [selectedActivity, setSelectedActivity] = React.useState<any | null>(null)
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false)
   const [openDialogEditReport, setOpenDialogEditReport] = React.useState(false)
+  const navigate = useNavigate()
 
+React.useEffect(() => {
+  if (report) {
+    const flattened = report.flatMap((school) =>
+      school.reports.map((rep) => ({
+        ...rep,
+        school_name: school.school_name,
+      }))
+    );
 
-  React.useEffect(() => {
-    if (report) {
-      const sorted = [...report].sort(
-        (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      );
-      setData(sorted)
-    }
-  }, [report])
+    const sorted = flattened.sort(
+      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
+
+    setData(sorted);
+  }
+}, [report]);
+
 
 
   const sortableId = React.useId()
@@ -167,7 +181,7 @@ export function DataTable() {
       await fetchWithAuth(`${API_PURCHASE}/${selectedActivity.id}`, {
         method: "DELETE",
       });
-      if (reload) reload();
+      if (onDataChange) onDataChange();
       setOpenDeleteDialog(false);
       setSelectedActivity(null);
       toast.success("Data berhasil dihapus!");
@@ -183,9 +197,9 @@ export function DataTable() {
       header: "Laporan Pembelanjaan",
       cell: ({ row }) => {
         return (
-          <div className="text-left truncate w-64 lg:w-sm px-2 lg:px-4">
+          <div className="text-left truncate w-64 lg:w-xs px-2 lg:px-4">
             <Link
-              to={`/admin/pembelanjaan/${row.original.id}`}
+              to={`/superadmin/pembelanjaan/${row.original.id}`}
             >
               {row.original.title}
             </Link>
@@ -193,6 +207,15 @@ export function DataTable() {
         )
       },
       enableHiding: false,
+    },
+    {
+      accessorKey: "Nama Sekolah",
+      header: "Nama Sekolah",
+      cell: ({ row }) => (
+        <div className="text-left px-2 lg:px-4 w-40 truncate">
+          {row.original.school_name}
+        </div>
+      ),
     },
     {
       accessorKey: "Sumber Dana",
@@ -211,7 +234,7 @@ export function DataTable() {
       header: "Total Dana Anggaran",
       cell: ({ row }) => (
         <div className="w-32 text-left px-2 lg:px-4">
-          Rp. {row.original.total_budget_amount.toLocaleString("id-ID")}
+          Rp. {(row.original.total_budget_amount??0).toLocaleString("id-ID")}
         </div>
       ),
     },
@@ -273,35 +296,8 @@ export function DataTable() {
     },
     {
       id: "actions",
-      cell: ({ row }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-              size="icon"
-            >
-              <IconDotsVertical />
-              <span className="sr-only">Open menu</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-32">
-            <DropdownMenuItem 
-              onClick={() => { 
-                setSelectedActivity(row.original)
-                setOpenDialogEditReport(true) 
-              }}
-            >Edit</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem 
-            variant="destructive" 
-            onClick={() => { 
-              setSelectedActivity(row.original); 
-              setOpenDeleteDialog(true) }}
-              >Delete
-              </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+      cell: ({row}) => (
+        <Button onClick={() => navigate(`/superadmin/pembelanjaan/${row.original.id}`)}>Detail</Button>
       ),
     },
   ]
@@ -365,13 +361,13 @@ export function DataTable() {
       <ReportShopDialog
         open={openDialog}
         onOpenChange={setOpenDialog}
-        onSuccess={reload}
+        onSuccess={onDataChange}
       />
       <EditReportShopEdDialog   
         open={openDialogEditReport}
         onOpenChange={setOpenDialogEditReport}
         report={selectedActivity}
-        onSuccess={reload}
+        onSuccess={onDataChange}
       />
       <div className="w-full flex flex-col sm:flex-row items-start sm:items-center gap-2 justify-between px-4 lg:px-6">
         <Input
@@ -383,15 +379,6 @@ export function DataTable() {
           className="text-sm max-w-sm"
         />
         <div className="flex items-center self-end gap-2">
-          <Button
-            size="lg"
-            className="text hover:bg-primary/80 "
-            onClick={() => setOpenDialog(true)}
-          >
-            <IconPlus />
-            <span className="hidden lg:inline">Tambah Laporan</span>
-            <span className="lg:hidden">Tambah</span>
-          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="lg">

@@ -1,14 +1,9 @@
-import { IconHome } from "@tabler/icons-react"
-import { 
-  // GalleryVerticalEnd, 
-  // AudioWaveform, 
+import { IconHome, IconSchool, IconUser, IconUserBolt } from "@tabler/icons-react"
+import {
   Book,
-  // BookOpen,
   LayoutDashboard,
-  
-  // Bot, 
-  // Command, 
-  Settings2,  } from "lucide-react"
+  UserCog,
+} from "lucide-react"
 
 export const Dropdown= {
 
@@ -33,36 +28,22 @@ export const Dropdown= {
           title: "Pembelanjaan",
           url: "/admin/pembelanjaan",
         },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
         {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
+          title: "Insight",
+          url: "/admin/pembelanjaan",
         },
       ],
     },
   ],
   admin: [
     {
+      title: "Halaman Utama",
+      url: "/",
+      icon: LayoutDashboard,
+    },
+    {
       title: "Dashboard",
-      url: "/admin",
+      url: "/superadmin",
       icon: LayoutDashboard,
       isActive: true,
     },
@@ -73,37 +54,23 @@ export const Dropdown= {
       items: [
         {
           title: "Pembelanjaan",
-          url: "/admin/pembelanjaan",
+          url: "/superadmin/pembelanjaan",
+        },
+        {
+          title: "Insight",
+          url: "/superadmin/insight",
         },
       ],
     },
     {
-      title: "Halaman Utama",
-      url: "/",
-      icon: LayoutDashboard,
+      title: "Akun Pengguna",
+      url: "/superadmin/akun",
+      icon: UserCog,
     },
     {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
+      title: "Sekolah",
+      url: "/superadmin/sekolah",
+      icon: IconSchool,
     },
   
   ]

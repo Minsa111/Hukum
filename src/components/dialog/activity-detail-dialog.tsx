@@ -143,7 +143,7 @@ export function ActivityDetailDialog({
         )
       }
 
-      // ⛔ POST removed — this dialog only updates existing data
+      // ⛔ POST removed - this dialog only updates existing data
       const method = "PUT"
       const url = `${API_ACTIVITY}/${activities.id}`
       await fetchWithAuth(url, { method, body: formData })

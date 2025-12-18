@@ -27,7 +27,6 @@ import {
   IconChevronRight,
   IconChevronsLeft,
   IconChevronsRight,
-  IconDotsVertical,
   IconLayoutColumns,
   // IconCircleCheckFilled,
   // IconGripVertical,
@@ -63,8 +62,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Label } from "@/components/ui/label"
@@ -116,15 +113,13 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof reportSchema>> }) {
   )
 }
 
-export function DataTable({report, nisn, selectedYear,}:{report:any[], nisn:string, selectedYear:string}) {
+export function DataTable({report, nisn, selectedYear, isSuperAdmin}:{report:any[], nisn:string, selectedYear:string, isSuperAdmin:boolean}) {
   const [data, setData] = React.useState<z.infer<typeof reportSchema>[]>([])
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 10 })
-  
-
 
   React.useEffect(() => {
     if (report) {
@@ -371,7 +366,7 @@ export function DataTable({report, nisn, selectedYear,}:{report:any[], nisn:stri
       defaultValue="semua"
       className="w-full flex-col justify-start gap-4"
     >
-      <div className="w-full flex flex-col sm:flex-row items-start sm:items-start gap-2 justify-between lg:pr-6">
+      <div className={`w-full flex flex-col sm:flex-row items-start sm:items-start gap-2 justify-between ${isSuperAdmin ? "" : "lg:pr-6"}`}>
         <Input
           placeholder="Pencarian Laporan..."
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
@@ -418,8 +413,9 @@ export function DataTable({report, nisn, selectedYear,}:{report:any[], nisn:stri
       </div>
       <TabsContent
         value="semua"
-        className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-0 lg:pr-6 "
-      >
+          className={`relative flex flex-col gap-4 overflow-auto px-4 lg:px-0 ${
+    isSuperAdmin ? "" : "lg:pr-6"
+  }`}>
         <div className="overflow-hidden rounded-lg border">
           <DndContext
             collisionDetection={closestCenter}

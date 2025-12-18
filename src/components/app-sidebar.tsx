@@ -1,8 +1,6 @@
 import * as React from "react"
 import { Dropdown } from "@/models/sidebarmenu"
 
-// import { NavProjects } from "./nav-projects"
-
 import { NavMain } from "@/components/nav-main"
 import { NavUser } from "@/components/nav-user"
 
@@ -15,21 +13,31 @@ import {
 } from "@/components/ui/sidebar"
 
 // const [open, setOpen] = useState(false)
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  isSuperAdmin: boolean;
+}
+
+export function AppSidebar({ isSuperAdmin, ...props }: AppSidebarProps) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <SidebarContent className="flex gap-0 py-1">
-            <img className="" src="/images/logoname.png" alt="logo" />
-          </SidebarContent>
+          <img className="" src="/images/logoname.png" alt="logo" />
+        </SidebarContent>
       </SidebarHeader>
+
       <SidebarContent>
-        <NavMain items={Dropdown.navMain} />
+        <NavMain
+          items={isSuperAdmin ? Dropdown.admin : Dropdown.navMain}
+        />
       </SidebarContent>
+
       <SidebarFooter>
         <NavUser />
       </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }
+

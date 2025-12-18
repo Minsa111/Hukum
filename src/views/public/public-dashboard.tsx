@@ -38,6 +38,7 @@ export default function Page() {
     return ["Semua", ...sorted]
   }, [data])
   return (
+    
       <div className="flex flex-1 flex-col gap-2 bg-background relative lg:px-16 px-2 w-full">
         <div className="@container/main flex flex-1 flex-col gap-2">
           <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
@@ -67,7 +68,7 @@ export default function Page() {
             <div className="grid gap-y-4 gap-x-6 mx-0 md:mx-6 lg:mx-6">
               <ChartAreaSpendBySchool chartData={data} selectedYear={selectedYear} />
             </div>
-            <DataTable reports={data}selectedYear={selectedYear}/>
+            <DataTable reports={data} selectedYear={selectedYear} />
           </div>
         </div>
       </div>

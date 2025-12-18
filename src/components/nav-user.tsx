@@ -28,7 +28,8 @@ import {
 import { useLogoutController } from "@/controllers/auth/authcontroller"
 export function NavUser() {
 
-  const school = localStorage.getItem("school");
+  const rawSchool = localStorage.getItem("school");
+  const school = !rawSchool || rawSchool === "null" ? "superadmin" : rawSchool;
   const username = localStorage.getItem("username");
   const handleLogout = useLogoutController();
   const { isMobile } = useSidebar()

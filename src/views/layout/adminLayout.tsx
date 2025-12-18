@@ -2,7 +2,11 @@ import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Outlet } from "react-router-dom";
 
-export function AdminLayout() {
+interface AdminLayoutProps {
+  isSuperAdmin: boolean
+}
+
+export function AdminLayout({ isSuperAdmin }: AdminLayoutProps) {
   return (
     <SidebarProvider
       style={
@@ -12,7 +16,8 @@ export function AdminLayout() {
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" />
+
+      <AppSidebar variant="inset" isSuperAdmin={isSuperAdmin} />
 
       <SidebarInset>
         <Outlet />

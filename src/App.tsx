@@ -1,15 +1,22 @@
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import "./App.css";
 import { Toaster } from "sonner";
 import { ProtectedAdminRoute, ProtectedLoginRoute, ProtectedSuperAdminRoute } from "./routes/protectedroute";
 import PublicDashboard from "./views/public/public-dashboard";
 import Recap from "./views/public/rekap";
 import SchoolRecap from "./views/public/rekap-school";
+import AdminSchool from "./views/superadmin/school";
+import AdminSchoolDetail from "./views/superadmin/school-detail";
 import ReportRecap from "./views/public/public-report-activity";
 import LoginPage from "./views/user/login";
 import Dashboard from "./views/user/dashboard";
+import AdminDashboard from "./views/superadmin/dashboard";
 import ShopReport from "./views/user/shopreport";
+import AccountsPage from "./views/superadmin/account";
+import AccountDetailPage from "./views/superadmin/account-detail";
+import AdminShopReport from "./views/superadmin/shopreport";
 import ShopActivity from "./views/user/reportactivity";
+import AdminShopActivity from "./views/superadmin/reportactivity";
 import NotFoundPage from "./views/notfound";
 import { AdminLayout } from "./views/layout/adminLayout";
 import { NavLayout } from "./views/layout/defLayout";
@@ -37,19 +44,39 @@ const App: React.FC = () => {
                 path="/superadmin"
                 element={
                   <ProtectedSuperAdminRoute>
-                    <AdminLayout />
+                    <AdminLayout isSuperAdmin={true} />
                   </ProtectedSuperAdminRoute>
                 }
               >
-              <Route index element={<Dashboard />} />
+              <Route index element={<AdminDashboard />} />
               <Route path="pembelanjaan" element={
                 <ProtectedSuperAdminRoute>
-                  <ShopReport />
+                  <AdminShopReport />
                 </ProtectedSuperAdminRoute>
               } />
               <Route path="pembelanjaan/:purchase_report_id" element={
                 <ProtectedSuperAdminRoute>
-                  <ShopActivity />
+                  <AdminShopActivity isSuperAdmin={true}/>
+                </ProtectedSuperAdminRoute>
+              } />
+              <Route path="sekolah" element={
+                <ProtectedSuperAdminRoute>
+                  <AdminSchool/>
+                </ProtectedSuperAdminRoute>
+              } />
+              <Route path="sekolah/:school_id" element={
+                <ProtectedSuperAdminRoute>
+                  <AdminSchoolDetail/>
+                </ProtectedSuperAdminRoute>
+              } />
+              <Route path="akun" element={
+                <ProtectedSuperAdminRoute>
+                  <AccountsPage/>
+                </ProtectedSuperAdminRoute>
+              } />
+              <Route path="akun/:user_id" element={
+                <ProtectedSuperAdminRoute>
+                  <AccountDetailPage/>
                 </ProtectedSuperAdminRoute>
               } />
           </Route>
@@ -57,7 +84,7 @@ const App: React.FC = () => {
               path="/admin"
               element={
                 <ProtectedAdminRoute>
-                  <AdminLayout />
+                  <AdminLayout isSuperAdmin={false}/>
                 </ProtectedAdminRoute>
               }
             >

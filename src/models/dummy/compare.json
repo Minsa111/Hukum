@@ -1,0 +1,872 @@
+[
+    {
+        "id": "5ede74d5-6ac3-4803-9d6e-24e08aaead70",
+        "title": "dasd",
+        "report_date": "2025-11-19",
+        "last_edited_date": "2025-11-19",
+        "created_at": "2025-11-19T03:06:03.486Z",
+        "updated_at": "2025-11-19T03:06:03.486Z",
+        "activities": [
+            {
+                "id": "d34875c7-ead0-47e1-9ff7-2b0f4991af3c",
+                "activity": "Konsumsi FGD",
+                "supportingFile": "1763530958623-749222966.pdf",
+                "activityDate": "2025-11-05",
+                "spendingAccount": "1231231qweqweqweqwe",
+                "description": "Nasi Kotakaasd",
+                "unitPrice": "20000.00",
+                "quantity": 202,
+                "unit": "Boxa",
+                "created_at": "2025-11-19T04:29:48.118Z",
+                "updated_at": "2025-11-19T05:42:38.000Z",
+                "totalPrice": 4040000
+            }
+        ],
+        "fundingSources": [
+            {
+                "id": "137162e0-8cc1-4363-b577-dea086d1fa6c",
+                "source_of_fund": "qwe",
+                "budget_amount": "123.00",
+                "received_date": "2025-11-05",
+                "created_at": "2025-11-22T03:14:40.254Z",
+                "updated_at": "2025-11-22T03:15:19.000Z"
+            },
+            {
+                "id": "363ca044-c569-4997-8b62-eb5e7af06c0e",
+                "source_of_fund": "dqw",
+                "budget_amount": "124123123123.00",
+                "received_date": "2025-11-01",
+                "created_at": "2025-11-22T03:15:19.574Z",
+                "updated_at": "2025-11-22T03:15:19.574Z"
+            },
+            {
+                "id": "4ea386b6-da9b-43cb-b0a8-c68b2f24240e",
+                "source_of_fund": "asdasd",
+                "budget_amount": "12312312.00",
+                "received_date": "2025-11-26",
+                "created_at": "2025-11-19T03:06:03.491Z",
+                "updated_at": "2025-11-22T03:15:19.000Z"
+            }
+        ],
+        "total_budget_amount": 124135435558,
+        "realization_amount": 4040000,
+        "remaining_fund": 124131395558
+    },
+    {
+        "id": "715cf075-7f78-42da-8fff-44b1aade24e5",
+        "title": "123123",
+        "report_date": "2025-11-19",
+        "last_edited_date": "2025-11-19",
+        "created_at": "2025-11-19T01:58:17.220Z",
+        "updated_at": "2025-11-19T01:58:17.220Z",
+        "activities": [],
+        "fundingSources": [
+            {
+                "id": "27a5292e-ce02-43db-8c99-fb4e48a15684",
+                "source_of_fund": "qwdqwd",
+                "budget_amount": "123123.00",
+                "received_date": "2025-11-29",
+                "created_at": "2025-11-19T01:58:17.232Z",
+                "updated_at": "2025-11-19T01:58:17.232Z"
+            }
+        ],
+        "total_budget_amount": 123123,
+        "realization_amount": 0,
+        "remaining_fund": 123123
+    },
+    {
+        "id": "8f54d370-0186-4ab7-ba6d-68d871fe4373",
+        "title": "qwe",
+        "report_date": "2025-10-28",
+        "last_edited_date": "2025-10-28",
+        "created_at": "2025-10-28T18:52:11.075Z",
+        "updated_at": "2025-10-28T18:52:11.075Z",
+        "activities": [
+            {
+                "id": "fb59ee5e-a3d2-4161-bf85-525fbcd8aa22",
+                "activity": "Beli kertas",
+                "supportingFile": "",
+                "activityDate": "2025-05-05",
+                "spendingAccount": "Belanja ATK",
+                "description": "Pembelian kertas HVS",
+                "unitPrice": "50000.00",
+                "quantity": 2,
+                "unit": "rim",
+                "created_at": "2025-10-29T01:10:34.571Z",
+                "updated_at": "2025-10-29T01:10:34.571Z",
+                "totalPrice": 100000
+            },
+            {
+                "id": "be99aa52-cbeb-4868-9aec-4d0d0db9cfa9",
+                "activity": "Beli kertas",
+                "supportingFile": "",
+                "activityDate": "2025-05-05",
+                "spendingAccount": "Belanja ATK",
+                "description": "Pembelian kertas HVS",
+                "unitPrice": "50000.00",
+                "quantity": 2,
+                "unit": "rim",
+                "created_at": "2025-10-29T01:26:56.417Z",
+                "updated_at": "2025-10-29T01:26:56.417Z",
+                "totalPrice": 100000
+            },
+            {
+                "id": "bddd9513-33aa-4404-8181-fb382ddfab23",
+                "activity": "qdwqdwqwdqwdqwdaa",
+                "supportingFile": null,
+                "activityDate": "2025-10-01",
+                "spendingAccount": "qweqw",
+                "description": "qwe",
+                "unitPrice": "3123131.00",
+                "quantity": 2,
+                "unit": "3das",
+                "created_at": "2025-10-30T08:05:43.662Z",
+                "updated_at": "2025-11-10T05:02:11.000Z",
+                "totalPrice": 6246262
+            },
+            {
+                "id": "9fb5ba56-5193-4785-80fe-7efd543d7368",
+                "activity": "Beli Pahala",
+                "supportingFile": "1761745385050-388420040.pdf",
+                "activityDate": "2025-05-05",
+                "spendingAccount": "Belanja ATK",
+                "description": "Pembelian kertas HVS",
+                "unitPrice": "50000.00",
+                "quantity": 2,
+                "unit": "rim",
+                "created_at": "2025-10-29T13:43:05.075Z",
+                "updated_at": "2025-10-29T13:43:05.075Z",
+                "totalPrice": 100000
+            },
+            {
+                "id": "857ed437-d5e3-4ab8-b04e-5c15d8a989b7",
+                "activity": "Beli kertas",
+                "supportingFile": "",
+                "activityDate": "2025-05-05",
+                "spendingAccount": "Belanja ATK",
+                "description": "Pembelian kertas HVS",
+                "unitPrice": "50000.00",
+                "quantity": 2,
+                "unit": "rim",
+                "created_at": "2025-10-29T01:10:39.611Z",
+                "updated_at": "2025-10-29T01:10:39.611Z",
+                "totalPrice": 100000
+            }
+        ],
+        "fundingSources": [
+            {
+                "id": "1",
+                "source_of_fund": "123123",
+                "budget_amount": "3123121.00",
+                "received_date": "2025-11-12",
+                "created_at": "2025-10-28T18:52:11.078Z",
+                "updated_at": "2025-11-22T03:05:31.000Z"
+            },
+            {
+                "id": "91fa063e-7be9-4fe0-bd4c-950f55401f5f",
+                "source_of_fund": "123asd",
+                "budget_amount": "3123121.00",
+                "received_date": "2025-02-04",
+                "created_at": "2025-10-28T18:52:11.078Z",
+                "updated_at": "2025-11-22T03:05:31.000Z"
+            }
+        ],
+        "total_budget_amount": 6246242,
+        "realization_amount": 6646262,
+        "remaining_fund": -400020
+    },
+    {
+        "id": "baeb4f7f-e2d4-4439-afcb-f1c15c32e444",
+        "title": "Minsa",
+        "report_date": "2025-10-27",
+        "last_edited_date": "2025-10-27",
+        "created_at": "2025-10-27T20:35:51.777Z",
+        "updated_at": "2025-10-27T20:35:51.777Z",
+        "activities": [
+            {
+                "id": "2a5a6118-73d2-4456-b8b0-9e1fbbeb4c5b",
+                "activity": "Konsumsi FGD",
+                "supportingFile": null,
+                "activityDate": "2025-01-01",
+                "spendingAccount": "Konsumsi pengeluran",
+                "description": "Nasi Kotak",
+                "unitPrice": "20000.00",
+                "quantity": 20,
+                "unit": "Box",
+                "created_at": "2025-11-13T10:04:37.469Z",
+                "updated_at": "2025-11-13T10:04:37.469Z",
+                "totalPrice": 400000
+            }
+        ],
+        "fundingSources": [
+            {
+                "id": "a1287f7d-8bac-4767-a790-3eb7030040de",
+                "source_of_fund": "qdwdqw",
+                "budget_amount": "12312312.00",
+                "received_date": "2025-10-02",
+                "created_at": "2025-10-27T20:35:51.778Z",
+                "updated_at": "2025-10-27T20:35:51.778Z"
+            }
+        ],
+        "total_budget_amount": 12312312,
+        "realization_amount": 400000,
+        "remaining_fund": 11912312
+    },
+    {
+        "id": "be2da3d1-be3d-4191-b0d3-65c5b2a284c0",
+        "title": "asd",
+        "report_date": "2025-10-27",
+        "last_edited_date": "2025-10-27",
+        "created_at": "2025-10-27T20:31:18.288Z",
+        "updated_at": "2025-10-27T20:31:18.288Z",
+        "activities": [],
+        "fundingSources": [
+            {
+                "id": "9df59698-fb9f-4460-8c17-b801c335ff08",
+                "source_of_fund": "asdas",
+                "budget_amount": "12312412.00",
+                "received_date": "2025-10-08",
+                "created_at": "2025-10-27T20:31:18.289Z",
+                "updated_at": "2025-10-27T20:31:18.289Z"
+            }
+        ],
+        "total_budget_amount": 12312412,
+        "realization_amount": 0,
+        "remaining_fund": 12312412
+    },
+    {
+        "id": "d3153efe-1b59-4a18-8454-dc1ef47a9d67",
+        "title": "kauunii",
+        "report_date": "2025-10-28",
+        "last_edited_date": "2025-10-28",
+        "created_at": "2025-10-28T19:08:11.865Z",
+        "updated_at": "2025-10-28T19:08:11.865Z",
+        "activities": [
+            {
+                "id": "fb5c480c-496c-4b5c-a7d6-5a1c0f6538bd",
+                "activity": "Konsumsi FGDaa23",
+                "supportingFile": "1763434808724-533839949.pdf",
+                "activityDate": "2025-11-06",
+                "spendingAccount": "qweqweq",
+                "description": "Nasi Kotak",
+                "unitPrice": "20000.00",
+                "quantity": 201,
+                "unit": "lmao",
+                "created_at": "2025-11-18T03:00:08.742Z",
+                "updated_at": "2025-11-18T17:20:20.000Z",
+                "totalPrice": 4020000
+            }
+        ],
+        "fundingSources": [
+            {
+                "id": "eb0bce4c-2c26-4ebb-a837-011f8bf0f252",
+                "source_of_fund": "APBD Kota Batu",
+                "budget_amount": "50000000.00",
+                "received_date": "2025-05-05",
+                "created_at": "2025-11-19T03:21:47.800Z",
+                "updated_at": "2025-11-19T03:21:47.800Z"
+            },
+            {
+                "id": "ec991483-5d51-45ec-9711-18e34b61881a",
+                "source_of_fund": "1234",
+                "budget_amount": "12333.00",
+                "received_date": "2025-04-16",
+                "created_at": "2025-10-28T19:08:11.866Z",
+                "updated_at": "2025-10-28T19:08:11.866Z"
+            }
+        ],
+        "total_budget_amount": 50012333,
+        "realization_amount": 4020000,
+        "remaining_fund": 45992333
+    },
+    {
+        "id": "ebe5df5c-ade1-464e-9fe7-c632466d4669",
+        "title": "123dasaa",
+        "report_date": "2025-10-28",
+        "last_edited_date": "2025-10-28",
+        "created_at": "2025-10-28T16:38:35.254Z",
+        "updated_at": "2025-10-28T16:38:35.254Z",
+        "activities": [
+            {
+                "id": "e9b07564-5b25-41d0-a00d-e8bb565ffff4",
+                "activity": "qwe",
+                "supportingFile": "1762843782297-141445984.pdf",
+                "activityDate": "2024-12-31",
+                "spendingAccount": "123",
+                "description": "qwe",
+                "unitPrice": "123.00",
+                "quantity": 1,
+                "unit": "123",
+                "created_at": "2025-11-11T06:49:42.308Z",
+                "updated_at": "2025-11-11T06:49:42.308Z",
+                "totalPrice": 123
+            }
+        ],
+        "fundingSources": [
+            {
+                "id": "5c730716-e514-47ed-87be-e968b369afbc",
+                "source_of_fund": "132adw",
+                "budget_amount": "1123123.00",
+                "received_date": "2025-04-30",
+                "created_at": "2025-10-28T16:38:35.256Z",
+                "updated_at": "2025-10-28T16:38:35.256Z"
+            }
+        ],
+        "total_budget_amount": 1123123,
+        "realization_amount": 123,
+        "remaining_fund": 1123000
+    },
+    {
+        "id": "edfd7302-919f-40ff-bcef-16d06ccec5df",
+        "title": "Minsa",
+        "report_date": "2025-10-27",
+        "last_edited_date": "2025-10-27",
+        "created_at": "2025-10-27T20:35:50.745Z",
+        "updated_at": "2025-10-27T20:35:50.745Z",
+        "activities": [],
+        "fundingSources": [
+            {
+                "id": "6397d534-027e-43d7-b941-fff47c4481e1",
+                "source_of_fund": "qdwdqw",
+                "budget_amount": "12312312.00",
+                "received_date": "2025-10-02",
+                "created_at": "2025-10-27T20:35:50.745Z",
+                "updated_at": "2025-10-27T20:35:50.745Z"
+            }
+        ],
+        "total_budget_amount": 12312312,
+        "realization_amount": 0,
+        "remaining_fund": 12312312
+    }
+]
+
+[
+    {
+        "id": "10e33d05-dda5-4b09-b21e-e771f86b74c4",
+        "title": "Pembelian Laptop untuk Adminaaaa",
+        "report_date": "2025-11-11",
+        "last_edited_date": "2025-11-11",
+        "created_at": "2025-11-11T02:10:32.957Z",
+        "updated_at": "2025-11-11T02:10:32.957Z",
+                "activities": [
+            {
+                "id": "fb5c480c-496c-4b5c-a7d6-5a1c0f6538bd",
+                "activity": "Konsumsi FGDaa23",
+                "supportingFile": "1763434808724-533839949.pdf",
+                "activityDate": "2025-11-06",
+                "spendingAccount": "qweqweq",
+                "description": "Nasi Kotak",
+                "unitPrice": "20000.00",
+                "quantity": 201,
+                "unit": "lmao",
+                "created_at": "2025-11-18T03:00:08.742Z",
+                "updated_at": "2025-11-18T17:20:20.000Z",
+                "totalPrice": 4020000
+            }
+        ],
+        "activities": [
+            {
+                "id": "e7ccdb93-614b-4bc5-a8ca-83db6f547521",
+                "activity": "Konsumsi FGD",
+                "supportingFile": null,
+                "activityDate": "2025-11-05",
+                "spendingAccount": "qwe",
+                "description": "123ads",
+                "unitPrice": "20000.00",
+                "quantity": 350,
+                "unit": "Box",
+                "created_at": "2025-11-22T05:05:06.354Z",
+                "updated_at": "2025-11-22T05:07:02.000Z"
+            }
+        ],
+        "fundingSources": [
+            {
+                "id": "e4a14b99-509c-4917-b074-4eca5679d4aa",
+                "source_of_fund": "dqwdqw",
+                "budget_amount": "12312123123.00",
+                "received_date": "2025-11-29",
+                "created_at": "2025-11-22T05:03:31.382Z",
+                "updated_at": "2025-11-22T05:04:20.000Z"
+            },
+            {
+                "id": "fa13e01a-bae7-4de7-8e31-5e76f6d0955f",
+                "source_of_fund": "APBD Kota Batu",
+                "budget_amount": "50000000.00",
+                "received_date": "2025-01-02",
+                "created_at": "2025-11-11T02:10:32.958Z",
+                "updated_at": "2025-11-22T05:04:20.000Z"
+            }
+        ],
+        "source_of_fund": "dqwdqw, APBD Kota Batu",
+        "budget_amount": 12362123123,
+        "realization_amount": 7000000,
+        "remaining_fund": 12355123123
+    },
+    {
+        "id": "5ede74d5-6ac3-4803-9d6e-24e08aaead70",
+        "title": "dasd",
+        "report_date": "2025-11-19",
+        "last_edited_date": "2025-11-19",
+        "created_at": "2025-11-19T03:06:03.486Z",
+        "updated_at": "2025-11-19T03:06:03.486Z",
+        "activities": [
+            {
+                "id": "d34875c7-ead0-47e1-9ff7-2b0f4991af3c",
+                "activity": "Konsumsi FGD",
+                "supportingFile": "1763530958623-749222966.pdf",
+                "activityDate": "2025-11-05",
+                "spendingAccount": "1231231qweqweqweqwe",
+                "description": "Nasi Kotakaasd",
+                "unitPrice": "20000.00",
+                "quantity": 202,
+                "unit": "Boxa",
+                "created_at": "2025-11-19T04:29:48.118Z",
+                "updated_at": "2025-11-19T05:42:38.000Z"
+            }
+        ],
+        "fundingSources": [
+            {
+                "id": "137162e0-8cc1-4363-b577-dea086d1fa6c",
+                "source_of_fund": "qwe",
+                "budget_amount": "123.00",
+                "received_date": "2025-11-05",
+                "created_at": "2025-11-22T03:14:40.254Z",
+                "updated_at": "2025-11-22T03:15:19.000Z"
+            },
+            {
+                "id": "363ca044-c569-4997-8b62-eb5e7af06c0e",
+                "source_of_fund": "dqw",
+                "budget_amount": "124123123123.00",
+                "received_date": "2025-11-01",
+                "created_at": "2025-11-22T03:15:19.574Z",
+                "updated_at": "2025-11-22T03:15:19.574Z"
+            },
+            {
+                "id": "4ea386b6-da9b-43cb-b0a8-c68b2f24240e",
+                "source_of_fund": "asdasd",
+                "budget_amount": "12312312.00",
+                "received_date": "2025-11-26",
+                "created_at": "2025-11-19T03:06:03.491Z",
+                "updated_at": "2025-11-22T03:15:19.000Z"
+            }
+        ],
+        "source_of_fund": "qwe, dqw, asdasd",
+        "budget_amount": 124135435558,
+        "realization_amount": 4040000,
+        "remaining_fund": 124131395558
+    },
+    {
+        "id": "711c0486-1da0-4b57-9103-a54d123b4e05",
+        "title": "dwq",
+        "report_date": "2025-11-11",
+        "last_edited_date": "2025-11-11",
+        "created_at": "2025-11-11T02:07:57.986Z",
+        "updated_at": "2025-11-11T02:07:57.986Z",
+        "activities": [],
+        "fundingSources": [
+            {
+                "id": "858ccd8c-1ffb-42d9-b5c3-ba975902aded",
+                "source_of_fund": "dqw",
+                "budget_amount": "123123.00",
+                "received_date": "2025-11-01",
+                "created_at": "2025-11-11T02:07:57.987Z",
+                "updated_at": "2025-11-11T02:07:57.987Z"
+            }
+        ],
+        "source_of_fund": "dqw",
+        "budget_amount": 123123,
+        "realization_amount": 0,
+        "remaining_fund": 123123
+    },
+    {
+        "id": "715cf075-7f78-42da-8fff-44b1aade24e5",
+        "title": "123123",
+        "report_date": "2025-11-19",
+        "last_edited_date": "2025-11-19",
+        "created_at": "2025-11-19T01:58:17.220Z",
+        "updated_at": "2025-11-19T01:58:17.220Z",
+        "activities": [],
+        "fundingSources": [
+            {
+                "id": "27a5292e-ce02-43db-8c99-fb4e48a15684",
+                "source_of_fund": "qwdqwd",
+                "budget_amount": "123123.00",
+                "received_date": "2025-11-29",
+                "created_at": "2025-11-19T01:58:17.232Z",
+                "updated_at": "2025-11-19T01:58:17.232Z"
+            }
+        ],
+        "source_of_fund": "qwdqwd",
+        "budget_amount": 123123,
+        "realization_amount": 0,
+        "remaining_fund": 123123
+    },
+    {
+        "id": "8f3f0263-f218-4260-9cce-8b2a822df2ea",
+        "title": "asd",
+        "report_date": "2025-11-11",
+        "last_edited_date": "2025-11-11",
+        "created_at": "2025-11-11T02:05:08.565Z",
+        "updated_at": "2025-11-11T02:05:08.565Z",
+        "activities": [],
+        "fundingSources": [
+            {
+                "id": "cf409aad-e723-4a71-a16d-7f735681af15",
+                "source_of_fund": "asd",
+                "budget_amount": "123.00",
+                "received_date": "2025-01-01",
+                "created_at": "2025-11-11T02:05:08.566Z",
+                "updated_at": "2025-11-11T02:05:08.566Z"
+            }
+        ],
+        "source_of_fund": "asd",
+        "budget_amount": 123,
+        "realization_amount": 0,
+        "remaining_fund": 123
+    },
+    {
+        "id": "8f54d370-0186-4ab7-ba6d-68d871fe4373",
+        "title": "qwe",
+        "report_date": "2025-10-28",
+        "last_edited_date": "2025-10-28",
+        "created_at": "2025-10-28T18:52:11.075Z",
+        "updated_at": "2025-10-28T18:52:11.075Z",
+        "activities": [
+            {
+                "id": "fb59ee5e-a3d2-4161-bf85-525fbcd8aa22",
+                "activity": "Beli kertas",
+                "supportingFile": "",
+                "activityDate": "2025-05-05",
+                "spendingAccount": "Belanja ATK",
+                "description": "Pembelian kertas HVS",
+                "unitPrice": "50000.00",
+                "quantity": 2,
+                "unit": "rim",
+                "created_at": "2025-10-29T01:10:34.571Z",
+                "updated_at": "2025-10-29T01:10:34.571Z"
+            },
+            {
+                "id": "be99aa52-cbeb-4868-9aec-4d0d0db9cfa9",
+                "activity": "Beli kertas",
+                "supportingFile": "",
+                "activityDate": "2025-05-05",
+                "spendingAccount": "Belanja ATK",
+                "description": "Pembelian kertas HVS",
+                "unitPrice": "50000.00",
+                "quantity": 2,
+                "unit": "rim",
+                "created_at": "2025-10-29T01:26:56.417Z",
+                "updated_at": "2025-10-29T01:26:56.417Z"
+            },
+            {
+                "id": "bddd9513-33aa-4404-8181-fb382ddfab23",
+                "activity": "qdwqdwqwdqwdqwdaa",
+                "supportingFile": null,
+                "activityDate": "2025-10-01",
+                "spendingAccount": "qweqw",
+                "description": "qwe",
+                "unitPrice": "3123131.00",
+                "quantity": 2,
+                "unit": "3das",
+                "created_at": "2025-10-30T08:05:43.662Z",
+                "updated_at": "2025-11-10T05:02:11.000Z"
+            },
+            {
+                "id": "9fb5ba56-5193-4785-80fe-7efd543d7368",
+                "activity": "Beli Pahala",
+                "supportingFile": "1761745385050-388420040.pdf",
+                "activityDate": "2025-05-05",
+                "spendingAccount": "Belanja ATK",
+                "description": "Pembelian kertas HVS",
+                "unitPrice": "50000.00",
+                "quantity": 2,
+                "unit": "rim",
+                "created_at": "2025-10-29T13:43:05.075Z",
+                "updated_at": "2025-10-29T13:43:05.075Z"
+            },
+            {
+                "id": "857ed437-d5e3-4ab8-b04e-5c15d8a989b7",
+                "activity": "Beli kertas",
+                "supportingFile": "",
+                "activityDate": "2025-05-05",
+                "spendingAccount": "Belanja ATK",
+                "description": "Pembelian kertas HVS",
+                "unitPrice": "50000.00",
+                "quantity": 2,
+                "unit": "rim",
+                "created_at": "2025-10-29T01:10:39.611Z",
+                "updated_at": "2025-10-29T01:10:39.611Z"
+            }
+        ],
+        "fundingSources": [
+            {
+                "id": "1",
+                "source_of_fund": "123123",
+                "budget_amount": "3123121.00",
+                "received_date": "2025-11-12",
+                "created_at": "2025-10-28T18:52:11.078Z",
+                "updated_at": "2025-11-22T03:05:31.000Z"
+            },
+            {
+                "id": "91fa063e-7be9-4fe0-bd4c-950f55401f5f",
+                "source_of_fund": "123asd",
+                "budget_amount": "3123121.00",
+                "received_date": "2025-02-04",
+                "created_at": "2025-10-28T18:52:11.078Z",
+                "updated_at": "2025-11-22T03:05:31.000Z"
+            }
+        ],
+        "source_of_fund": "123123, 123asd",
+        "budget_amount": 6246242,
+        "realization_amount": 6646262,
+        "remaining_fund": -400020
+    },
+    {
+        "id": "9223da58-838e-4992-95e3-5025bb47e34b",
+        "title": "aku adalah ao",
+        "report_date": "2025-11-11",
+        "last_edited_date": "2025-11-11",
+        "created_at": "2025-11-11T02:19:56.326Z",
+        "updated_at": "2025-11-11T02:19:56.326Z",
+        "activities": [
+            {
+                "id": "fac09969-345b-4c11-80c1-0d65d6747a4c",
+                "activity": "asd",
+                "supportingFile": "1762864912423-193336789.pdf",
+                "activityDate": "2025-01-01",
+                "spendingAccount": "dqwdqw",
+                "description": "sqw",
+                "unitPrice": "123.00",
+                "quantity": 12,
+                "unit": "13",
+                "created_at": "2025-11-11T12:41:52.433Z",
+                "updated_at": "2025-11-11T12:41:52.433Z"
+            }
+        ],
+        "fundingSources": [
+            {
+                "id": "94f979a4-6218-4fc2-9bbf-3b8bf78f4d1c",
+                "source_of_fund": "adalaha ernaras",
+                "budget_amount": "123123.00",
+                "received_date": "2025-02-02",
+                "created_at": "2025-11-11T02:19:56.329Z",
+                "updated_at": "2025-11-11T02:19:56.329Z"
+            }
+        ],
+        "source_of_fund": "adalaha ernaras",
+        "budget_amount": 123123,
+        "realization_amount": 1476,
+        "remaining_fund": 121647
+    },
+    {
+        "id": "b1534697-1333-4cc0-933d-4d7cd70cee4e",
+        "title": "LaporanSHU",
+        "report_date": "2025-11-11",
+        "last_edited_date": "2025-11-11",
+        "created_at": "2025-11-11T01:47:39.343Z",
+        "updated_at": "2025-11-11T01:47:39.343Z",
+        "activities": [],
+        "fundingSources": [
+            {
+                "id": "fe8812a3-2e05-47a2-92d0-5016d2beb4dc",
+                "source_of_fund": "SHU",
+                "budget_amount": "12333.00",
+                "received_date": "2025-01-01",
+                "created_at": "2025-11-11T01:47:39.345Z",
+                "updated_at": "2025-11-11T01:47:39.345Z"
+            }
+        ],
+        "source_of_fund": "SHU",
+        "budget_amount": 12333,
+        "realization_amount": 0,
+        "remaining_fund": 12333
+    },
+    {
+        "id": "b75ddd48-50bc-4ce0-bf00-7a085395f3bb",
+        "title": "Danabos Reguler",
+        "report_date": "2025-11-22",
+        "last_edited_date": "2025-11-22",
+        "created_at": "2025-11-22T05:09:01.174Z",
+        "updated_at": "2025-11-22T05:09:45.000Z",
+        "activities": [],
+        "fundingSources": [
+            {
+                "id": "17e4426a-6a4c-4508-b7c7-71150c5b05fd",
+                "source_of_fund": "BOS Reguler 2025 Peiode 1",
+                "budget_amount": "10000000.00",
+                "received_date": "2025-01-02",
+                "created_at": "2025-11-22T05:09:01.178Z",
+                "updated_at": "2025-11-22T05:10:23.000Z"
+            }
+        ],
+        "source_of_fund": "BOS Reguler 2025 Peiode 1",
+        "budget_amount": 10000000,
+        "realization_amount": 0,
+        "remaining_fund": 10000000
+    },
+    {
+        "id": "baeb4f7f-e2d4-4439-afcb-f1c15c32e444",
+        "title": "Minsa",
+        "report_date": "2025-10-27",
+        "last_edited_date": "2025-10-27",
+        "created_at": "2025-10-27T20:35:51.777Z",
+        "updated_at": "2025-10-27T20:35:51.777Z",
+        "activities": [
+            {
+                "id": "2a5a6118-73d2-4456-b8b0-9e1fbbeb4c5b",
+                "activity": "Konsumsi FGD",
+                "supportingFile": null,
+                "activityDate": "2025-01-01",
+                "spendingAccount": "Konsumsi pengeluran",
+                "description": "Nasi Kotak",
+                "unitPrice": "20000.00",
+                "quantity": 20,
+                "unit": "Box",
+                "created_at": "2025-11-13T10:04:37.469Z",
+                "updated_at": "2025-11-13T10:04:37.469Z"
+            }
+        ],
+        "fundingSources": [
+            {
+                "id": "a1287f7d-8bac-4767-a790-3eb7030040de",
+                "source_of_fund": "qdwdqw",
+                "budget_amount": "12312312.00",
+                "received_date": "2025-10-02",
+                "created_at": "2025-10-27T20:35:51.778Z",
+                "updated_at": "2025-10-27T20:35:51.778Z"
+            }
+        ],
+        "source_of_fund": "qdwdqw",
+        "budget_amount": 12312312,
+        "realization_amount": 400000,
+        "remaining_fund": 11912312
+    },
+    {
+        "id": "be2da3d1-be3d-4191-b0d3-65c5b2a284c0",
+        "title": "asd",
+        "report_date": "2025-10-27",
+        "last_edited_date": "2025-10-27",
+        "created_at": "2025-10-27T20:31:18.288Z",
+        "updated_at": "2025-10-27T20:31:18.288Z",
+        "activities": [],
+        "fundingSources": [
+            {
+                "id": "9df59698-fb9f-4460-8c17-b801c335ff08",
+                "source_of_fund": "asdas",
+                "budget_amount": "12312412.00",
+                "received_date": "2025-10-08",
+                "created_at": "2025-10-27T20:31:18.289Z",
+                "updated_at": "2025-10-27T20:31:18.289Z"
+            }
+        ],
+        "source_of_fund": "asdas",
+        "budget_amount": 12312412,
+        "realization_amount": 0,
+        "remaining_fund": 12312412
+    },
+    {
+        "id": "d3153efe-1b59-4a18-8454-dc1ef47a9d67",
+        "title": "kauunii",
+        "report_date": "2025-10-28",
+        "last_edited_date": "2025-10-28",
+        "created_at": "2025-10-28T19:08:11.865Z",
+        "updated_at": "2025-10-28T19:08:11.865Z",
+        "activities": [
+            {
+                "id": "fb5c480c-496c-4b5c-a7d6-5a1c0f6538bd",
+                "activity": "Konsumsi FGDaa23",
+                "supportingFile": "1763434808724-533839949.pdf",
+                "activityDate": "2025-11-06",
+                "spendingAccount": "qweqweq",
+                "description": "Nasi Kotak",
+                "unitPrice": "20000.00",
+                "quantity": 201,
+                "unit": "lmao",
+                "created_at": "2025-11-18T03:00:08.742Z",
+                "updated_at": "2025-11-18T17:20:20.000Z"
+            }
+        ],
+        "fundingSources": [
+            {
+                "id": "eb0bce4c-2c26-4ebb-a837-011f8bf0f252",
+                "source_of_fund": "APBD Kota Batu",
+                "budget_amount": "50000000.00",
+                "received_date": "2025-05-05",
+                "created_at": "2025-11-19T03:21:47.800Z",
+                "updated_at": "2025-11-19T03:21:47.800Z"
+            },
+            {
+                "id": "ec991483-5d51-45ec-9711-18e34b61881a",
+                "source_of_fund": "1234",
+                "budget_amount": "12333.00",
+                "received_date": "2025-04-16",
+                "created_at": "2025-10-28T19:08:11.866Z",
+                "updated_at": "2025-10-28T19:08:11.866Z"
+            }
+        ],
+        "source_of_fund": "APBD Kota Batu, 1234",
+        "budget_amount": 50012333,
+        "realization_amount": 4020000,
+        "remaining_fund": 45992333
+    },
+    {
+        "id": "ebe5df5c-ade1-464e-9fe7-c632466d4669",
+        "title": "123dasaa",
+        "report_date": "2025-10-28",
+        "last_edited_date": "2025-10-28",
+        "created_at": "2025-10-28T16:38:35.254Z",
+        "updated_at": "2025-10-28T16:38:35.254Z",
+        "activities": [
+            {
+                "id": "e9b07564-5b25-41d0-a00d-e8bb565ffff4",
+                "activity": "qwe",
+                "supportingFile": "1762843782297-141445984.pdf",
+                "activityDate": "2024-12-31",
+                "spendingAccount": "123",
+                "description": "qwe",
+                "unitPrice": "123.00",
+                "quantity": 1,
+                "unit": "123",
+                "created_at": "2025-11-11T06:49:42.308Z",
+                "updated_at": "2025-11-11T06:49:42.308Z"
+            }
+        ],
+        "fundingSources": [
+            {
+                "id": "5c730716-e514-47ed-87be-e968b369afbc",
+                "source_of_fund": "132adw",
+                "budget_amount": "1123123.00",
+                "received_date": "2025-04-30",
+                "created_at": "2025-10-28T16:38:35.256Z",
+                "updated_at": "2025-10-28T16:38:35.256Z"
+            }
+        ],
+        "source_of_fund": "132adw",
+        "budget_amount": 1123123,
+        "realization_amount": 123,
+        "remaining_fund": 1123000
+    },
+    {
+        "id": "edfd7302-919f-40ff-bcef-16d06ccec5df",
+        "title": "Minsa",
+        "report_date": "2025-10-27",
+        "last_edited_date": "2025-10-27",
+        "created_at": "2025-10-27T20:35:50.745Z",
+        "updated_at": "2025-10-27T20:35:50.745Z",
+        "activities": [],
+        "fundingSources": [
+            {
+                "id": "6397d534-027e-43d7-b941-fff47c4481e1",
+                "source_of_fund": "qdwdqw",
+                "budget_amount": "12312312.00",
+                "received_date": "2025-10-02",
+                "created_at": "2025-10-27T20:35:50.745Z",
+                "updated_at": "2025-10-27T20:35:50.745Z"
+            }
+        ],
+        "source_of_fund": "qdwdqw",
+        "budget_amount": 12312312,
+        "realization_amount": 0,
+        "remaining_fund": 12312312
+    }
+]

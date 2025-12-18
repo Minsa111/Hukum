@@ -11,7 +11,7 @@ import { usePublicReports } from "@/api/hooks/use-public-report";
 export function Navbar() {
   const [isLogin, setIslogin] = useState(false);
   const navigate = useNavigate();
-  const { valid, expired } = validateToken();
+  const { valid, expired, user } = validateToken();
   const { data } = usePublicReports();
   useEffect(() => {
     if (!valid || expired) {
@@ -37,7 +37,7 @@ export function Navbar() {
             variant="outline"
             size="sm"
             className="text-sm hidden md:block text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-            onClick={() => navigate(isLogin ? "/admin" : "/auth/login")}
+            onClick={() => navigate(isLogin ? user?.role === "admin" ? "/superadmin" : "/admin" : "/auth/login")}
           >
             {isLogin ? "Admin Dashboard" : "Login"}
           </Button>

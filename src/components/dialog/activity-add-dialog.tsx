@@ -34,6 +34,7 @@ export function ReportShopActivityDialog({
   open,
   onOpenChange,
   onSuccess,
+
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -45,7 +46,7 @@ export function ReportShopActivityDialog({
   const [quantity, setQuantity] = React.useState("")
   const [unit, setUnit] = React.useState("")
   const [submitted, setSubmitted] = React.useState(false)
-  const { purchase_report_id } = useParams<{ purchase_report_id: string }>()  
+  const { purchase_report_id } = useParams<{ purchase_report_id: string }>()
   const [description, setDescription] = React.useState("")
   const [date, setDate] = React.useState<Date | undefined>(undefined)
   const [openDate, setOpenDate] = React.useState(false)
@@ -66,51 +67,51 @@ export function ReportShopActivityDialog({
     const rawValue = e.target.value.replace(/\D/g, "")
     const formatted = rawValue ? Number(rawValue).toLocaleString("id-ID") : ""
     setPrice(formatted)
-  }  
+  }
   const handleNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value.replace(/\D/g, "")
     setQuantity(rawValue)
   }
 
-const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault()
-  setSubmitted(true)
-  setLoading(true)
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setSubmitted(true)
+    setLoading(true)
 
-  const isEmpty = !activity || !spendingAccount || !price || !date || !quantity || !unit || !description
-  if (isEmpty) {
-    setLoading(false)
-    return toast.error("Lengkapi form terlebih dahulu.")
+    const isEmpty = !activity || !spendingAccount || !price || !date || !quantity || !unit || !description
+    if (isEmpty) {
+      setLoading(false)
+      return toast.error("Lengkapi form terlebih dahulu.")
+    }
+
+    try {
+      const formData = new FormData()
+      formData.append("purchase_report_id", purchase_report_id || "")
+      formData.append("activity", activity)
+      formData.append("activity_date", date ? date.toLocaleDateString("sv-SE") : "")
+      formData.append("spending_account", spendingAccount)
+      formData.append("description", description)
+      formData.append("unit_price", price.replace(/\D/g, ""))
+      formData.append("quantity", quantity)
+      formData.append("unit", unit)
+      if (file) formData.append("supporting_file", file)
+
+
+      await fetchWithAuth(`${API_ACTIVITY}`, {
+        method: "POST",
+        body: formData,
+      })
+
+      toast.success("Laporan berhasil ditambahkan!")
+      onOpenChange(false)
+      onSuccess?.()
+
+    } catch (err) {
+      toast.error(`Gagal menambahkan laporan: ${err}`)
+    } finally {
+      setLoading(false)
+    }
   }
-
-  try {
-    const formData = new FormData()
-    formData.append("purchase_report_id", purchase_report_id || "")
-    formData.append("activity", activity)
-    formData.append("activity_date", date ? date.toLocaleDateString("sv-SE") : "")
-    formData.append("spending_account", spendingAccount)
-    formData.append("description", description)
-    formData.append("unit_price", price.replace(/\D/g, ""))
-    formData.append("quantity", quantity)
-    formData.append("unit", unit)
-    if (file) formData.append("supporting_file", file)
-
-
-    await fetchWithAuth(`${API_ACTIVITY}`, {
-      method: "POST",
-      body: formData, 
-    })
-
-    toast.success("Laporan berhasil ditambahkan!")
-    onOpenChange(false)
-    onSuccess?.() 
-
-  } catch (err) {
-    toast.error(`Gagal menambahkan laporan: ${err}`)
-  } finally {
-    setLoading(false)
-  }
-}
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -121,7 +122,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="grid gap-4 py-1">
-          
+
           <div className="grid gap-3">
             <Label htmlFor="activity">Kegiatan</Label>
             <Input
@@ -133,32 +134,40 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
           </div>
 
           <div className="grid gap-3">
-            <Label htmlFor="date">Tanggal Kegiatan</Label>
+            <Label htmlFor="date">Tanggal Kegiqwdqwdatan</Label>
             <Popover open={openDate} onOpenChange={setOpenDate}>
               <PopoverTrigger asChild>
-                <Button variant="outline" id="date" className=" justify-between font-normal">
+                <Button
+                  type="button"
+                  variant="outline"
+                  id="date"
+                  className="justify-between font-normal"
+                >
                   {date ? date.toLocaleDateString() : "Pilih tanggal"}
                   <ChevronDownIcon />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto overflow-hidden p-0 z-[9995]" align="start">
+
+              <PopoverContent className="w-auto p-0 z-[1000]" align="start">
                 <Calendar
                   mode="single"
                   selected={date}
                   captionLayout="dropdown"
-                  onSelect={(date) => {
-                    setDate(date)
+                  onSelect={(d) => {
+                    if (!d) return
+                    setDate(d)
                     setOpenDate(false)
                   }}
                 />
               </PopoverContent>
             </Popover>
+
           </div>
 
           <div className="grid gap-3">
             <Label htmlFor="spendingAccount">Rekening Belanja</Label>
             <Input
-              
+
               id="spendingAccount"
               value={spendingAccount}
               placeholder="Apa jenis rekening belanja untuk kegiatan tersebut?"
@@ -168,12 +177,12 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
           <div className="grid gap-3">
             <Label htmlFor="file">File Pendukung</Label>
-              <Input 
-                id="file" 
-                type="file"
-                accept="application/pdf"
-                onChange={handleFileChange}
-              />
+            <Input
+              id="file"
+              type="file"
+              accept="application/pdf"
+              onChange={handleFileChange}
+            />
           </div>
 
           <div className="flex flex-row items-start justify-between gap-3">
@@ -203,9 +212,9 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
               </InputGroup>
             </div>
           </div>
-          
+
           <div className="flex flex-row items-start justify-between gap-3">
-            
+
             <div className="grid w-1/2 gap-3">
               <Label htmlFor="quantity">Kuantitas</Label>
               <InputGroup>

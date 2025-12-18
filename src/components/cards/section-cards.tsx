@@ -12,11 +12,11 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-export function SectionCards({ data }: { data: any[] }) {
+export function SectionCards({ data, isAllSchool }: { data: any[], isAllSchool?: boolean }) {
   const now = new Date()
   const sixMonthsAgo = new Date()
   sixMonthsAgo.setMonth(now.getMonth() - 6)
-
+  
   const prevEnd = new Date(sixMonthsAgo)
   const prevStart = new Date(sixMonthsAgo)
   prevStart.setMonth(prevStart.getMonth() - 6)
@@ -107,11 +107,11 @@ export function SectionCards({ data }: { data: any[] }) {
             {fundGrowth >= 0 
               ?
               <p className="flex line-clamp-1 gap-2 font-medium">
-                <span>Meningkat
-                  <span className="text-green-600"> 
+                Meningkat 
+                <span className="text-green-600"> 
                     {fundGrowth.toFixed(1)}%
                   </span>
-                </span><IconTrendingUp className="size-4 text-green-600" />
+                <IconTrendingUp className="size-4 text-green-600" />
               </p>
               :
               <p className="flex line-clamp-1 gap-2 font-medium">
@@ -160,7 +160,8 @@ export function SectionCards({ data }: { data: any[] }) {
                 </span><IconTrendingUp className="size-4 text-red-600" />
               </p>
               :
-              <p className="flex line-clamp-1 gap-2 font-medium text-green-600">Penurunan Realisasi <IconTrendingDown className="size-4 text-green-600" /> </p>}
+              <p className="flex line-clamp-1 gap-2 font-medium">Penurunan Realisasi
+                <span className="text-green-600">{realizationGrowth.toFixed(1)}%</span><IconTrendingDown className="size-4 text-green-600" /> </p>}
           </div>
           <div className="text-muted-foreground text-xs">
             Realisasi selama 6 bulan terakhir

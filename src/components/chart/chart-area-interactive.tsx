@@ -44,7 +44,7 @@ const chartConfig = {
 
 export function ChartAreaInteractive({ chartData }: { chartData: any[] }) {
   const isMobile = useIsMobile()
-  const [timeRange, setTimeRange] = React.useState("90d")
+  const [timeRange, setTimeRange] = React.useState("365d")
 
   React.useEffect(() => {
     if (isMobile) setTimeRange("7d")
@@ -55,16 +55,16 @@ export function ChartAreaInteractive({ chartData }: { chartData: any[] }) {
   chartData.forEach((report) => {
     report.activities?.forEach((activity: any) => {
       const date = activity.activityDate
+      const price = activity.unitPrice * activity.quantity
       if (!groupedData[date]) groupedData[date] = { realization: 0, budget: 0 }
-      groupedData[date].realization += parseFloat(activity.totalPrice) || 0
+      groupedData[date].realization += price || 0
     })
-
-  report.fundingSources?.forEach((fund: any) => {
-    const receivedDate = fund.received_date
-    if (!receivedDate) return
-    if (!groupedData[receivedDate]) groupedData[receivedDate] = { realization: 0, budget: 0 }
-    groupedData[receivedDate].budget += parseFloat(fund.budget_amount) || 0
-  })
+    report.fundingSources?.forEach((fund: any) => {
+      const receivedDate = fund.received_date
+      if (!receivedDate) return
+      if (!groupedData[receivedDate]) groupedData[receivedDate] = { realization: 0, budget: 0 }
+      groupedData[receivedDate].budget += parseFloat(fund.budget_amount) || 0
+    })
   })
 
   const formattedData = Object.entries(groupedData)
@@ -98,7 +98,6 @@ export function ChartAreaInteractive({ chartData }: { chartData: any[] }) {
     start.setDate(now.getDate() - days)
     return date >= start
   })
-
   return (
     <Card className="@container/card">
       <CardHeader>

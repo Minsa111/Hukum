@@ -1,16 +1,35 @@
 // src/app/dashboard/page.tsx
-import { DataTable } from "@/components/table/admin/admin-table-dashboard"
+import { DataTable } from "@/components/table/public/public-dashboard-table"
 import { SectionCards } from "@/components/cards/section-cards"
 import { SiteHeader } from "@/components/site-header"
 import { ChartAreaInteractive } from "@/components/chart/chart-area-interactive"
-import { useReports } from "@/api/hooks/use-report"
+import { fetchWithAuth } from "@/controllers/fetchwithauths"
+import { useEffect, useState} from "react"
+import { API_PURCHASE, API_PUBLIC_ALL} from "@/api/api"
 
 export default function Page() {
-  const school_id = localStorage.getItem("school_id")
-  const { data: report, loading, error} = useReports(school_id)
+  const [report, setReport] = useState<any>(null);
+  const [schoolReport, setSchoolReport] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  async function loadReport () {
+    try {
+      setLoading(true);
+      const data = await fetchWithAuth(`${API_PURCHASE}`);
+      const secData = await fetchWithAuth(`${API_PURCHASE}${API_PUBLIC_ALL}`);
+      setReport(data);
+      setSchoolReport(secData);
+    } catch (err) {
+        console.error("❌ Error fetching report:", err);
+    }finally {
+        setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadReport();
+  }, []);
 
   if (loading) return <p>Loading...</p>
-  if (error) return <p className="text-red-500">Error loading reports.</p>
 
   return (
     <div className="flex flex-1 flex-col">
@@ -21,7 +40,7 @@ export default function Page() {
           <div className="px-4 lg:px-6">
             <ChartAreaInteractive chartData={report} />
           </div>
-          <DataTable data={report} />
+          <DataTable reports={schoolReport} selectedYear="Semua"/>
         </div>
       </div>
     </div>
