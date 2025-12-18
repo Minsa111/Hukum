@@ -214,38 +214,24 @@ export function ActivityDetailDialog({
           <div className="grid gap-2">
             <Label className="text-neutral-500">Tanggal Kegiatan</Label>
             {isEdit ? (
-              <Popover open={openDate} onOpenChange={setOpenDate}>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" className="justify-between">
-                    {date
-                      ? date.toLocaleDateString("id-ID", {
-                          day: "2-digit",
-                          month: "long",
-                          year: "numeric",
-                        })
-                      : "Pilih tanggal"}
-                    <ChevronDownIcon className="h-4 w-4 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={(d) => {
-                      setDate(d)
-                      setOpenDate(false)
-                    }}
-                  />
-                </PopoverContent>
-              </Popover>
+              <div>
+                <Label htmlFor="date">Tanggal Kegiatan</Label>
+                <Input
+                  type="date"
+                  value={date ? date.toISOString().slice(0, 10) : ""}
+                  onChange={(e) => {
+                    setDate(e.target.value ? new Date(e.target.value) : undefined)
+                  }}
+                />
+              </div>
             ) : (
               <span>
                 {date
                   ? date.toLocaleDateString("id-ID", {
-                      day: "2-digit",
-                      month: "long",
-                      year: "numeric",
-                    })
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                  })
                   : ""}
               </span>
             )}
@@ -267,7 +253,7 @@ export function ActivityDetailDialog({
           {/* SUPPORTING FILE */}
           <div className="grid gap-2">
             <Label className="text-neutral-500">File Pendukung</Label>
-          {!isEdit ? (
+            {!isEdit ? (
               <div className="flex gap-8">
                 <span>{activities?.supportingFile || "Tidak ada file"}</span>
                 {activities?.supportingFile && (
@@ -285,13 +271,13 @@ export function ActivityDetailDialog({
                   </Button>
                 )}
               </div>
-          ) :(
-            <Input 
-            id="file" 
-            type="file"
-            accept="application/pdf"
-            onChange={handleFileChange}
-            />)}
+            ) : (
+              <Input
+                id="file"
+                type="file"
+                accept="application/pdf"
+                onChange={handleFileChange}
+              />)}
           </div>
 
           {/* DESCRIPTION + PRICE */}
@@ -349,46 +335,46 @@ export function ActivityDetailDialog({
 
             {!isEdit ? (
               <>
-              {!isPublics ? (
-                <>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="destructive" type="button">
-                      Hapus
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Hapus data?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        Tindakan ini tidak dapat dibatalkan.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Batal</AlertDialogCancel>
-                      <AlertDialogActionDestructive onClick={handleDelete}>
-                        Hapus
-                      </AlertDialogActionDestructive>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                {!isPublics ? (
+                  <>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="destructive" type="button">
+                          Hapus
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Hapus data?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Tindakan ini tidak dapat dibatalkan.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Batal</AlertDialogCancel>
+                          <AlertDialogActionDestructive onClick={handleDelete}>
+                            Hapus
+                          </AlertDialogActionDestructive>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
 
-                {/* EDIT */}
-                <Button type="button" onClick={() => onEdit?.()}>
-                  Edit
-                </Button>
-                <DialogClose asChild>
-                  <Button variant="outline" type="button">
-                    Kembali
-                  </Button>
-                </DialogClose>
-                </>
+                    {/* EDIT */}
+                    <Button type="button" onClick={() => onEdit?.()}>
+                      Edit
+                    </Button>
+                    <DialogClose asChild>
+                      <Button variant="outline" type="button">
+                        Kembali
+                      </Button>
+                    </DialogClose>
+                  </>
                 ) : (
-                <DialogClose asChild>
-                  <Button variant="outline" type="button">
-                    Kembali
-                  </Button>
-                </DialogClose>
+                  <DialogClose asChild>
+                    <Button variant="outline" type="button">
+                      Kembali
+                    </Button>
+                  </DialogClose>
                 )}
               </>
             ) : (

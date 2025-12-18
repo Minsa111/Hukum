@@ -251,30 +251,13 @@ React.useEffect(() => {
                   {/* DATE */}
                   <div className="flex flex-col gap-3 mt-3">
                     <Label>Tanggal Dana Diterima</Label>
-                    <Popover
-                      open={fund.openDate}
-                      onOpenChange={(open) => updateFund(index, "openDate", open)}
-                    >
-                      <PopoverTrigger asChild>
-                        <Button variant="outline" className="justify-between">
-                          {fund.received_date
-                            ? fund.received_date.toLocaleDateString()
-                            : "Pilih Tanggal"}
-                          <ChevronDownIcon />
-                        </Button>
-                      </PopoverTrigger>
-
-                      <PopoverContent className="p-0">
-                        <Calendar
-                          mode="single"
-                          selected={fund.received_date}
-                          onSelect={(d) => {
-                            updateFund(index, "received_date", d)
-                            updateFund(index, "openDate", false)
-                          }}
-                        />
-                      </PopoverContent>
-                    </Popover>
+  <Input
+    type="date"
+    value={date ? date.toISOString().slice(0, 10) : ""}
+    onChange={(e) => {
+      setDate(e.target.value ? new Date(e.target.value) : undefined)
+    }}
+  />
                   </div>
 
                   {/* BUDGET */}

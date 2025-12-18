@@ -14,12 +14,7 @@ import { Input } from "@/components/ui/input"
 import { fetchWithAuth } from "@/controllers/fetchwithauths"
 import { API_PURCHASE } from "@/api/api"
 import { Label } from "@/components/ui/label"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { Calendar } from "../ui/calendar"
+
 import {
   InputGroup,
   InputGroupAddon,
@@ -42,7 +37,6 @@ export function ReportShopDialog({
   const [fundsource, setFundsource] = React.useState("")
   const [value, setValue] = React.useState("")
   const [date, setDate] = React.useState<Date | undefined>(undefined)
-  const [openDate, setOpenDate] = React.useState(false)
   const [loading, setLoading] = React.useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,26 +113,14 @@ export function ReportShopDialog({
           </div>
 
           <div className="flex flex-col gap-3">
-            <Label htmlFor="date">Tanggal Dana Diterima</Label>
-            <Popover open={openDate} onOpenChange={setOpenDate}>
-              <PopoverTrigger asChild>
-                <Button variant="outline" id="date" className="w-48 justify-between font-normal">
-                  {date ? date.toLocaleDateString() : "Pilih tanggal"}
-                  <ChevronDownIcon />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto overflow-hidden p-0 z-[9995]" align="start">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  captionLayout="dropdown"
-                  onSelect={(date) => {
-                    setDate(date)
-                    setOpenDate(false)
+              <Label htmlFor="date">Tanggal Kegiatan</Label>
+                <Input
+                  type="date"
+                  value={date ? date.toISOString().slice(0, 10) : ""}
+                  onChange={(e) => {
+                    setDate(e.target.value ? new Date(e.target.value) : undefined)
                   }}
                 />
-              </PopoverContent>
-            </Popover>
           </div>
 
           <div className="grid gap-3">

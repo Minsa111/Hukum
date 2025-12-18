@@ -133,36 +133,18 @@ export function ReportShopActivityDialog({
             />
           </div>
 
-          <div className="grid gap-3">
-            <Label htmlFor="date">Tanggal Kegiqwdqwdatan</Label>
-            <Popover open={openDate} onOpenChange={setOpenDate}>
-              <PopoverTrigger asChild>
-                <Button
-                  type="button"
-                  variant="outline"
-                  id="date"
-                  className="justify-between font-normal"
-                >
-                  {date ? date.toLocaleDateString() : "Pilih tanggal"}
-                  <ChevronDownIcon />
-                </Button>
-              </PopoverTrigger>
+        <div className="grid gap-3">
+          <Label htmlFor="date">Tanggal Kegiatan</Label>
+          <Input
+            type="date"
+            value={date ? date.toISOString().slice(0, 10) : ""}
+            onChange={(e) => {
+              setDate(e.target.value ? new Date(e.target.value) : undefined)
+            }}
+          />
+        </div>
 
-              <PopoverContent className="w-auto p-0 z-[1000]" align="start">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  captionLayout="dropdown"
-                  onSelect={(d) => {
-                    if (!d) return
-                    setDate(d)
-                    setOpenDate(false)
-                  }}
-                />
-              </PopoverContent>
-            </Popover>
 
-          </div>
 
           <div className="grid gap-3">
             <Label htmlFor="spendingAccount">Rekening Belanja</Label>

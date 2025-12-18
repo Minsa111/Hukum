@@ -8,7 +8,7 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog"
-import {ChevronDownIcon, Eye, EyeOff, Loader2 } from "lucide-react"
+import { Eye, EyeOff, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { fetchWithAuth } from "@/controllers/fetchwithauths"
@@ -17,8 +17,6 @@ import { Label } from "@/components/ui/label"
 import * as React from "react"
 import { toast } from "sonner"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
-import { Calendar } from "../ui/calendar"
 
 export function AccountAddDialog({
   open,
@@ -177,33 +175,6 @@ export function AccountAddDialog({
               </SelectContent>
             </Select>
           </div>
-          <div className="grid gap-3">
-          <Popover open={openDate} onOpenChange={setOpenDate} modal={false}>
-  <PopoverTrigger asChild>
-    <Button
-      variant="outline"
-      id="date"
-      className="justify-between font-normal"
-    >
-      {date ? date.toLocaleDateString() : "Pilih tanggal"}
-      <ChevronDownIcon />
-    </Button>
-  </PopoverTrigger>
-
-  <PopoverContent className="w-auto p-0" align="start">
-    <Calendar
-      mode="single"
-      selected={date}
-      captionLayout="dropdown"
-      onSelect={(d) => {
-        if (!d) return
-        setDate(d)
-        setOpenDate(false)
-      }}
-    />
-  </PopoverContent>
-</Popover>
-</div>
           <div className="grid gap-3">
             <Label htmlFor="school">Sekolah</Label>
               <Select value={school} onValueChange={setSchool}>

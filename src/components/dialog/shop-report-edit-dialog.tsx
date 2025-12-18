@@ -14,18 +14,7 @@ import { Input } from "@/components/ui/input"
 import { fetchWithAuth } from "@/controllers/fetchwithauths"
 import { API_PURCHASE } from "@/api/api"
 import { Label } from "@/components/ui/label"
-// import {
-//   Popover,
-//   PopoverContent,
-//   PopoverTrigger,
-// } from "@/components/ui/popover"
-// import { Calendar } from "../ui/calendar"
-// import {
-//   InputGroup,
-//   InputGroupAddon,
-//   InputGroupInput,
-//   InputGroupText,
-// } from "../ui/input-group"
+
 import * as React from "react"
 import { toast } from "sonner"
 
