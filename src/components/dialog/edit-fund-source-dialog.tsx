@@ -24,8 +24,7 @@ import * as React from "react"
 import { toast } from "sonner"
 import { IconCircleMinus, IconPlus } from "@tabler/icons-react"
 import { AlertDialog, AlertDialogActionDestructive, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "../ui/alert-dialog"
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
-import { Calendar } from "../ui/calendar"
+
 
 export function EditFundDialog({
   open,
@@ -50,9 +49,12 @@ export function EditFundDialog({
     },
   ])
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false)
-  const [selectedFund, setSelectedFund] = React.useState<any | null>(null)
-  const [date, setDate] = React.useState<Date | undefined>(undefined)
-  const [openDate, setOpenDate] = React.useState(false)
+  const [selectedFund, setSelectedFund] = React.useState<{
+  id: string
+  index: number
+  source_of_fund: string
+} | null>(null)
+
   const [loading, setLoading] = React.useState(false)
 
 
@@ -195,7 +197,7 @@ export function EditFundDialog({
                     toast.success("Data berhasil dihapus!")
                     setSelectedFund(null)
                     setOpenDeleteDialog(false)
-                    removeFund(funds.indexOf(selectedFund))
+                    removeFund(selectedFund.index)
                   } catch (err) {
                     console.error(err)
                     toast.error("Terjadi kesalahan saat menghapus data.")
@@ -224,10 +226,17 @@ export function EditFundDialog({
                     <button
                       type="button"
                       onClick={() => {
-                        setSelectedFund(fund)
-                        setOpenDeleteDialog(true)
-                      }
-                      }
+  // NEW FUND → remove immediately
+  if (!fund.id) {
+    removeFund(index)
+    return
+  }
+
+  // EXISTING FUND → confirm delete
+  setSelectedFund({ ...fund, index })
+  setOpenDeleteDialog(true)
+}}
+
                       className="absolute right-2 top-2 text-red-500"
                     >
                       <IconCircleMinus />
@@ -238,9 +247,10 @@ export function EditFundDialog({
                   <div className="grid gap-3 mt-3">
                     <Label>Sumber Dana</Label>
                     <Input
+                      
                       required
                       value={fund.source_of_fund}
-                      disabled={isSuperAdmin === true}
+                      disabled={isSuperAdmin}
                       onChange={(e) =>
                         updateFund(index, "source_of_fund", e.target.value)
                       }
@@ -266,7 +276,7 @@ export function EditFundDialog({
                           e.target.value ? new Date(e.target.value) : undefined
                         )
                       }
-                      disabled={isSuperAdmin === true}
+                      disabled={isSuperAdmin}
                     />
                   </div>
 
@@ -281,6 +291,7 @@ export function EditFundDialog({
                       </InputGroupAddon>
                       <InputGroupInput
                         required
+                        disabled={isSuperAdmin}
                         placeholder="1.000.000"
                         value={fund.budget_amount}
                         onChange={(e) => {
@@ -299,17 +310,24 @@ export function EditFundDialog({
           </ScrollArea>
 
           {/* ADD FUND BUTTON */}
-          <Button
-            type="button"
-            variant="outline"
-            className="flex gap-2 justify-center"
-            onClick={addFund}
-          >
-            <IconPlus className="w-4 h-4" />
-            Tambah Sumber Dana
-          </Button>
+          {
+            isSuperAdmin ? "" 
+            : (
+            <Button
+              type="button"
+              variant="outline"
+              className="flex gap-2 justify-center"
+              onClick={addFund}
+            >
+              <IconPlus className="w-4 h-4" />
+              Tambah Sumber Dana
+            </Button>
+            )
+          }
 
           {/* FOOTER */}
+          {
+            isSuperAdmin ? "" :(
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline" type="button">
@@ -327,7 +345,7 @@ export function EditFundDialog({
                 "Simpan"
               )}
             </Button>
-          </DialogFooter>
+          </DialogFooter>)}
         </form>
       </DialogContent>
 

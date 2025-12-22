@@ -1,4 +1,4 @@
-import { IconHome, IconSchool, IconUser, IconUserBolt } from "@tabler/icons-react"
+import { IconHome, IconSchool } from "@tabler/icons-react"
 import {
   Book,
   LayoutDashboard,
@@ -9,7 +9,7 @@ export const Dropdown= {
 
   navMain: [
     {
-      title: "Dashboard Publik",
+      title: "Dashboard Beranda",
       url: "/",
       icon: IconHome,
     },
@@ -37,9 +37,9 @@ export const Dropdown= {
   ],
   admin: [
     {
-      title: "Halaman Utama",
+      title: "Dashboard Beranda",
       url: "/",
-      icon: LayoutDashboard,
+      icon: IconHome,
     },
     {
       title: "Dashboard",

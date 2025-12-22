@@ -104,8 +104,8 @@ export default function Page(isSuperAdmin: boolean) {
             <div className="flex flex-col sm:flex-row gap-2">
             {isSuperAdmin ? (
               <>
-                <Button variant={"default"} size={"lg"} className="hidden sm:inline-flex"onClick={()=>setOpenDialogEditFund(true)}><IconCashBanknoteEdit /> Edit Sumber Dana</Button>
-                <Button variant={"default"} size={"default"} className="sm:hidden text-xs"onClick={()=>setOpenDialogEditFund(true)}><IconCashBanknoteEdit /> Edit Sumber Dana</Button>
+                <Button variant={"default"} size={"lg"} className="hidden sm:inline-flex"onClick={()=>setOpenDialogEditFund(true)}><IconCashBanknoteEdit /> Lihat Sumber Dana</Button>
+                <Button variant={"default"} size={"default"} className="sm:hidden text-xs"onClick={()=>setOpenDialogEditFund(true)}><IconCashBanknoteEdit /> Lihat Sumber Dana</Button>
                 </>
               ) :(
               <>
