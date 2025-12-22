@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import {
   closestCenter,
@@ -92,13 +91,11 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-import { API_PURCHASE, API_USERS } from "@/api/api";
+import { API_USERS } from "@/api/api";
 import { fetchWithAuth } from "@/controllers/fetchwithauths";
 import { toast } from "sonner";
-import { AccountAddDialog} from "@/components/dialog/add-account-dialog";
+import { AccountAddDialog } from "@/components/dialog/add-account-dialog";
 import { AccountDetailDialog } from "@/components/dialog/detail-account-dialog";
-import { set } from "zod";
-
 
 function DraggableRow({ row }: { row: Row<User> }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
@@ -133,7 +130,7 @@ export function DataTable({
   onDataChange?: () => void;
 }) {
 
-  
+
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openDetailAccount, setOpenDetailAccount] = React.useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
@@ -178,7 +175,7 @@ export function DataTable({
       setSelectedActivity(null);
       onDataChange?.();
     } catch (err) {
-      toast.error("Gagal menghapus data.");
+      toast.error("Gagal menghapus data: " + err);
     }
   }
 
@@ -188,25 +185,16 @@ export function DataTable({
       accessorKey: "username",
       header: "Username",
       cell: ({ row }) => (
-        <div className="text-left truncate w-64 px-2" 
+        <div className="text-left truncate w-64 px-2"
         >
-            <button className ="text-left truncate hover:underline w-64 px-2"
-              onClick={
-              ()=>{
+          <button className="text-left truncate hover:underline w-64 px-2"
+            onClick={
+              () => {
                 setOpenDetailAccount(true)
                 setSelectedActivity(row.original)
               }}>
-              {row.original.username}
-            </button>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "Nama Sekolah",
-      header: "Nama Sekolah",
-      cell: ({ row }) => (
-        <div className="text-left truncate w-40 px-2">
-          {row.original.school?.school_name ?? "-"}
+            {row.original.username}
+          </button>
         </div>
       ),
     },
@@ -218,37 +206,69 @@ export function DataTable({
           {row.original.role}
         </div>
       ),
-    },{
-          id: "actions",
-          cell: ({ row }) => (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-                  size="icon"
-                >
-                  <IconDotsVertical />
-                  <span className="sr-only">Open menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-32">
-                <DropdownMenuItem
-                  onClick={() => {
-                    setSelectedActivity(row.original)
-                    setOpenDetailAccount(true)
-                  }}
-                >Edit</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive" onClick={() => {
-                  setSelectedActivity(row.original)
-                  setOpenDeleteDialog(true)
-                }}
-                >Delete</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ),
-        },
+    },
+    {
+      accessorKey: "Nama Sekolah",
+      header: "Nama Sekolah",
+      cell: ({ row }) => {
+        const isAdmin = row.original.role === "admin"
+
+        return (
+          <div
+            className={`text-left truncate w-40 px-2 ${isAdmin
+                ? "text-muted-foreground italic cursor-not-allowed"
+                : ""
+              }`}
+          >
+            {isAdmin
+              ? "-"
+              : row.original.school?.school_name ?? "-"}
+          </div>
+        )
+      },
+    },
+
+    {
+
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => (
+        <div className="text-left truncate w-40 px-2">
+          {row.original.status}
+        </div>
+      ),
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+              size="icon"
+            >
+              <IconDotsVertical />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-32">
+            <DropdownMenuItem
+              onClick={() => {
+                setSelectedActivity(row.original)
+                setOpenDetailAccount(true)
+              }}
+            >Edit</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem variant="destructive" onClick={() => {
+              setSelectedActivity(row.original)
+              setOpenDeleteDialog(true)
+            }}
+            >Delete</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ),
+    },
   ];
 
   /* ------------------------------- Table Instance ------------------------------ */
@@ -328,33 +348,33 @@ export function DataTable({
             <IconPlus />Tambah Akun
           </Button>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="lg">
-              <IconLayoutColumns />
-              <span>Kolom</span>
-              <IconChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="lg">
+                <IconLayoutColumns />
+                <span>Kolom</span>
+                <IconChevronDown />
+              </Button>
+            </DropdownMenuTrigger>
 
 
-          <DropdownMenuContent align="end" className="w-56">
-            {table
-              .getAllColumns()
-              .filter((col) => col.getCanHide())
-              .map((col) => (
-                <DropdownMenuCheckboxItem
-                  key={col.id}
-                  checked={col.getIsVisible()}
-                  onCheckedChange={(v) => col.toggleVisibility(Boolean(v))}
-                >
-                  {col.id}
-                </DropdownMenuCheckboxItem>
-              ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+            <DropdownMenuContent align="end" className="w-56">
+              {table
+                .getAllColumns()
+                .filter((col) => col.getCanHide())
+                .map((col) => (
+                  <DropdownMenuCheckboxItem
+                    key={col.id}
+                    checked={col.getIsVisible()}
+                    onCheckedChange={(v) => col.toggleVisibility(Boolean(v))}
+                  >
+                    {col.id}
+                  </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
-</div>
       {/* ------------------------------- TABLE ------------------------------- */}
       <TabsContent
         value="semua"
@@ -376,9 +396,9 @@ export function DataTable({
                         {header.isPlaceholder
                           ? null
                           : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                       </TableHead>
                     ))}
                   </TableRow>

@@ -1,4 +1,3 @@
-// src/components/report-shop-dialog.tsx
 import {
   Dialog,
   DialogContent,
@@ -8,7 +7,7 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog"
-import { ChevronDownIcon, Loader2 } from "lucide-react"
+import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { fetchWithAuth } from "@/controllers/fetchwithauths"
@@ -18,17 +17,19 @@ import { Label } from "@/components/ui/label"
 import * as React from "react"
 import { toast } from "sonner"
 
-export function SchoolAddDialog({
+export function SchoolDetailDialog({
   open,
   onOpenChange,
-  onSuccess, 
+  onSuccess,
+  school,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
   onSuccess?: () => void
+  school: any
 }) {
   const [npsn, setNPSN] = React.useState("")
-  const [school, setSchool] = React.useState("")
+  const [schoolName, setSchoolName] = React.useState("")
   const [loading, setLoading] = React.useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,26 +47,25 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   setLoading(true);
 
   if (!npsn || !school) {
-    toast.error("Harap isi semua data diisi.");
+    toast.error("Harap isi semua data .");
     setLoading(false);
     return;
   }
 
   const payload: SchoolPayload = {
     nisn: npsn,
-    school_name: school,
+    school_name: schoolName,
   };
 
   try {
-    const res = await fetchWithAuth(API_SCHOOLS, {
-      method: "POST",
+    const res = await fetchWithAuth(`${API_SCHOOLS}/${school.id}`, {
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
 
     console.log("✅ Report:", res);
-    toast.success("Laporan berhasil ditambahkan!");
-
+    toast.success("Laporan berhasil disimpan!");
     onOpenChange(false);
     onSuccess?.();
   } catch (err) {
@@ -75,13 +75,24 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(false);
   }
 };
+const resetForm = React.useCallback(() => {
+  setNPSN(school?.nisn || "")
+  setSchoolName(school?.school_name || "")
+  setLoading(false)
+}, [school])
+
+React.useEffect(() => {
+  if (open) {
+    resetForm()
+  }
+}, [open, resetForm])
 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Tambah Sekolah</DialogTitle>
+          <DialogTitle>Perbarui Sekolah</DialogTitle>
           <DialogDescription>Isi form berikut.</DialogDescription>
         </DialogHeader>
 
@@ -89,6 +100,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
           <div className="grid gap-3">
             <Label htmlFor="title">NPSN</Label>
             <Input
+              required
               id="NPSN"
               value={npsn}
               placeholder="Masukkan NPSN"
@@ -99,13 +111,14 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
           <div className="grid gap-3">
             <Label htmlFor="fundsource">Nama Sekolah</Label>
             <Input
-              id="fundsource"
-              value={school}
+              required
+              id="school"
+              value={schoolName}
               placeholder="Masukkan Nama Sekolah"
-              onChange={(e) =>setSchool(e.target.value)}
+              onChange={(e) =>setSchoolName(e.target.value)}
             />
           </div>
-
+        
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline" type="button">

@@ -8,7 +8,7 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog"
-import {ChevronDownIcon, Eye, EyeOff, Loader2 } from "lucide-react"
+import { Eye, EyeOff, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { fetchWithAuth } from "@/controllers/fetchwithauths"
@@ -17,8 +17,6 @@ import { Label } from "@/components/ui/label"
 import * as React from "react"
 import { toast } from "sonner"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
-import { Calendar } from "../ui/calendar"
 
 export function AccountAddDialog({
   open,
@@ -37,8 +35,6 @@ export function AccountAddDialog({
   const [school, setSchool] = React.useState("")
   const [schools, setSchools] = React.useState<School[]>([])//for data
   const [loading, setLoading] = React.useState(false)
-  const [date, setDate] = React.useState(new Date())
-  const [openDate, setOpenDate] = React.useState(false)
 
 
   interface SchoolPayload {
@@ -49,9 +45,9 @@ export function AccountAddDialog({
     school_id: string;
   }
   interface School {
-  id: string
-  school_name: string
-}
+    id: string
+    school_name: string
+  }
 
 
   async function loadSchools() {
@@ -63,17 +59,24 @@ export function AccountAddDialog({
       console.error(error)
       return []
     }
-}
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
-    if (!username || !school || !password || !role || !status) {
-      toast.error("Harap isi semua data diisi.");
-      setLoading(false);
-      return;
+    if (
+      !username ||
+      !password ||
+      !role ||
+      !status ||
+      (role !== "admin" && !school)
+    ) {
+      toast.error("Harap isi semua data.")
+      setLoading(false)
+      return
     }
+
 
     const payload: SchoolPayload = {
       username: username,
@@ -102,9 +105,11 @@ export function AccountAddDialog({
       setLoading(false);
     }
   };
-    React.useEffect(() => {
+  React.useEffect(() => {
     if (!open) return
-
+    if (role === "admin") {
+      setSchool("")
+    }
     async function fetchSchools() {
       const data = await loadSchools()
       if (data) {
@@ -113,7 +118,7 @@ export function AccountAddDialog({
     }
 
     fetchSchools()
-  }, [open])
+  }, [open, role])
 
 
 
@@ -137,34 +142,34 @@ export function AccountAddDialog({
           </div>
 
           <div className="grid gap-3">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="password">Password</Label>
-                  </div>
-                  <div className="relative">
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Masukkan Password"
-                      required
-                      value={password}
-                      onChange={(e) =>setPassword(e.target.value)}
-                      className="pr-10"
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="absolute right-2 top-1/2 -translate-y-1/2 hover:bg-transparent"
-                      onClick={() => setShowPassword((prev) => !prev)}
-                    >
-                      {showPassword ? (
-                        <Eye className="h-4 w-4 text-muted-foreground" />
-                      ) : (
-                        <EyeOff className="h-4 w-4 text-muted-foreground" />
-                      )}
-                    </Button>
-                  </div>
-                </div>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password">Password</Label>
+            </div>
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Masukkan Password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="pr-10"
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-2 top-1/2 -translate-y-1/2 hover:bg-transparent"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? (
+                  <Eye className="h-4 w-4 text-muted-foreground" />
+                ) : (
+                  <EyeOff className="h-4 w-4 text-muted-foreground" />
+                )}
+              </Button>
+            </div>
+          </div>
           <div className="grid gap-3">
             <Label htmlFor="role">Role</Label>
             <Select value={role} onValueChange={setRole}>
@@ -176,50 +181,34 @@ export function AccountAddDialog({
                 <SelectItem value="instansi">Instansi</SelectItem>
               </SelectContent>
             </Select>
-          </div>
-          <div className="grid gap-3">
-          <Popover open={openDate} onOpenChange={setOpenDate} modal={false}>
-  <PopoverTrigger asChild>
-    <Button
-      variant="outline"
-      id="date"
-      className="justify-between font-normal"
-    >
-      {date ? date.toLocaleDateString() : "Pilih tanggal"}
-      <ChevronDownIcon />
-    </Button>
-  </PopoverTrigger>
-
-  <PopoverContent className="w-auto p-0" align="start">
-    <Calendar
-      mode="single"
-      selected={date}
-      captionLayout="dropdown"
-      onSelect={(d) => {
-        if (!d) return
-        setDate(d)
-        setOpenDate(false)
-      }}
-    />
-  </PopoverContent>
-</Popover>
-</div>
-          <div className="grid gap-3">
+          </div><div className="grid gap-3">
             <Label htmlFor="school">Sekolah</Label>
-              <Select value={school} onValueChange={setSchool}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Pilih Sekolah" />
-                </SelectTrigger>
 
-                <SelectContent>
-                  {schools.map((item) => (
-                    <SelectItem key={item.id} value={item.id}>
-                      {item.school_name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <Select
+              value={school}
+              onValueChange={setSchool}
+              disabled={role === "admin"}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue
+                  placeholder={
+                    role === "admin"
+                      ? "Admin tidak perlu sekolah"
+                      : "Pilih Sekolah"
+                  }
+                />
+              </SelectTrigger>
+
+              <SelectContent>
+                {schools.map((item) => (
+                  <SelectItem key={item.id} value={item.id}>
+                    {item.school_name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
+
           <div className="grid gap-3">
             <Label htmlFor="status">Status</Label>
             <Select value={status} onValueChange={setStatus}>

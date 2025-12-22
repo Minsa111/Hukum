@@ -28,6 +28,7 @@ export default function Page(isSuperAdmin: boolean) {
   const [openDialogReport, setOpenDialogReport] = React.useState(false);
   const [openDialogEditReport, setOpenDialogEditReport] = React.useState(false);
   const [openDialogEditFund, setOpenDialogEditFund] = React.useState(false);
+  const nisn  = useParams<{ nisn: string }>()
   const { purchase_report_id } = useParams<{ purchase_report_id: string }>()
   const [report, setReport] = React.useState<any>(null);
   const [loading, setLoading] = React.useState(true);
@@ -55,10 +56,18 @@ export default function Page(isSuperAdmin: boolean) {
         setLoading(false);
     }
   }
+  const goBackByRole = () => {
+  if (isSuperAdmin && window.history.length > 1) {
+    navigate(-1)
+  } else {
+    navigate("/admin/pembelanjaan")
+  }
+}
+
 
   React.useEffect(() => {
     loadReport();
-  }, );
+  }, []);
 
   if (loading) return <p>Loading...</p>;
   if (!report) return <p>No report found.</p>;
@@ -82,17 +91,24 @@ export default function Page(isSuperAdmin: boolean) {
         onOpenChange={setOpenDialogEditFund}
         onSuccess={loadReport}
         report={report}
+        isSuperAdmin={isSuperAdmin}
       />
       <SiteHeader title="Pembelanjaan" />
       <div className="@container/main flex flex-1 flex-col gap-2">
         <div className="w-full flex flex-col px-4 lg:px-6 items-start pt-2 md:pt-6">
-          <Button variant={"outline"} size={"lg"} className="text-blue-500" onClick={() => navigate( isSuperAdmin ? `/superadmin/pembelanjaan`:`/admin/pembelanjaan`)}>
+          <Button variant={"outline"} size={"lg"} className="text-blue-500" onClick={() => goBackByRole()}>
             <IconArrowLeft /> Kembali
           </Button>
           <div className="w-full flex flex-col lg:flex-row items-start md:items-center justify-between gap-4 py-2 md:gap-6 md:py-4">
             <span className="text-md lg:text-2xl font-bold items-start">{report?.title}</span>
             <div className="flex flex-col sm:flex-row gap-2">
-            {isSuperAdmin ? "" :(<>
+            {isSuperAdmin ? (
+              <>
+                <Button variant={"default"} size={"lg"} className="hidden sm:inline-flex"onClick={()=>setOpenDialogEditFund(true)}><IconCashBanknoteEdit /> Edit Sumber Dana</Button>
+                <Button variant={"default"} size={"default"} className="sm:hidden text-xs"onClick={()=>setOpenDialogEditFund(true)}><IconCashBanknoteEdit /> Edit Sumber Dana</Button>
+                </>
+              ) :(
+              <>
               <div className="flex flex-row gap-2">
               <AlertDialog>
                 <AlertDialogTrigger asChild>

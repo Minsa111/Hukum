@@ -17,6 +17,7 @@ import AccountDetailPage from "./views/superadmin/account-detail";
 import AdminShopReport from "./views/superadmin/shopreport";
 import ShopActivity from "./views/user/reportactivity";
 import AdminShopActivity from "./views/superadmin/reportactivity";
+import AdminShopActivityDetail from "./views/superadmin/reportactivity";
 import NotFoundPage from "./views/notfound";
 import { AdminLayout } from "./views/layout/adminLayout";
 import { NavLayout } from "./views/layout/defLayout";
@@ -68,7 +69,12 @@ const App: React.FC = () => {
                 <ProtectedSuperAdminRoute>
                   <AdminSchoolDetail/>
                 </ProtectedSuperAdminRoute>
-              } />
+                } />
+              <Route path="sekolah/:school_id/pembelanjaan/:pembelanjaan_id" element={
+                <ProtectedSuperAdminRoute>
+                  <AdminShopActivityDetail/>
+                </ProtectedSuperAdminRoute>
+                } />
               <Route path="akun" element={
                 <ProtectedSuperAdminRoute>
                   <AccountsPage/>

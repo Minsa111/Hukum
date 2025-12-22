@@ -40,7 +40,7 @@ export default function Page() {
           <div className="px-4 lg:px-6">
             <ChartAreaInteractive chartData={report} />
           </div>
-          <DataTable reports={schoolReport} selectedYear="Semua"/>
+          <DataTable reports={schoolReport} selectedYear="Semua" isSuperAdmin = {true}/>
         </div>
       </div>
     </div>

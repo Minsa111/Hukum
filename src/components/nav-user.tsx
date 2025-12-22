@@ -26,10 +26,10 @@ import {
 } from "@/components/ui/sidebar"
 
 import { useLogoutController } from "@/controllers/auth/authcontroller"
-export function NavUser() {
+export function NavUser({isSuperAdmin}:{isSuperAdmin: boolean}) {
 
   const rawSchool = localStorage.getItem("school");
-  const school = !rawSchool || rawSchool === "null" ? "superadmin" : rawSchool;
+  const school = isSuperAdmin ? "superadmin" : rawSchool;
   const username = localStorage.getItem("username");
   const handleLogout = useLogoutController();
   const { isMobile } = useSidebar()
