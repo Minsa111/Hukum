@@ -6,18 +6,12 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog"
-import { ChevronDownIcon, Loader2 } from "lucide-react"
+import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { fetchWithAuth } from "@/controllers/fetchwithauths"
 import { API_URL, API_ACTIVITY, API_UPLOAD } from "@/api/api"
 import { Label } from "@/components/ui/label"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { Calendar } from "../ui/calendar"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -69,7 +63,6 @@ export function ActivityDetailDialog({
   const [description, setDescription] = React.useState("")
   const [date, setDate] = React.useState<Date | undefined>()
   const [file, setFile] = React.useState<File | null>(null)
-  const [openDate, setOpenDate] = React.useState(false)
 
   // ----- UTILITY: PRICE FORMAT -----
   const formatPrice = (val: string | number) => {
@@ -215,7 +208,6 @@ export function ActivityDetailDialog({
             <Label className="text-neutral-500">Tanggal Kegiatan</Label>
             {isEdit ? (
               <div>
-                <Label htmlFor="date">Tanggal Kegiatan</Label>
                 <Input
                   type="date"
                   value={date ? date.toISOString().slice(0, 10) : ""}

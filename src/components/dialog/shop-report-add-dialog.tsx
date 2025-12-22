@@ -95,6 +95,7 @@ export function ReportShopDialog({
           <div className="grid gap-3">
             <Label htmlFor="title">Laporan Pembelanjaan</Label>
             <Input
+              required
               id="title"
               value={title}
               placeholder="Masukkan Nama Laporan Pembelanjaan"
@@ -109,12 +110,14 @@ export function ReportShopDialog({
               value={fundsource}
               placeholder="Masukkan Sumber Dana"
               onChange={(e) => setFundsource(e.target.value)}
+              required
             />
           </div>
 
           <div className="flex flex-col gap-3">
-              <Label htmlFor="date">Tanggal Kegiatan</Label>
+              <Label htmlFor="date">Tanggal Dana Diterima</Label>
                 <Input
+                  required
                   type="date"
                   value={date ? date.toISOString().slice(0, 10) : ""}
                   onChange={(e) => {
@@ -125,7 +128,7 @@ export function ReportShopDialog({
 
           <div className="grid gap-3">
             <Label htmlFor="fundcurr">Jumlah Nominal</Label>
-            <InputGroup>
+            <InputGroup >
               <InputGroupAddon>
                 <InputGroupText>Rp.</InputGroupText>
               </InputGroupAddon>
@@ -135,6 +138,7 @@ export function ReportShopDialog({
                 className="!pl-1"
                 value={value}
                 onChange={handleChange}
+                required
               />
             </InputGroup>
           </div>

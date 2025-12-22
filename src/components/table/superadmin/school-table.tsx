@@ -37,7 +37,6 @@ import {
   useReactTable,
   getSortedRowModel,
 } from "@tanstack/react-table"
-import { reportDataSchema } from "@/models/schema/public-dashboard-table"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -49,16 +48,15 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Tabs, TabsContent } from "@/components/ui/tabs"
-import { ActivityDetailDialog } from "@/components/dialog/activity-detail-dialog"
 import { toast } from "sonner"
-import { Link, useNavigate } from "react-router-dom"
 import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogActionDestructive, AlertDialogCancel, AlertDialogTrigger, AlertDialogFooter } from "@/components/ui/alert-dialog"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { IconDotsVertical } from "@tabler/icons-react"
 import { fetchWithAuth } from "@/controllers/fetchwithauths"
 import { API_SCHOOLS } from "@/api/api"
+import { SchoolDetailDialog } from "@/components/dialog/school-detail-dialog"
 
-// ✅ Draggable row — uses nisn as id
+
 function DraggableRow({ row }: { row: Row<any> }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
     id: row.original.id, // ✅ use nisn as row id
@@ -84,49 +82,36 @@ function DraggableRow({ row }: { row: Row<any> }) {
   )
 }
 
-export function DataTable({
+export function DataTable2({
   reports,
-  selectedYear,
-  onDataChange,
-  isSuperAdmin,
+  onDataChange
 }: {
   reports: any[]
-  selectedYear: string
   onDataChange?: () => void
-  isSuperAdmin: boolean
 }) {
   const [selectedActivity, setSelectedActivity] = React.useState<any | null>(null)
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false)
-  const [data, setData] = React.useState<
-    {
-      id: string
-      school_name: string
-      totalBudget: number
-      totalRealization: number
-      lastUpdated: string | null
-    }[]
-  >([])
-
+  const [data, setData] = React.useState(reports)
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 10 })
+  const [openSchoolDialog, setOpenSchoolDialog] = React.useState(false);
   const sortableId = React.useId()
   const sensors = useSensors(
     useSensor(MouseSensor, {}),
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {})
   )
-  const navigate = useNavigate()
+  
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   async function handleDelete() {
     try {
       await fetchWithAuth(`${API_SCHOOLS}/${selectedActivity.id}`, {
         method: "DELETE",
       });
-      if (onDataChange) onDataChange();
-      setIsDialogOpen(false);
+      if (onDataChange) 
+      onDataChange();
       setSelectedActivity(null);
       toast.success("Data berhasil dihapus!");
     } catch (err) {
@@ -137,54 +122,8 @@ export function DataTable({
   React.useEffect(() => {
   if (!reports) return;
 
-  try {
-    const parsed = reportDataSchema.parse(reports);
 
-    const summarized = parsed.map((school) => {
-      let totalBudget = 0;
-      let totalRealization = 0;
-      let lastUpdated: string | null = null;
-
-      school.reports.forEach((report) => {
-        // Funding sources
-        report.fundingSources.forEach((fund) => {
-          const year = new Date(fund.received_date).getFullYear().toString();
-          if (selectedYear === "Semua" || year === selectedYear) {
-            totalBudget += parseFloat(fund.budget_amount);
-          }
-        });
-
-        // Activities
-        report.activities.forEach((act) => {
-          const actYear = new Date(act.activityDate).getFullYear().toString();
-          if (selectedYear === "Semua" || actYear === selectedYear) {
-            totalRealization += parseFloat(act.unitPrice) * act.quantity;
-          }
-
-          const updatedTime = new Date(act.updated_at);
-          if (!lastUpdated || updatedTime > new Date(lastUpdated)) {
-            lastUpdated = act.updated_at;
-          }
-        });
-      });
-
-      return {
-        id: school.nisn, 
-        school_name: school.school_name,
-        totalBudget,
-        totalRealization,
-        lastUpdated,
-      };
-    });
-
-    setData(summarized);
-    console.log("Data:", summarized);
-  } catch (err) {
-    console.error("Invalid data:", err);
-    toast.error("Terjadi kesalahan saat memproses data. " + err);
-  }
-}, [reports, selectedYear]);
-
+}, [reports]);
   const dataIds = React.useMemo<UniqueIdentifier[]>(
     () => data?.map((item) => item.id) || [],
     [data]
@@ -192,47 +131,43 @@ export function DataTable({
 
   const columns: ColumnDef<{
     id: string
+    nisn: string
     school_name: string
-    totalBudget: number
-    totalRealization: number
-    lastUpdated: string | null
+    created_at: string
+    updated_at: string
+    
   }>[] = [
+    {
+      accessorKey: "npns",
+      header: "NPSN",
+      cell: ({ row }) => (
+        <div className="text-left truncate hover:underline w-32 px-2 lg:px-4 font-medium" 
+        onClick={() =>{
+          setSelectedActivity(row.original)
+          setOpenSchoolDialog(true)}}>
+            {row.original.nisn}
+        </div>
+      ),
+    },
     {
       accessorKey: "school_name",
       header: "Sekolah",
       cell: ({ row }) => (
-        <div className="text-left truncate hover:underline w-56 lg:w-xs px-2 lg:px-4 font-medium">
-          <Link to={`/superadmin/sekolah/${row.original.id}`}>
+        <div className="text-left truncate hover:underline w-56 px-2 lg:px-4 font-medium"
+        onClick={() =>{
+          setSelectedActivity(row.original)
+          setOpenSchoolDialog(true)}}>
             {row.original.school_name}
-          </Link>
         </div>
       ),
     },
     {
-      accessorKey: "totalBudget",
-      header: "Total Dana Anggaran",
+      accessorKey: "Dibuat Pada",
+      header: "Dibuat Pada",
       cell: ({ row }) => (
         <div className="text-left px-2 lg:px-4">
-          Rp {row.original.totalBudget.toLocaleString("id-ID")}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "totalRealization",
-      header: "Total Dana Terealisasi",
-      cell: ({ row }) => (
-        <div className="text-left px-2 lg:px-4">
-          Rp {row.original.totalRealization.toLocaleString("id-ID")}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "lastUpdated",
-      header: "Terakhir Diperbarui",
-      cell: ({ row }) => (
-        <div className="text-left px-2 lg:px-4">
-          {row.original.lastUpdated
-            ? new Date(row.original.lastUpdated).toLocaleString("en-GB", {
+          {row.original.updated_at
+            ? new Date(row.original.updated_at).toLocaleString("en-GB", {
                 day: "2-digit",
                 month: "2-digit",
                 year: "numeric",
@@ -244,10 +179,25 @@ export function DataTable({
         </div>
       ),
     },
-    ...(isSuperAdmin
-      ?
-      [
-        {
+    {
+      accessorKey: "terakhir diperbarui",
+      header: "Terakhir Diperbarui",
+      cell: ({ row }) => (
+        <div className="text-left px-2 lg:px-4">
+          {row.original.updated_at
+            ? new Date(row.original.updated_at).toLocaleString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              })
+            : "-"}
+        </div>
+      ),
+    },
+    {
           id: "actions",
           cell: ({ row }) => (
             <DropdownMenu>
@@ -256,12 +206,12 @@ export function DataTable({
                   <AlertDialogHeader>
                     <AlertDialogTitle>Apakah anda yakin?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete this data.
+                      Apakah anda yaking ingin menghapus {selectedActivity?.school_name}?
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Batal</AlertDialogCancel>
-                    <AlertDialogActionDestructive onClick={handleDelete}>Lanjutkan</AlertDialogActionDestructive>
+                    <AlertDialogActionDestructive onClick={handleDelete}>Hapus</AlertDialogActionDestructive>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
@@ -279,13 +229,13 @@ export function DataTable({
                 <DropdownMenuItem
                   onClick={() => {
                     setSelectedActivity(row.original)
-                    setIsDialogOpen(true)
+                    setOpenSchoolDialog(true)
                   }}
                 >Detail</DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
                     setSelectedActivity(row.original)
-                    setIsDialogOpen(true)
+                    setOpenSchoolDialog(true)
                   }}
                 >Edit</DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -298,19 +248,6 @@ export function DataTable({
             </DropdownMenu>
           ),
         },
-      ]
-      :
-      [
-      {
-            id: "actions",
-            cell: () => {
-              return(
-                <Button onClick={() => setIsDialogOpen(true)}>Detail</Button>
-              )
-            },
-          }
-      ]
-    ),
   ]
 
   const table = useReactTable({
@@ -346,10 +283,10 @@ export function DataTable({
 
   return (
     <Tabs defaultValue="semua" className="w-full flex-col justify-start gap-6">
-      <ActivityDetailDialog
-        open={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
-        activities={selectedActivity ?? {}}
+      <SchoolDetailDialog
+        open={openSchoolDialog}
+        onOpenChange={setOpenSchoolDialog}
+        school={selectedActivity ?? {}}
         onSuccess={() => onDataChange?.()}
       />
       <TabsContent value="semua" className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">

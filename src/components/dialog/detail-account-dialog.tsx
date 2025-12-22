@@ -39,27 +39,35 @@ export function AccountDetailDialog({
   const [loading, setLoading] = React.useState(false)
 
   const resetForm = React.useCallback(() => {
+    const nextRole = report?.role || ""
+
     setUsername(report?.username || "")
     setPassword("")
     setShowPassword(false)
-    setRole(report?.role || "")
+    setRole(nextRole)
     setStatus(report?.status || "")
-    setSchool("")
-  }, [report])
-  async function loadSchools() {
-    try {
-      const response = await fetchWithAuth(API_SCHOOLS)
-      setSchools(response)
-      if (report?.school?.id) {
-        setSchool(report.school.id)
-      }
-    } catch (error) {
-      toast.error("Gagal mengambil data sekolah")
-      console.error(error)
-      return []
+    setSchool(report?.school?.id || "")
+      
+    
+    if (nextRole === "admin") {
+      setSchool("")
+    } else {
+      setSchool(report?.school?.id || "")
     }
+  }, [report])
+
+  const loadSchools = React.useCallback(async () => {
+  try {
+    const response = await fetchWithAuth(API_SCHOOLS)
+    setSchools(response)
+  } catch (error) {
+    toast.error("Gagal mengambil data sekolah")
+    console.error(error)
   }
-  interface SchoolPayload {
+}, [])
+
+
+  interface UserPayload {
     username: string;
     password: string;
     role: string;
@@ -77,23 +85,27 @@ export function AccountDetailDialog({
     e.preventDefault();
     setLoading(true);
 
-    if (!username || !school || !password || !role || !status) {
-      toast.error("Harap isi semua data diisi.");
-      setLoading(false);
-      return;
+    if (!username || !role || !status) {
+      toast.error("Harap isi semua data wajib.")
+      return
     }
 
-    const payload: SchoolPayload = {
-      username: username,
-      password: password,
-      role: role,
-      status: status,
-      school_id: school
-    };
+
+    const payload: any = {
+      username,
+      role,
+      status,
+      school_id: role === "admin" ? "" : school,
+    }
+
+    if (password) {
+      payload.password = password
+    }
+
 
     try {
-      const res = await fetchWithAuth(API_USERS, {
-        method: "POST",
+      const res = await fetchWithAuth(`${API_USERS}/${report?.id}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
@@ -111,11 +123,22 @@ export function AccountDetailDialog({
     }
   };
   React.useEffect(() => {
+  if (role === "admin") {
+    setSchool("")
+  }
+}, [role])
+
+  React.useEffect(() => {
     if (open) {
-      loadSchools()
       resetForm()
     }
   }, [open, resetForm])
+
+  React.useEffect(() => {
+    if (open) {
+      loadSchools()
+    }
+  }, [open, loadSchools])
 
 
 
@@ -124,17 +147,18 @@ export function AccountDetailDialog({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Detail Akun</DialogTitle>
-          <DialogDescription>Isi form berikut.</DialogDescription>
+          <DialogDescription>Ubah detail akun di sini.</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="grid gap-4 py-2">
           <div className="grid gap-3">
             <Label htmlFor="username">Username</Label>
             <Input
-              id="usename"
+              id="username"
               value={username}
               placeholder="Masukkan Username"
               onChange={(e) => setUsername(e.target.value)}
+              disabled
             />
           </div>
 
@@ -147,7 +171,7 @@ export function AccountDetailDialog({
                 id="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Masukkan Password"
-                required
+                
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="pr-10"
@@ -169,7 +193,7 @@ export function AccountDetailDialog({
           </div>
           <div className="grid gap-3">
             <Label htmlFor="role">Role</Label>
-            <Select value={role} onValueChange={setRole}>
+            <Select required value={role} onValueChange={setRole}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Pilih Role" />
               </SelectTrigger>
@@ -181,9 +205,18 @@ export function AccountDetailDialog({
           </div>
           <div className="grid gap-3">
             <Label htmlFor="school">Sekolah</Label>
-            <Select value={school} onValueChange={setSchool}>
+
+            <Select
+              value={school}
+              onValueChange={setSchool}
+              disabled={role === "admin"}
+            >
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Pilih Sekolah" />
+                <SelectValue
+                  placeholder={
+                    role === "admin" ? "Admin tidak perlu sekolah" : "Pilih Sekolah"
+                  }
+                />
               </SelectTrigger>
 
               <SelectContent>
@@ -195,9 +228,10 @@ export function AccountDetailDialog({
               </SelectContent>
             </Select>
           </div>
+
           <div className="grid gap-3">
             <Label htmlFor="status">Status</Label>
-            <Select value={status} onValueChange={setStatus}>
+            <Select required value={status} onValueChange={setStatus}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
@@ -220,7 +254,7 @@ export function AccountDetailDialog({
                   Menyimpan...
                 </>
               ) : (
-                "Tambah"
+                "Perbarui"
               )}
             </Button>
           </DialogFooter>

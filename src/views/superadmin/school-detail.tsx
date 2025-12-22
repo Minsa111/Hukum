@@ -6,30 +6,37 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { DataTable } from "@/components/table/public/spend-fund-table"
+import { DataTable } from "@/components/table/superadmin/spend-fund-table"
 import { useParams } from "react-router-dom"
 import { API_PURCHASE, API_NISN } from "@/api/api"
 import { fetchWithAuth } from "@/controllers/fetchwithauths"
+import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 import { ChartPieLegendFundSpend } from "@/components/piechart/fund-spend-pie-chart"
 import { ChartAreaFundVsSpend } from "@/components/chart/spend-fund-chart-area-interactive"
 import { reportDataSchema } from "@/models/schema/public-dashboard-table"
 import { SiteHeader } from "@/components/site-header"
+import { Button } from "@/components/ui/button"
+import { IconArrowLeft } from "@tabler/icons-react"
 
 export default function Page() {
   const { school_id: nisn } = useParams<{ school_id: string }>()
   const [report, setReport] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const school = report?.[0]
+  const reports = school?.reports ?? []
+  const hasData = reports.length > 0
 
+  const navigate = useNavigate()
   const [selectedYear, setSelectedYear] = useState<string>(
     new Date().getFullYear().toString()
   )
 
   // 🧠 Load data immediately and extract reports[]
-  async function loadReport(id: string) {
+  async function loadReport() {
     try {
       setLoading(true)
-      const json = await fetchWithAuth(`${API_PURCHASE}${API_NISN}/${id}`)
+      const json = await fetchWithAuth(`${API_PURCHASE}${API_NISN}/${nisn}`)
 
       const parsed = reportDataSchema.parse(json) 
 
@@ -37,7 +44,6 @@ export default function Page() {
 
     } catch (err) {
       toast.error("Terjadi kesalahan saat mengambil data.")
-      console.error("Zod validation error:", err)
     } finally {
       setLoading(false)
     }
@@ -45,9 +51,9 @@ export default function Page() {
 
   useEffect(() => {
     if (nisn) {
-      loadReport(nisn)
+      loadReport()
     }
-  }, [nisn])
+  }, [])
 
   const availableYears = useMemo(() => {
     const years = new Set<string>()
@@ -69,18 +75,35 @@ export default function Page() {
     return ["Semua", ...sorted]
   }, [report])
 
-  if (loading) return <p>Loading...</p>
+if (loading) return <p>Loading...</p>
 
+if (!report.length) {
   return (
-    <div className="flex flex-1 flex-col">
-      <SiteHeader title="Sekolah"/>
+    <div className="flex flex-1 items-center justify-center">
+      <p className="text-muted-foreground text-lg">
+        Tidak ada data untuk sekolah ini.
+      </p>
+    </div>
+  ) 
+}
+return (
+  <div className="flex flex-1 flex-col">
+    <SiteHeader title="Sekolah" />
+
     <div className="@container/main flex flex-1 flex-col gap-2">
       <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-        <div className="flex flex-1 flex-col gap-2 bg-background relative lg:px-6 px-2 ">
+        <div className="flex flex-1 flex-col gap-2 md:gap-4 bg-background relative lg:px-6 px-2">
+          
           <div className="flex justify-between items-start">
-            <span className="text-2xl font-bold">
-              Rekap {report[0]?.school_name || ""}
-            </span>
+            <div className="flex items-center gap-2">
+            <Button variant={"outline"} size={"lg"} className="text-blue-500" onClick={() => navigate( `/superadmin/sekolah`)}>
+              <IconArrowLeft /> Kembali
+            </Button>
+              <span className="text-2xl font-bold">
+                Rekap {school.school_name}
+              </span>
+            </div>
+
             <Select value={selectedYear} onValueChange={setSelectedYear}>
               <SelectTrigger className="w-[140px]">
                 <SelectValue placeholder="Pilih Tahun" />
@@ -94,17 +117,40 @@ export default function Page() {
               </SelectContent>
             </Select>
           </div>
-          {/* 📊 Charts Section */}
-          <div className="grid gap-y-4 gap-x-6 md:grid-cols-[30%_auto] ">
-            <ChartPieLegendFundSpend reports={report} year={selectedYear} />
-            <ChartAreaFundVsSpend chartData={report} selectedYear={selectedYear} />
-          </div>
-          {/* 📋 DataTable directly fed from extracted reports[] */}
-          <div className="w-full flex flex-col items-start gap-y-4 gap-x-6">
-            <DataTable report={report[0].reports} nisn={report[0]?.nisn} selectedYear={selectedYear} isSuperAdmin = {true}/>
-          </div>
+
+          {/* 🟡 EMPTY STATE */}
+          {!hasData ? (
+            <div className="flex items-center justify-center h-64">
+              <p className="text-muted-foreground text-lg">
+                Belum ada laporan untuk sekolah ini.
+              </p>
+            </div>
+          ) : (
+            <>
+              {/* 📊 Charts */}
+              <div className="grid gap-y-4 gap-x-6 md:grid-cols-[30%_auto]">
+                <ChartPieLegendFundSpend reports={report} year={selectedYear} />
+                <ChartAreaFundVsSpend
+                  chartData={report}
+                  selectedYear={selectedYear}
+                />
+              </div>
+
+              {/* 📋 Table */}
+              <div className="w-full flex flex-col items-start gap-y-4">
+                <DataTable
+                  report={reports}
+                  nisn={school.nisn}
+                  selectedYear={selectedYear}
+                  isSuperAdmin={true}
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
-    </div></div>
-  )
+    </div>
+  </div>
+)
+
 }

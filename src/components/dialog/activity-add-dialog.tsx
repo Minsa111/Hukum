@@ -144,8 +144,6 @@ export function ReportShopActivityDialog({
           />
         </div>
 
-
-
           <div className="grid gap-3">
             <Label htmlFor="spendingAccount">Rekening Belanja</Label>
             <Input

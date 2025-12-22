@@ -4,7 +4,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog"
@@ -15,12 +14,6 @@ import { fetchWithAuth } from "@/controllers/fetchwithauths"
 import { API_PURCHASE } from "@/api/api"
 import { Label } from "@/components/ui/label"
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { Calendar } from "../ui/calendar"
-import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
@@ -29,19 +22,23 @@ import {
 import { ScrollArea } from "../ui/scroll-area"
 import * as React from "react"
 import { toast } from "sonner"
-import { IconCircleMinus, IconCirclePlus, IconPlus } from "@tabler/icons-react"
+import { IconCircleMinus, IconPlus } from "@tabler/icons-react"
 import { AlertDialog, AlertDialogActionDestructive, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "../ui/alert-dialog"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import { Calendar } from "../ui/calendar"
 
 export function EditFundDialog({
   open,
   onOpenChange,
   onSuccess,
   report,
+  isSuperAdmin
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
   onSuccess?: () => void
   report: any
+  isSuperAdmin?: boolean
 }) {
   const [funds, setFunds] = React.useState([
     {
@@ -88,94 +85,94 @@ export function EditFundDialog({
     )
   }
 
-const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault()
-  setLoading(true)
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setLoading(true)
 
-  try {
-    // Validation
-    for (const f of funds) {
-      if (!f.source_of_fund || !f.budget_amount || !f.received_date) {
-        toast.error("Semua field wajib diisi.")
-        setLoading(false)
-        return
+    try {
+      // Validation
+      for (const f of funds) {
+        if (!f.source_of_fund || !f.budget_amount || !f.received_date) {
+          toast.error("Semua field wajib diisi.")
+          setLoading(false)
+          return
+        }
       }
-    }
 
-    // -----------------------------
-    // 1️⃣ POST new funding sources
-    // -----------------------------
-    const newFunds = funds.filter(f => !f.id)
+      // -----------------------------
+      // 1️⃣ POST new funding sources
+      // -----------------------------
+      const newFunds = funds.filter(f => !f.id)
 
-    if (newFunds.length > 0) {
-      await fetchWithAuth(
-        `${API_PURCHASE}/${report.id}/funding-sources`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            funding_sources: newFunds.map(f => ({
+      if (newFunds.length > 0) {
+        await fetchWithAuth(
+          `${API_PURCHASE}/${report.id}/funding-sources`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              funding_sources: newFunds.map(f => ({
+                source_of_fund: f.source_of_fund,
+                budget_amount: parseInt(f.budget_amount.replace(/\D/g, "")),
+                received_date: f.received_date.toLocaleDateString("sv-SE"),
+              })),
+            }),
+          }
+        )
+      }
+
+      // -----------------------------
+      // 2️⃣ PUT existing funding sources
+      // -----------------------------
+      const existingFunds = funds.filter(f => f.id)
+
+      for (const f of existingFunds) {
+        await fetchWithAuth(
+          `${API_PURCHASE}/${report.id}/funding-sources/${f.id}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
               source_of_fund: f.source_of_fund,
               budget_amount: parseInt(f.budget_amount.replace(/\D/g, "")),
               received_date: f.received_date.toLocaleDateString("sv-SE"),
-            })),
-          }),
-        }
-      )
+            }),
+          }
+        )
+      }
+
+      toast.success("Sumber dana berhasil disimpan!")
+      onOpenChange(false)
+      onSuccess?.()
+
+    } catch (err) {
+      console.error(err)
+      toast.error("Gagal menyimpan sumber dana.")
+    } finally {
+      setLoading(false)
     }
-    
-    // -----------------------------
-    // 2️⃣ PUT existing funding sources
-    // -----------------------------
-    const existingFunds = funds.filter(f => f.id)
+  }
 
-    for (const f of existingFunds) {
-      await fetchWithAuth(
-        `${API_PURCHASE}/${report.id}/funding-sources/${f.id}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            source_of_fund: f.source_of_fund,
-            budget_amount: parseInt(f.budget_amount.replace(/\D/g, "")),
-            received_date: f.received_date.toLocaleDateString("sv-SE"),
-          }),
-        }
-      )
+
+  React.useEffect(() => {
+    if (open && report?.fundingSources) {
+      const mapped = report.fundingSources.map((f: any) => ({
+        id: f.id,
+        source_of_fund: f.source_of_fund || "",
+        budget_amount: Number(f.budget_amount).toLocaleString("id-ID"),
+        received_date: f.received_date ? new Date(f.received_date) : undefined,
+        openDate: false,
+      }))
+
+      setFunds(mapped.length > 0 ? mapped : [{
+        id: undefined,
+        source_of_fund: "",
+        budget_amount: "",
+        received_date: undefined,
+        openDate: false,
+      }])
     }
-
-    toast.success("Sumber dana berhasil disimpan!")
-    onOpenChange(false)
-    onSuccess?.()
-
-  } catch (err) {
-    console.error(err)
-    toast.error("Gagal menyimpan sumber dana.")
-  } finally {
-    setLoading(false)
-  }
-}
-
-
-React.useEffect(() => {
-  if (open && report?.fundingSources) {
-    const mapped = report.fundingSources.map((f: any) => ({
-      id: f.id,
-      source_of_fund: f.source_of_fund || "",
-      budget_amount: Number(f.budget_amount).toLocaleString("id-ID"),
-      received_date: f.received_date ? new Date(f.received_date) : undefined,
-      openDate: false,
-    }))
-
-    setFunds(mapped.length > 0 ? mapped : [{
-      id: undefined,
-      source_of_fund: "",
-      budget_amount: "",
-      received_date: undefined,
-      openDate: false,
-    }])
-  }
-}, [open, report])
+  }, [open, report])
 
 
   return (
@@ -190,21 +187,21 @@ React.useEffect(() => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Batal</AlertDialogCancel>
-            <AlertDialogActionDestructive 
-            onClick={async () => {
-              if (selectedFund?.id){
-                try{
-                  await deleteFund(selectedFund?.id)
-                  toast.success("Data berhasil dihapus!")
-                  setSelectedFund(null)
-                  setOpenDeleteDialog(false)
-                  removeFund(funds.indexOf(selectedFund))
-                }catch(err){
-                  console.error(err)
-                  toast.error("Terjadi kesalahan saat menghapus data.")
+            <AlertDialogActionDestructive
+              onClick={async () => {
+                if (selectedFund?.id) {
+                  try {
+                    await deleteFund(selectedFund?.id)
+                    toast.success("Data berhasil dihapus!")
+                    setSelectedFund(null)
+                    setOpenDeleteDialog(false)
+                    removeFund(funds.indexOf(selectedFund))
+                  } catch (err) {
+                    console.error(err)
+                    toast.error("Terjadi kesalahan saat menghapus data.")
+                  }
                 }
-            }
-          }}>Lanjutkan</AlertDialogActionDestructive>
+              }}>Lanjutkan</AlertDialogActionDestructive>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -241,7 +238,9 @@ React.useEffect(() => {
                   <div className="grid gap-3 mt-3">
                     <Label>Sumber Dana</Label>
                     <Input
+                      required
                       value={fund.source_of_fund}
+                      disabled={isSuperAdmin === true}
                       onChange={(e) =>
                         updateFund(index, "source_of_fund", e.target.value)
                       }
@@ -251,14 +250,27 @@ React.useEffect(() => {
                   {/* DATE */}
                   <div className="flex flex-col gap-3 mt-3">
                     <Label>Tanggal Dana Diterima</Label>
-  <Input
-    type="date"
-    value={date ? date.toISOString().slice(0, 10) : ""}
-    onChange={(e) => {
-      setDate(e.target.value ? new Date(e.target.value) : undefined)
-    }}
-  />
+
+                    <Input
+                      type="date"
+                      required
+                      value={
+                        fund.received_date
+                          ? fund.received_date.toISOString().slice(0, 10)
+                          : ""
+                      }
+                      onChange={(e) =>
+                        updateFund(
+                          index,
+                          "received_date",
+                          e.target.value ? new Date(e.target.value) : undefined
+                        )
+                      }
+                      disabled={isSuperAdmin === true}
+                    />
                   </div>
+
+
 
                   {/* BUDGET */}
                   <div className="grid gap-3 mt-3">
@@ -268,6 +280,7 @@ React.useEffect(() => {
                         <InputGroupText>Rp.</InputGroupText>
                       </InputGroupAddon>
                       <InputGroupInput
+                        required
                         placeholder="1.000.000"
                         value={fund.budget_amount}
                         onChange={(e) => {

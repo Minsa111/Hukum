@@ -33,7 +33,7 @@ export function AppSidebar({ isSuperAdmin, ...props }: AppSidebarProps) {
       </SidebarContent>
 
       <SidebarFooter>
-        <NavUser />
+        <NavUser isSuperAdmin={isSuperAdmin}/>
       </SidebarFooter>
 
       <SidebarRail />
