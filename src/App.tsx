@@ -6,6 +6,7 @@ import PublicDashboard from "./views/public/public-dashboard";
 import Recap from "./views/public/rekap";
 import SchoolRecap from "./views/public/rekap-school";
 import AdminSchool from "./views/superadmin/school";
+import Insight from "./views/superadmin/insight";
 import AdminSchoolDetail from "./views/superadmin/school-detail";
 import ReportRecap from "./views/public/public-report-activity";
 import LoginPage from "./views/user/login";
@@ -50,6 +51,11 @@ const App: React.FC = () => {
                 }
               >
               <Route index element={<AdminDashboard />} />
+              <Route path="insight" element={
+                <ProtectedSuperAdminRoute>
+                  <Insight />
+                </ProtectedSuperAdminRoute>
+              } />
               <Route path="pembelanjaan" element={
                 <ProtectedSuperAdminRoute>
                   <AdminShopReport />

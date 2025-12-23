@@ -25,17 +25,14 @@ export function AppSidebar({ isSuperAdmin, ...props }: AppSidebarProps) {
           <img className="" src="/images/logoname.png" alt="logo" />
         </SidebarContent>
       </SidebarHeader>
-
       <SidebarContent>
         <NavMain
           items={isSuperAdmin ? Dropdown.admin : Dropdown.navMain}
         />
       </SidebarContent>
-
       <SidebarFooter>
         <NavUser isSuperAdmin={isSuperAdmin}/>
       </SidebarFooter>
-
       <SidebarRail />
     </Sidebar>
   );

@@ -28,10 +28,10 @@ export const Dropdown= {
           title: "Pembelanjaan",
           url: "/admin/pembelanjaan",
         },
-        {
-          title: "Insight",
-          url: "/admin/pembelanjaan",
-        },
+        // {
+        //   title: "Insight",
+        //   url: "/admin/pembelanjaan",
+        // },
       ],
     },
   ],
@@ -56,10 +56,10 @@ export const Dropdown= {
           title: "Pembelanjaan",
           url: "/superadmin/pembelanjaan",
         },
-        {
-          title: "Insight",
-          url: "/superadmin/insight",
-        },
+        // {
+        //   title: "Insight",
+        //   url: "/superadmin/insight",
+        // },
       ],
     },
     {
